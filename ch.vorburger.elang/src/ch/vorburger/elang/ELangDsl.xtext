@@ -1,0 +1,9 @@
+grammar ch.vorburger.elang.ELangDsl with org.eclipse.xtext.common.Terminals
+
+generate eLangDsl "http://www.vorburger.ch/elang/ELangDsl"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
