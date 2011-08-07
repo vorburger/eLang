@@ -8,6 +8,6 @@ This expression language's syntax is not strictly Java-based, but can be adapted
 
 While using Xtext, it's not currently built on the (new) xBase; plan to look at how it's possible to base it on / re-use (some) xBase infrastructure - while still keeping the syntax.
 
-Licensed under the Eclipse Public License (EPL).
+Copyright (c) 2011 Michael Vorburger (http://www.vorburger.ch) and others.
 
-Michael Vorburger, 2011-08-07 (Initial Publication)
+Licensed under the Eclipse Public License (EPL).
