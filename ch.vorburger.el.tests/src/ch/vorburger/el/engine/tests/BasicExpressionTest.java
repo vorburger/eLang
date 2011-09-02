@@ -44,11 +44,9 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 	@Test
 	public void testFixedDateLiterals() throws Exception {
 		checkDateExpression("15.06.2008", new GregorianCalendar(2008,06-1,15));
-		checkDateExpression("15.06.08", new GregorianCalendar(2008,06-1,15));
-		// TODO Test the two-digit year format interpretation well!!!  y = y<100 ? y<50 ? y+2000 : y+1900 : y;
-
 		checkDateExpression("15.06.2008 18:23:53", new GregorianCalendar(2008,06-1,15,18,23,53));
-		checkDateExpression("15.06.08 18:23:53", new GregorianCalendar(2008,06-1,15,18,23,53));
+		checkDateExpression("9.1.2008", new GregorianCalendar(2008,01-1,9));
+		checkDateExpression("9.1.2008 18:23:53", new GregorianCalendar(2008,01-1,9,18,23,53));
 
 		try {
 			checkDateExpression("15.13.2008", null);

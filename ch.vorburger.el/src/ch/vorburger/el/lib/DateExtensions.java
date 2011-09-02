@@ -36,11 +36,7 @@ public class DateExtensions {
 		int minute = 0;
 		int second = 0;
 		
-		if (dateSegments[2].length() == 2) {
-			year = makeFourDigitYearFromTwoDigitYear(Integer.parseInt(dateSegments[2]));
-		} else {
-			year = Integer.parseInt(dateSegments[2]);
-		}
+		year = Integer.parseInt(dateSegments[2]);
 		
 		if(segments.length > 1) { // we have a time as well
 			String[] timeSegments = segments[1].split(":");
@@ -57,14 +53,4 @@ public class DateExtensions {
 		return new int[] { year, month - 1, dayOfMonth, hourOfDay, minute, second };
 	}
 	
-	// TODO Review this!!! Ok?
-	private static int makeFourDigitYearFromTwoDigitYear(int twoDigitYear) {
-		if (twoDigitYear >= 0 && twoDigitYear < 50) {
-			return twoDigitYear + 2000;
-		} else if (twoDigitYear < 100) {
-			return twoDigitYear + 1900;
-		} else {
-			throw new RuntimeException("Unexpected problem; caller (lexer) should only pass a twoDigitYear be >=0 or <100 ?! twoDigitYear=" + twoDigitYear);
-		}
-	}
 }
