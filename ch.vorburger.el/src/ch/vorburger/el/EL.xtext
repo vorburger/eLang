@@ -14,6 +14,19 @@ XPrimaryExpression returns XExpression:
 	XIfExpression |
 	XParenthesizedExpression;
 
+// let's overwrite this to get rid of the "as" function
+XCastedExpression returns XExpression:
+	XMemberFeatureCall;
+
+// let's overwrite this to get rid of the "instanceof" function
+XRelationalExpression returns XExpression:
+	XOtherOperatorExpression
+	(=>({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpCompare]) rightOperand=XOtherOperatorExpression)*;
+
+// let's overwrite this to get rid of the "->" function
+XOtherOperatorExpression returns XExpression:
+	XAdditiveExpression;
+
 XLiteral returns XExpression:
   XBooleanLiteral |
   XNullLiteral |
@@ -23,26 +36,26 @@ XLiteral returns XExpression:
   DateTimeLiteral;
 
 DateLiteral:
-	{DateLiteral} value=DATE;	
+	{DateLiteral} value=Date;
 
 DateTimeLiteral:
-	{DateTimeLiteral} value=DATE_TIME;	
+	{DateTimeLiteral} value=Date_Time;	
 
 DecimalLiteral:
-  {DecimalLiteral} value=NUMBER;
+  {DecimalLiteral} value=Number;
 
 XNullLiteral returns XExpression :
 	{XNullLiteral} ('null' | 'NULL');
 	
 XBooleanLiteral returns XExpression :
 	{XBooleanLiteral} (('false' | 'FALSE') | isTrue?=('true' | 'TRUE'));	
-	
-terminal DATE_TIME:
-	(('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')' '('0'..'9')('0'..'9')':'('0'..'9')('0'..'9')':'('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')('0'..'9')('0'..'9')' '('0'..'9')('0'..'9')':'('0'..'9')('0'..'9')':'('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')' '('0'..'9')('0'..'9')':'('0'..'9')('0'..'9')':'('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')('0'..'9')('0'..'9')' '('0'..'9')('0'..'9')':'('0'..'9')('0'..'9')':'('0'..'9')('0'..'9'));
 
-terminal DATE:
-	(('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')'.'('0'..'9')('0'..'9')('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9'))|(('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')'/'('0'..'9')('0'..'9')('0'..'9')('0'..'9'));
+Date:
+	INT'.'INT'.'INT;
 
-terminal NUMBER: 
-	((('0'..'9')+'.'('0'..'9')*(('e'|'E'|'d'|'D')('-'|'+')?('0'..'9')+)?)|('.'('0'..'9')+(('e'|'E'|'d'|'D')('-'|'+')?('0'..'9')+)?)|(('0'..'9')+(('e'|'E'|'d'|'D')('-'|'+')?('0'..'9')+)?));
-  
+Date_Time:
+	Date INT ':' INT ':' INT;
+
+Number: 
+	(INT? '.')? INT (=>(('e'|'E')('-'|'+')? INT) | ID )?;
+ 

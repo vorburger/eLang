@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el.ui
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Vendor: vorburger.ch
+Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: ch.vorburger.el;visibility:=reexport,
@@ -20,6 +20,7 @@ Require-Bundle: ch.vorburger.el;visibility:=reexport,
 Import-Package: org.apache.log4j,
  org.apache.commons.logging
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: ch.vorburger.el.ui.contentassist.antlr,
+Export-Package: ch.vorburger.el.ui.contentassist,
+ ch.vorburger.el.ui.contentassist.antlr,
  ch.vorburger.el.ui.internal
 Bundle-Activator: ch.vorburger.el.ui.internal.ELActivator

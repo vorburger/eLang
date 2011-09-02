@@ -2,14 +2,13 @@ package ch.vorburger.el.lib;
 
 import java.math.BigDecimal;
 
-public class TypeExtensions {
-
+public class DecimalExtensions {
 	public static BigDecimal operator_plus(BigDecimal x, BigDecimal y) {
-		if(y!=null) {
-			return x.add(y);
-		} else {
-			return x;
-		}
+		return x.add(y);
+	}
+
+	public static BigDecimal operator_minus(BigDecimal x) {
+		return x.negate();
 	}
 
 	public static BigDecimal operator_minus(BigDecimal x, BigDecimal y) {
@@ -23,9 +22,5 @@ public class TypeExtensions {
 	public static BigDecimal operator_divide(BigDecimal x, BigDecimal y) {
 		return x.divide(y);
 	}
-	
-	public static BigDecimal operator_minus(BigDecimal x) {
-		return x.negate();
-	}
-	
+
 }

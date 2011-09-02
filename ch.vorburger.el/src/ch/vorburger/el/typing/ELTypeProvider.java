@@ -31,5 +31,4 @@ public class ELTypeProvider extends XbaseTypeProvider {
 	protected JvmTypeReference _type(DateTimeLiteral literal, boolean rawType) {
 		return typeReferences.getTypeForName(GregorianCalendar.class, literal);
 	}
-
 }

@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Vendor: vorburger.ch
+Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.0.0";visibility:=reexport,
@@ -34,6 +34,9 @@ Export-Package: ch.vorburger.el,
  ch.vorburger.el.lib,
  ch.vorburger.el.parser.antlr,
  ch.vorburger.el.parser.antlr.internal,
+ ch.vorburger.el.scoping,
  ch.vorburger.el.serializer,
  ch.vorburger.el.services,
- ch.vorburger.el.validation
+ ch.vorburger.el.typing,
+ ch.vorburger.el.validation,
+ ch.vorburger.el.valueconverter

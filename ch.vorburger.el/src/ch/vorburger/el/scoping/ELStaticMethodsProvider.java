@@ -7,17 +7,23 @@ import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeP
 
 import com.google.common.collect.Iterables;
 
-public class ELStaticMethodsProvider extends
-		StaticMethodsFeatureForTypeProvider {
-
+public class ELStaticMethodsProvider extends StaticMethodsFeatureForTypeProvider {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	  protected Iterable<String> getVisibleTypesContainingStaticMethods(JvmTypeReference reference) {
-		Iterable<String> resultFromSuper = super.getVisibleTypesContainingStaticMethods(reference);
+	protected Iterable getVisibleTypesContainingStaticMethods(JvmTypeReference reference) {
+		Iterable resultFromSuper = super.getVisibleTypesContainingStaticMethods(reference);
 		if (reference != null && reference.getType() != null
-	        && "java.math.BigDecimal"
-	          .equals(reference.getType().getIdentifier())) {
-	      return Iterables.concat(Collections.singletonList("ch.vorburger.el.lib.TypeExtensions"), resultFromSuper);
-	    }
-	    return resultFromSuper;
-	  } 
+				&& "java.math.BigDecimal".equals(reference.getType().getIdentifier())) {
+			return Iterables.concat(
+					Collections.singletonList("ch.vorburger.el.lib.DecimalExtensions"),
+					resultFromSuper);
+		}
+		if (reference != null && reference.getType() != null
+				&& "java.util.GregorianCalendar".equals(reference.getType().getIdentifier())) {
+			return Iterables.concat(
+					Collections.singletonList("ch.vorburger.el.lib.DateExtensions"),
+					resultFromSuper);
+		}
+		return resultFromSuper;
+	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.xtext.diagnostics.AbstractDiagnostic;
 import org.eclipse.xtext.diagnostics.ExceptionDiagnostic;
+import org.eclipse.xtext.validation.Issue;
 
 /**
  * Error occurring during the loading/parsing of an expression.
@@ -19,8 +20,8 @@ public class ExpressionParsingException extends ExpressionException {
 		super(message, expressionAsString);
 	}
 
-	public ExpressionParsingException(String message, String scriptAsString, Throwable t) {
-		super(message, scriptAsString, t);
+	public ExpressionParsingException(String message, String expressionAsString, Throwable t) {
+		super(message, expressionAsString, t);
 	}
 
 	public ExpressionParsingException addDiagnosticErrors(List<Diagnostic> errors) {
@@ -34,6 +35,13 @@ public class ExpressionParsingException extends ExpressionException {
 			} else {
 				this.getErrors().add(new ExpressionError(emfDiagnosticError.getMessage(), -1, -1, -1));				
 			}
+		}
+		return this;
+	}
+
+	public ExpressionParsingException addValidationIssues(Iterable<Issue> validationErrors) {
+		for (Issue validationError : validationErrors) {
+			this.getErrors().add(new ExpressionError(validationError.getMessage(), validationError.getLineNumber(), validationError.getOffset(), validationError.getLength()));				
 		}
 		return this;
 	}

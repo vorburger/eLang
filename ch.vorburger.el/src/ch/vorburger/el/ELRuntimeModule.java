@@ -3,17 +3,40 @@
  */
 package ch.vorburger.el;
 
+import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
+import org.eclipse.xtext.scoping.IScopeProvider;
+import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
+import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
+import ch.vorburger.el.naming.ELQualifiedNameProvider;
+import ch.vorburger.el.scoping.ELScopeProvider;
 import ch.vorburger.el.scoping.ELStaticMethodsProvider;
 import ch.vorburger.el.typing.ELTypeProvider;
+import ch.vorburger.el.valueconverter.ELValueConverterService;
 
 /**
  * Use this class to register components to be used at runtime / without the
  * Equinox extension registry.
  */
 public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
+
+	@Override
+	public Class<? extends IValueConverterService> bindIValueConverterService() {
+		return ELValueConverterService.class;
+	}
+
+	@Override
+	public Class<? extends IdentifiableSimpleNameProvider> bindIdentifiableSimpleNameProvider() {
+		return ELIdentifiableSimpleNameProvider.class;
+	}
+
+	@Override
+	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return ELQualifiedNameProvider.class;
+	}
 
 	public Class<? extends StaticMethodsFeatureForTypeProvider> bindStaticMethodsFeatureForTypeProvider() {
 		return ELStaticMethodsProvider.class;
@@ -23,4 +46,10 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	public Class<? extends ITypeProvider> bindITypeProvider() {
 		return ELTypeProvider.class;
 	}
+	
+	@Override
+	public Class<? extends IScopeProvider> bindIScopeProvider() {
+		return ELScopeProvider.class;
+	}
+
 }

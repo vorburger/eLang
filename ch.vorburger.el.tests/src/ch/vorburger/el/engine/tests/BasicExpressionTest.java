@@ -11,39 +11,87 @@ import org.junit.Test;
 
 import ch.vorburger.el.engine.ExpressionException;
 import ch.vorburger.el.engine.ExpressionExecutionException;
+import ch.vorburger.el.engine.ExpressionFactory;
 import ch.vorburger.el.engine.ExpressionParsingException;
 
 
 /**
- * Basic Tests for the Script Engine.
+ * Basic Tests for the Expression Engine.
  * 
  * @author Michael Vorburger
- */
+ * @author Kai Kreuzer
+*/
 public class BasicExpressionTest extends AbstractExpressionTestBase {
 	
+	public BasicExpressionTest() {
+		super(new ExpressionFactory());
+	}
+
+	protected BasicExpressionTest(ExpressionFactory expressionFactory) {
+		super(expressionFactory);
+	}
+
 	@Test
 	public void testFixedNumericLiterals() throws Exception {
 		checkNumericExpression("1", 1);
 		checkNumericExpression("1", 1);
 		checkNumericExpression("23.7", new BigDecimal("23.7"));
+		checkNumericExpression("23.73", new BigDecimal("23.73"));
 		checkNumericExpression("81.5e2", 8150);
-		checkNumericExpression(".5", new BigDecimal(0.5));
-		
-		// TODO What does the d notation mean?  Test it: checkNumericExpressionScript("1d2", ???);
-		
-		// TODO Test more numeric literal string formats?  Do some negative testing also, what should fail?
+		checkNumericExpression(".5", new BigDecimal(0.5));		
 	}
 	
 	@Test
 	public void testFixedDateLiterals() throws Exception {
 		checkDateExpression("15.06.2008", new GregorianCalendar(2008,06-1,15));
-		checkDateExpression("15/06/2008", new GregorianCalendar(2008,06-1,15));
-
 		checkDateExpression("15.06.08", new GregorianCalendar(2008,06-1,15));
 		// TODO Test the two-digit year format interpretation well!!!  y = y<100 ? y<50 ? y+2000 : y+1900 : y;
 
 		checkDateExpression("15.06.2008 18:23:53", new GregorianCalendar(2008,06-1,15,18,23,53));
 		checkDateExpression("15.06.08 18:23:53", new GregorianCalendar(2008,06-1,15,18,23,53));
+
+		try {
+			checkDateExpression("15.13.2008", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '13', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("13"));
+		}
+		try {
+			checkDateExpression("15.00.2008", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '00', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("00"));
+		}
+		try {
+			checkDateExpression("00.10.2008", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '00', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("00"));
+		}
+		try {
+			checkDateExpression("32.10.2008", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '32', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("32"));
+		}
+		try {
+			checkDateExpression("01.10.2008 24:00:00", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '24', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("24"));
+		}
+		try {
+			checkDateExpression("01.10.2008 00:60:00", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '60', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("60"));
+		}
+		try {
+			checkDateExpression("01.10.2008 00:00:60", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			Assert.assertTrue("Exception message does not contain '60', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("60"));
+		}
 
 		// TODO Test more numeric literal date and dateTime formats?  Do some negative testing also, what should fail?
 
@@ -67,6 +115,7 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 		checkNumericExpression("0 + 2 * 3", 6);
 		checkNumericExpression("27-13", 14);
 		checkNumericExpression("27 - 13", 14);
+		checkNumericExpression("26/13", 2);
 		checkNumericExpression("5.0/2.0", new BigDecimal("2.5"));
 
 		// More than two, with mixed operators (of same precedence)
@@ -129,28 +178,75 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 		checkBooleanExpression("26 >= 27", false);
 	}
 
-	// TODO Is String comparison with =/==/!=/<> required/supported, or only LIKE?
-//	@Test
-//	public void testStringBooleanOperators() throws Exception {
-//		checkBooleanExpressionScript("\"ABC\" = \"ABC\"", true);
-//		checkBooleanExpressionScript("\"ABC\" = \"CBA\"", false);
-//		checkBooleanExpressionScript("\"ABC\" == \"ABC\"", true);
-//		checkBooleanExpressionScript("\"ABC\" == \"CBA\"", false);
-//		
-//		checkBooleanExpressionScript("\"ABC\" != \"ABC\"", false);
-//		checkBooleanExpressionScript("\"ABC\" != \"CBA\"", true);
-//		checkBooleanExpressionScript("\"ABC\" <> \"ABC\"", false);
-//		checkBooleanExpressionScript("\"ABC\" <> \"CBA\"", true);
-//
-//	}
+	@Test
+	public void testStringBooleanOperators() throws Exception {
+		checkBooleanExpression("\"ABC\" == \"ABC\"", true);
+		checkBooleanExpression("\"ABC\" == \"CBA\"", false);
+		
+		checkBooleanExpression("\"ABC\" != \"ABC\"", false);
+		checkBooleanExpression("\"ABC\" != \"CBA\"", true);
 
-	// TODO Is String less-than/greater-than comparison (</>/>=/<=) required/supported?  (e.g. "\"ABC\" < \"ABC\"", etc.)
-	
-	// TODO Negative testing, and testing of error handling for unsupported comparison types (e.g. String literal and numeric "Hello" == 123, or 1 + 1 OR 2, etc.)
-	
-	// TODO testDateBooleanComparison() - presumably, =/==/!=/<>/<=/>=/!</!> can be used on DATE literal (and variables), too?
-	
-	// TODO testNULLValueComparison: "The NULL value can only be used with the = ( == ) or != ( <> ) operators. Any attempt to use another operator returns the value 0 (false)."
+		checkBooleanExpression("\"ABC\" < \"ABC\"", false);
+		checkBooleanExpression("\"ABC\" <= \"ABC\"", true);
+		checkBooleanExpression("\"ABC\" > \"ABC\"", false);
+		checkBooleanExpression("\"ABC\" >= \"ABC\"", true);
+		checkBooleanExpression("\"ABC\" < \"CBA\"", true);
+		checkBooleanExpression("\"ABC\" > \"CBA\"", false);
+	}
+
+	@Test
+	public void testInvalidTypeComparison() throws Exception {
+		try {
+			checkBooleanExpression("\"ABC\" > 0", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			// OK
+		}
+
+		try {
+			checkBooleanExpression("\"ABC\" < 0", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			// OK
+		}
+
+		try {
+			checkBooleanExpression("\"ABC\" > 01.01.2011", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			// OK
+		}
+
+		try {
+			checkBooleanExpression("\"ABC\" > true", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			// OK
+		}
+
+		try {
+			checkBooleanExpression("1+1 || 2", null);
+			Assert.fail("This should have failed...");
+		} catch (ExpressionParsingException e) {
+			// OK
+		}
+
+	}
+
+	@Test
+	public void testDateComparison() throws Exception {
+		checkBooleanExpression("01.01.2011>31.12.2010", true);		
+		checkBooleanExpression("01.01.2011<31.12.2010", false);		
+		checkBooleanExpression("01.01.2011 < 31.12.2010", false);		
+		checkBooleanExpression("01.01.2011==31.12.2010", false);		
+		checkBooleanExpression("01.01.2011!=31.12.2010", true);		
+
+		checkBooleanExpression("01.01.2011 00:00:00==01.01.2011", true);		
+		checkBooleanExpression("01.01.2011 00:00:00<01.01.2011 01:01:01", true);		
+		checkBooleanExpression("01.01.2011 00:00:00 < 01.01.2011 01:01:01", true);		
+		checkBooleanExpression("01.01.2011>01.01.2011 01:01:01", false);		
+		checkBooleanExpression("01.01.2011 > 01.01.2011 01:01:01", false);		
+	}
 	
 	@Test
 	public void testEmptyScript() throws Exception {
@@ -170,7 +266,7 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 	}
 	
 	@Test
-	public void testWhitespaceAndCommentAroundExpressions() throws Exception {
+	public void testWhitespaceAroundExpressions() throws Exception {
 		checkNumericExpression(" \n.5", new BigDecimal("0.5"));
 	}
 
@@ -191,10 +287,6 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 		// I initially had some trouble with NegatedExpression, this should work as well of course:
 		checkNumericExpression("5-1", 4);
 		checkNumericExpression("5 -1", 4);
-		
-		// TODO Grammar should support +(1+1) now... fix interpreter.
-		// TODO An expression like "+(1+1)" is not supported yet... I think.  Could be added, but very low priority.
-		// UNSUPPORTED: checkNumericExpressionScript("+(1+1)", Integer.valueOf( +(1+1) ));
 	}
 	
 	@Test
@@ -204,20 +296,20 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 			Assert.fail("This should have failed...");
 		}
 		catch (ExpressionParsingException e) {
- 			// TODO Column Number does not seem to be working!  Assert.assertEquals(3, e.getErrors().get(0).getColumnNumber());
+ 			Assert.assertEquals(0, e.getErrors().get(0).getColumnNumber());
 		}
 	}
 	
 	@Test
 	public void testTypeMismatchErrorHandlingDateInsteadOfNumberInAddition() throws Exception {
 		try {
-			checkNumericExpression("1+2+3+15.06.2008", Integer.valueOf(-1));
+			checkNumericExpression("1.4+16.06.2008", Integer.valueOf(-1));
 			Assert.fail("This should have failed...");
 		}
 		catch (ExpressionParsingException e) {
-//			System.out.println("OK: " + e.getMessage());
-			Assert.assertTrue("Exception message does not contain '.2008', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains(".2008"));
-			// TODO Column Number does not seem to be working! Assert.assertEquals(6, e.getErrors().get(0).getColumnNumber());
+			Assert.assertTrue("Exception message does not contain '.2008', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("16.06.2008"));
+			Assert.assertEquals(4, e.getErrors().get(0).getColumnNumber());
+			Assert.assertEquals(10, e.getErrors().get(0).getLength());
 		}
 	}
 
@@ -244,17 +336,19 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 	}
 	
 	
-//	@Test
-//	public void testTypeMismatchErrorHandlingNumberInsteadOfBoolean() throws Exception {
-//		try {
-//			checkBooleanExpressionScript("123", true);
-//			Assert.fail("This should have failed...");
-//		}
-//		catch (ScriptExcecutionException e) {
-//			Assert.assertTrue("Exception message does not contain '123', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("123"));
-//			// System.out.println("OK: " + e.getMessage());
-//		}
-//	}
+	@Test
+	@Ignore
+	// This one contradicts the test testNumberInterpretedAsBoolean
+	public void testTypeMismatchErrorHandlingNumberInsteadOfBoolean() throws Exception {
+		try {
+			checkBooleanExpression("123", true);
+			Assert.fail("This should have failed...");
+		}
+		catch (ExpressionExecutionException e) {
+			Assert.assertTrue("Exception message does not contain '123', the faulty part of the expression, as expected, but instead: " + e.getMessage(), e.getMessage().contains("123"));
+			// System.out.println("OK: " + e.getMessage());
+		}
+	}
 
 	@Test
 	public void testTypeMismatchErrorHandlingStringInsteadOfDate() throws Exception {

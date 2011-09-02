@@ -68,8 +68,7 @@ public final class ExpressionError {
 	 * Get the column number on which an error occurred.
 	 * @return The column number. Returns -1 if a column number is unavailable.
 	 */
-	// TODO Column Number does not seem to be working! Should be public if I can get column numbers to work! 
-	int getColumnNumber() {
+	public int getColumnNumber() {
 		return column;
 	}
     
