@@ -4,12 +4,18 @@
 package ch.vorburger.el;
 
 import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
+import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
+import ch.vorburger.el.engine.Expression;
+import ch.vorburger.el.engine.ExpressionImpl;
+import ch.vorburger.el.generator.ELGenerator;
+import ch.vorburger.el.interpreter.ELInterpreter;
 import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
 import ch.vorburger.el.naming.ELQualifiedNameProvider;
 import ch.vorburger.el.scoping.ELScopeProvider;
@@ -52,4 +58,17 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELScopeProvider.class;
 	}
 
+	@Override
+	public Class<? extends IExpressionInterpreter> bindIExpressionInterpreter() {
+		return ELInterpreter.class;
+	}
+	
+	@Override
+	public Class<? extends IGenerator> bindIGenerator() {
+		return ELGenerator.class;
+	}
+	
+	public Class<? extends Expression> bindExpression() {
+		return ExpressionImpl.class;
+	}
 }

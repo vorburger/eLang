@@ -78,8 +78,8 @@ public class ExpressionFactory {
 	 * @throws ExpressionCompilationException 
 	 */
 	public Expression newCompiledExpressionFromString(final String expressionAsString) throws ExpressionParsingException, ExpressionCompilationException {
-		ExpressionImpl expression = guiceInjector.getInstance(ExpressionImpl.class);
-		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString));
+		Expression expression = guiceInjector.getInstance(Expression.class);
+		((ExpressionImpl)expression).setXExpression(parseExpressionIntoXTextEObject(expressionAsString));
 		return expression.compile();
 	}
 
