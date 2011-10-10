@@ -3,6 +3,7 @@ package ch.vorburger.el.engine;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 
 public abstract class AbstractExpression implements Expression {
 
@@ -11,10 +12,10 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public BigDecimal evaluateExpectingNumber()
+	public BigDecimal evaluateExpectingNumber(Map<String, Object> context)
 			throws ExpressionExecutionException {
 		try {
-			return (BigDecimal) evaluate();
+			return (BigDecimal) evaluate(context);
 		} catch (ClassCastException e) {
 			throw new ExpressionExecutionException(
 					"Expression does not evaluate to a Number.");
@@ -22,8 +23,7 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public GregorianCalendar evaluateExpectingGregorianCalendar(
-			final Object rootObj) throws ExpressionExecutionException {
+	public GregorianCalendar evaluateExpectingGregorianCalendar() throws ExpressionExecutionException {
 		try {
 			return (GregorianCalendar) evaluate();
 		} catch (ClassCastException e) {
@@ -33,7 +33,7 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public Date evaluateExpectingDate(final Object rootObj)
+	public Date evaluateExpectingDate()
 			throws ExpressionExecutionException {
 		// Implementation may change; clients should use method with most
 		// appropriate return type for client
@@ -47,7 +47,7 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public String evaluateExpectingString(final Object rootObj)
+	public String evaluateExpectingString()
 			throws ExpressionExecutionException {
 		Object result = evaluate();
 		if (result == null) {
@@ -58,7 +58,7 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public Boolean evaluateExpectingBoolean(final Object rootObj)
+	public Boolean evaluateExpectingBoolean()
 			throws ExpressionExecutionException {
 		try {
 			Object result = evaluate();

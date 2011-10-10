@@ -45,18 +45,18 @@ public class ELCompiler extends XbaseCompiler {
 		b.append(")");
 	}
 
-	protected void _toJavaStatement(DateLiteral expr, IAppendable b,
-			boolean isReferenced) {
-		generateComment(expr, b, isReferenced);
-	}
-
-	protected void _toJavaStatement(DateTimeLiteral expr, IAppendable b,
-			boolean isReferenced) {
-		generateComment(expr, b, isReferenced);
-	}
-
-	protected void _toJavaStatement(DecimalLiteral expr, IAppendable b,
-			boolean isReferenced) {
-		generateComment(expr, b, isReferenced);
-	}
+//	protected void _toJavaStatement(DateLiteral expr, IAppendable b,
+//			boolean isReferenced) {
+//		generateComment(expr, b, isReferenced);
+//	}
+//
+//	protected void _toJavaStatement(DateTimeLiteral expr, IAppendable b,
+//			boolean isReferenced) {
+//		generateComment(expr, b, isReferenced);
+//	}
+//
+//	protected void _toJavaStatement(DecimalLiteral expr, IAppendable b,
+//			boolean isReferenced) {
+//		generateComment(expr, b, isReferenced);
+//	}
 }

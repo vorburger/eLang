@@ -3,6 +3,7 @@ package ch.vorburger.el.engine;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 
 
 
@@ -11,26 +12,23 @@ import java.util.GregorianCalendar;
  *
  * @see ExpressionFactory
  * @author Michael Vorburger
+ * @author Kai Kreuzer
  */
 public interface Expression {
 
-	public Object evaluate()
-			throws ExpressionExecutionException;
-			
-	public BigDecimal evaluateExpectingNumber(/* final DataObject rootObj*/)
-			throws ExpressionExecutionException;
+	public Object evaluate() throws ExpressionExecutionException;
 
-	public GregorianCalendar evaluateExpectingGregorianCalendar(
-			final Object rootObj) throws ExpressionExecutionException;
+	public Object evaluate(Map<String, Object> context) throws ExpressionExecutionException;
 
-	public Date evaluateExpectingDate(final Object rootObj)
-			throws ExpressionExecutionException;
+	public BigDecimal evaluateExpectingNumber(Map<String, Object> context)	throws ExpressionExecutionException;
 
-	public String evaluateExpectingString(
-			final Object rootObj) throws ExpressionExecutionException;
+	public GregorianCalendar evaluateExpectingGregorianCalendar() throws ExpressionExecutionException;
 
-	public Boolean evaluateExpectingBoolean(
-			final Object rootObj) throws ExpressionExecutionException;
+	public Date evaluateExpectingDate() throws ExpressionExecutionException;
+
+	public String evaluateExpectingString() throws ExpressionExecutionException;
+
+	public Boolean evaluateExpectingBoolean() throws ExpressionExecutionException;
 	
 	public Expression compile() throws ExpressionCompilationException;
 	

@@ -1,7 +1,11 @@
 package ch.vorburger.el.engine;
 
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.OnTheFlyJavaCompiler.EclipseRuntimeDependentJavaCompiler;
@@ -42,10 +46,17 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 		return xExpression;
 	}
 	
-	public Object evaluate() throws ExpressionExecutionException {
+	public Object evaluate(Map<String, Object> context) throws ExpressionExecutionException {
 		Object thisElement = null;
 	    IEvaluationContext evaluationContext = contextProvider.get();
 	    evaluationContext.newValue(XbaseScopeProvider.THIS, thisElement);
+
+	    if(context!=null) {
+			for(Map.Entry<String, Object> entry : context.entrySet()) {
+				evaluationContext.newValue(QualifiedName.create(entry.getKey()), convertToExpressionType(entry.getValue()));
+			}
+	    }
+
 	    IEvaluationResult result = elInterpreter.evaluate(xExpression, evaluationContext, CancelIndicator.NullImpl);
 	    if (result.getException() != null) {
 	        throw new ExpressionExecutionException("Boo!", result.getException());
@@ -53,6 +64,27 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	    return result.getResult();
 	}
 
+	private Object convertToExpressionType(Object value) {
+		if(value instanceof Integer) {
+			return new BigDecimal((Integer) value);
+		}
+		if(value instanceof Long) {
+			return new BigDecimal((Long) value);
+		}
+		if(value instanceof Float) {
+			return new BigDecimal((Float) value);
+		}
+		if(value instanceof Double) {
+			return new BigDecimal((Double) value);
+		}
+		return value;
+	}
+
+
+	public Object evaluate() throws ExpressionExecutionException {
+		return evaluate(null);
+	}
+	
 	@Override
 	public Expression compile() throws ExpressionCompilationException {
 		initializeClassPath();
@@ -76,5 +108,4 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 		javaCompiler.addClassPathOfClass(Supplier.class);  // google collect
 	}
 
-	
 }

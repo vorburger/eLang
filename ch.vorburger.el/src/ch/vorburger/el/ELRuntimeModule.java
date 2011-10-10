@@ -12,6 +12,8 @@ import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
+import com.google.inject.Singleton;
+
 import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionImpl;
 import ch.vorburger.el.generator.ELGenerator;
@@ -52,11 +54,6 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	public Class<? extends ITypeProvider> bindITypeProvider() {
 		return ELTypeProvider.class;
 	}
-	
-	@Override
-	public Class<? extends IScopeProvider> bindIScopeProvider() {
-		return ELScopeProvider.class;
-	}
 
 	@Override
 	public Class<? extends IExpressionInterpreter> bindIExpressionInterpreter() {
@@ -70,5 +67,11 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	
 	public Class<? extends Expression> bindExpression() {
 		return ExpressionImpl.class;
+	}
+
+	@Override
+	@Singleton
+	public Class<? extends IScopeProvider> bindIScopeProvider() {
+		return ELScopeProvider.class;
 	}
 }

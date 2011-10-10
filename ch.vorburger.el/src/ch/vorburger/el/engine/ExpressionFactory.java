@@ -5,7 +5,9 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -23,9 +25,11 @@ import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.XExpression;
 
 import ch.vorburger.el.ELStandaloneSetup;
+import ch.vorburger.el.scoping.ELScopeProvider;
 
 import com.google.common.base.Predicate;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 
 /**
  * Expression Factory which can create new Expression objects from some textual representation.
@@ -62,9 +66,13 @@ public class ExpressionFactory {
 	 * @throws ExpressionCompilationException 
 	 */
 	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException, ExpressionCompilationException {
-		if(alwaysCompile) return newCompiledExpressionFromString(expressionAsString);
+		return newExpressionFromString(expressionAsString, null);
+	}
+
+	public Expression newExpressionFromString(final String expressionAsString, Map<String, Class<? extends Object>> varTypes) throws ExpressionParsingException, ExpressionCompilationException {
+		if(alwaysCompile) return newCompiledExpressionFromString(expressionAsString, varTypes);
 		ExpressionImpl expression = guiceInjector.getInstance(ExpressionImpl.class);
-		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString));
+		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString, varTypes));
 		return expression;
 	}
 
@@ -74,12 +82,27 @@ public class ExpressionFactory {
 	 * @see ExpressionEngine
 	 * 
 	 * @param expressionAsString Expression expression
+	 * @param varTypes 
 	 * @return expression object, which can be evaluated 
 	 * @throws ExpressionCompilationException 
 	 */
 	public Expression newCompiledExpressionFromString(final String expressionAsString) throws ExpressionParsingException, ExpressionCompilationException {
+		return newCompiledExpressionFromString(expressionAsString, null);
+	}
+
+	/**
+	 * Parse text expression and return a parsed expression object.
+	 * 
+	 * @see ExpressionEngine
+	 * 
+	 * @param expressionAsString Expression expression
+	 * @param varTypes 
+	 * @return expression object, which can be evaluated 
+	 * @throws ExpressionCompilationException 
+	 */
+	public Expression newCompiledExpressionFromString(final String expressionAsString, Map<String, Class<? extends Object>> varTypes) throws ExpressionParsingException, ExpressionCompilationException {
 		Expression expression = guiceInjector.getInstance(Expression.class);
-		((ExpressionImpl)expression).setXExpression(parseExpressionIntoXTextEObject(expressionAsString));
+		((ExpressionImpl)expression).setXExpression(parseExpressionIntoXTextEObject(expressionAsString, varTypes));
 		return expression.compile();
 	}
 
@@ -102,12 +125,17 @@ public class ExpressionFactory {
 	}
 
 	/**
+	 * @param varTypes 
 	 * @see http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=287413
 	 */
-	private XExpression parseExpressionIntoXTextEObject(final String expressionAsString) throws ExpressionParsingException {
+	private XExpression parseExpressionIntoXTextEObject(final String expressionAsString, Map<String, Class<? extends Object>> varTypes) throws ExpressionParsingException {
 
 		Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
+
+		Adapter varTypeAdapter = new VarTypeAdapter(varTypes);
+		resource.eAdapters().add(varTypeAdapter);
+		
 		try {
 			resource.load(new StringInputStream(expressionAsString), resourceSet.getLoadOptions());
 		} catch (IOException e) {
@@ -163,5 +191,4 @@ public class ExpressionFactory {
 	protected String getFileExtension() {
 		return "expr";
 	}
-
 }

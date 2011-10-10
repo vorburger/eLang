@@ -10,6 +10,7 @@ XExpression returns XExpression :
 	XOrExpression;
 
 XPrimaryExpression returns XExpression:
+	XFeatureCall |
 	XLiteral |
 	XIfExpression |
 	XParenthesizedExpression;
