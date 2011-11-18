@@ -38,7 +38,7 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 		checkNumericExpression("23.7", new BigDecimal("23.7"));
 		checkNumericExpression("23.73", new BigDecimal("23.73"));
 		checkNumericExpression("81.5e2", 8150);
-		checkNumericExpression(".5", new BigDecimal(0.5));		
+		checkNumericExpression("0.5", new BigDecimal(0.5));		
 	}
 	
 	@Test
@@ -265,7 +265,7 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 	
 	@Test
 	public void testWhitespaceAroundExpressions() throws Exception {
-		checkNumericExpression(" \n.5", new BigDecimal("0.5"));
+		checkNumericExpression(" \n0.5", new BigDecimal("0.5"));
 	}
 
 	@Test
@@ -274,7 +274,7 @@ public class BasicExpressionTest extends AbstractExpressionTestBase {
 		checkNumericExpression("- 1", -1);
 		checkNumericExpression("-23.7", new BigDecimal("-23.7"));
 		checkNumericExpression("-81.5e2", -8150);
-		checkNumericExpression("-.5", new BigDecimal("-0.5"));
+		checkNumericExpression("-0.5", new BigDecimal("-0.5"));
 
 		// With WS etc. (Tokenizer will not pick it up; leads to a NegationExpression)
 		checkNumericExpression("-   1", -1);

@@ -3,7 +3,6 @@ package ch.vorburger.el.engine;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
 
 public abstract class AbstractExpression implements Expression {
 
@@ -12,7 +11,12 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public BigDecimal evaluateExpectingNumber(Map<String, Object> context)
+	public BigDecimal evaluateExpectingNumber() throws ExpressionExecutionException {
+		return evaluateExpectingNumber(null);
+	}
+
+	@Override
+	public BigDecimal evaluateExpectingNumber(ExpressionContext context)
 			throws ExpressionExecutionException {
 		try {
 			return (BigDecimal) evaluate(context);
@@ -24,8 +28,13 @@ public abstract class AbstractExpression implements Expression {
 
 	@Override
 	public GregorianCalendar evaluateExpectingGregorianCalendar() throws ExpressionExecutionException {
+		return evaluateExpectingGregorianCalendar(null);
+	}
+
+	@Override
+	public GregorianCalendar evaluateExpectingGregorianCalendar(ExpressionContext context) throws ExpressionExecutionException {
 		try {
-			return (GregorianCalendar) evaluate();
+			return (GregorianCalendar) evaluate(context);
 		} catch (ClassCastException e) {
 			throw new ExpressionExecutionException(
 					"Expression does not evaluate to a GregorianCalendar.");
@@ -33,12 +42,17 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public Date evaluateExpectingDate()
+	public Date evaluateExpectingDate() throws ExpressionExecutionException {
+		return evaluateExpectingDate(null);
+	}
+
+	@Override
+	public Date evaluateExpectingDate(ExpressionContext context)
 			throws ExpressionExecutionException {
 		// Implementation may change; clients should use method with most
 		// appropriate return type for client
 		try {
-			GregorianCalendar result = (GregorianCalendar) evaluate();
+			GregorianCalendar result = (GregorianCalendar) evaluate(context);
 			return result.getTime();
 		} catch (ClassCastException e) {
 			throw new ExpressionExecutionException(
@@ -47,39 +61,41 @@ public abstract class AbstractExpression implements Expression {
 	}
 
 	@Override
-	public String evaluateExpectingString()
+	public String evaluateExpectingString() throws ExpressionExecutionException {
+		return evaluateExpectingString(null);
+	}
+
+	@Override
+	public String evaluateExpectingString(ExpressionContext context)
 			throws ExpressionExecutionException {
-		Object result = evaluate();
+		Object result = evaluate(context);
 		if (result == null) {
 			return null;
 		} else {
-			return evaluate().toString();
+			return result.toString();
 		}
 	}
 
 	@Override
-	public Boolean evaluateExpectingBoolean()
+	public Boolean evaluateExpectingBoolean() throws ExpressionExecutionException {
+		return evaluateExpectingBoolean(null);
+	}
+	
+	@Override
+	public Boolean evaluateExpectingBoolean(ExpressionContext context)
 			throws ExpressionExecutionException {
 		try {
-			Object result = evaluate();
+			Object result = evaluate(context);
 			if (result instanceof BigDecimal) {
 				return ((BigDecimal) result).intValue() != 0;
 			} else {
-				return (Boolean) evaluate();
+				return (Boolean) result;
 			}
 		} catch (ClassCastException e) {
 			throw new ExpressionExecutionException(
 					"Expression does not evaluate to a Boolean.");
 		}
 	}
-
-	// TODO Return Any (ex-NodeEvalResult) instead of 4-5 different signatures?
-
-	// public DataObject evaluateExpectingDataObject(/* DataObject rootObj*/)
-	// throws ExpressionExcecutionException {
-	// return ((ExpressionImpl)expression).evaluateExpectingDataObject(null
-	// /*rootObj*/);
-	// }
 	
 	@Override
 	public Expression compile() throws ExpressionCompilationException {

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
 
 
@@ -28,9 +29,9 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 
 	@Test
 	public void testVariableNumericLiterals() throws Exception {
-		Map<String, Object> context = new HashMap<String, Object>();
-		context.put("a", 1);
-		context.put("b", 2);
+		ExpressionContext context = new ExpressionContext();
+		context.putInstance("a", 1);
+		context.putInstance("b", 2);
 		
 		checkNumericExpression("a", context, 1);
 		checkNumericExpression("b", context, 2);

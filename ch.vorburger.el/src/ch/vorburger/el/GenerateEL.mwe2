@@ -14,6 +14,7 @@ Workflow {
         scanClassPath = true
         platformUri = "${runtimeProject}/.."
         registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
+        registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
     }
 
     component = DirectoryCleaner {

@@ -71,6 +71,19 @@
         </page>
     </extension>
     <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="ch.vorburger.el.EL"
+            name="EL">
+            <keywordReference id="ch.vorburger.el.ui.keyword_EL"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
         point="org.eclipse.ui.keywords">
         <keyword
             id="ch.vorburger.el.ui.keyword_EL"
@@ -145,6 +158,30 @@
             class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
+   <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            category="ch.vorburger.el.EL"
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="ch.vorburger.el.EL.compiler.preferencePage"
+            name="Compiler">
+            <keywordReference id="ch.vorburger.el.ui.keyword_EL"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            category="ch.vorburger.el.EL"
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="ch.vorburger.el.EL.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="ch.vorburger.el.ui.keyword_EL"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
 
 	<!-- Quick Outline -->
 	<extension
@@ -190,7 +227,7 @@
    	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 
-			class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RenameElementHandler"
+			class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler"
 			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
 			<activeWhen>
 				<reference
@@ -212,6 +249,15 @@
          </command>
       </menuContribution>
    </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+	    <page
+	        category="ch.vorburger.el.EL"
+	        class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="ch.vorburger.el.EL.refactoring"
+	        name="Refactoring">
+	        <keywordReference id="ch.vorburger.el.ui.keyword_EL"/>
+	    </page>
+	</extension>
 
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="ch.vorburger.el.EL.compare.contentViewers"

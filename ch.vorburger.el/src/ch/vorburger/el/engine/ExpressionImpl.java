@@ -1,9 +1,6 @@
 package ch.vorburger.el.engine;
 
 
-import java.math.BigDecimal;
-import java.util.Map;
-
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
@@ -23,6 +20,7 @@ import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+@SuppressWarnings("restriction")
 public class ExpressionImpl extends AbstractExpression implements Expression {
 
 	@Inject protected IExpressionInterpreter elInterpreter;
@@ -46,15 +44,18 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 		return xExpression;
 	}
 	
-	public Object evaluate(Map<String, Object> context) throws ExpressionExecutionException {
+	public Object evaluate(ExpressionContext context) throws ExpressionExecutionException {
 		Object thisElement = null;
 	    IEvaluationContext evaluationContext = contextProvider.get();
 	    evaluationContext.newValue(XbaseScopeProvider.THIS, thisElement);
 
 	    if(context!=null) {
-			for(Map.Entry<String, Object> entry : context.entrySet()) {
-				evaluationContext.newValue(QualifiedName.create(entry.getKey()), convertToExpressionType(entry.getValue()));
+			for(String elementName : context.getElementNames()) {
+				
+				evaluationContext.newValue(QualifiedName.create(elementName), context.getInstance(elementName));
 			}
+	    } else {
+	    	context = new ExpressionContext();
 	    }
 
 	    IEvaluationResult result = elInterpreter.evaluate(xExpression, evaluationContext, CancelIndicator.NullImpl);
@@ -63,23 +64,6 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	    } 
 	    return result.getResult();
 	}
-
-	private Object convertToExpressionType(Object value) {
-		if(value instanceof Integer) {
-			return new BigDecimal((Integer) value);
-		}
-		if(value instanceof Long) {
-			return new BigDecimal((Long) value);
-		}
-		if(value instanceof Float) {
-			return new BigDecimal((Float) value);
-		}
-		if(value instanceof Double) {
-			return new BigDecimal((Double) value);
-		}
-		return value;
-	}
-
 
 	public Object evaluate() throws ExpressionExecutionException {
 		return evaluate(null);

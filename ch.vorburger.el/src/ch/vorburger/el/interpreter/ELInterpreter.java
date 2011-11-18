@@ -14,6 +14,7 @@ import ch.vorburger.el.eL.DateTimeLiteral;
 import ch.vorburger.el.eL.DecimalLiteral;
 import ch.vorburger.el.lib.DateExtensions;
 
+@SuppressWarnings("restriction")
 public class ELInterpreter extends XbaseInterpreter {
 
 	protected Object _evaluateDecimalLiteral(DecimalLiteral literal, IEvaluationContext context, CancelIndicator indicator) {

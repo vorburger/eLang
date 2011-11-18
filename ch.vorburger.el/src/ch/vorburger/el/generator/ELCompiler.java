@@ -12,6 +12,7 @@ import ch.vorburger.el.eL.DateTimeLiteral;
 import ch.vorburger.el.eL.DecimalLiteral;
 import ch.vorburger.el.lib.DateExtensions;
 
+@SuppressWarnings("restriction")
 public class ELCompiler extends XbaseCompiler {
 
 	public String compile(XExpression expression, ImportManager importManager) {
@@ -29,7 +30,7 @@ public class ELCompiler extends XbaseCompiler {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
 		b.append("new GregorianCalendar(");
 		for(int i=0; i<6; i++) {
-			b.append(args[i]);
+			b.append(String.valueOf(args[i]));
 			if(i<5) b.append(", ");
 		}
 		b.append(")");
@@ -39,7 +40,7 @@ public class ELCompiler extends XbaseCompiler {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
 		b.append("new GregorianCalendar(");
 		for(int i=0; i<6; i++) {
-			b.append(args[i]);
+			b.append(String.valueOf(args[i]));
 			if(i<5) b.append(", ");
 		}
 		b.append(")");

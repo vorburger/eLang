@@ -9,6 +9,7 @@ import ch.vorburger.el.eL.ELPackage;
 import ch.vorburger.el.lib.DateExtensions;
  
 
+@SuppressWarnings("restriction")
 public class ELJavaValidator extends XbaseJavaValidator {
 
 	@Check

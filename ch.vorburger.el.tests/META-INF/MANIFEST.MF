@@ -14,7 +14,8 @@ Require-Bundle: ch.vorburger.el,
  org.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
  org.eclipse.xtext.xbase.lib;bundle-version="2.0.1",
- org.eclipse.xtext.xtend2.lib;bundle-version="2.0.1"
+ org.eclipse.xtext.xtend2.lib;bundle-version="2.0.1",
+ org.eclipse.jdt.core;resolution:=optional
 Import-Package: org.apache.log4j,
  org.apache.commons.logging
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

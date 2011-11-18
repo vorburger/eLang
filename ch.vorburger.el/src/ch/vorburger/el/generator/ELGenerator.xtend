@@ -9,9 +9,7 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import com.google.inject.Inject
 import org.eclipse.xtext.xbase.XExpression
-import org.eclipse.xtext.xbase.XLiteral
-import org.eclipse.xtext.common.types.*
-import org.eclipse.xtext.xbase.compiler.*
+import org.eclipse.xtext.xbase.compiler.ImportManager
 
 class ELGenerator implements IGenerator {
 	

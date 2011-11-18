@@ -10,9 +10,8 @@ import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider;
+import org.eclipse.xtext.xbase.typing.ITypeArgumentContextHelper;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
-
-import com.google.inject.Singleton;
 
 import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionImpl;
@@ -20,15 +19,20 @@ import ch.vorburger.el.generator.ELGenerator;
 import ch.vorburger.el.interpreter.ELInterpreter;
 import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
 import ch.vorburger.el.naming.ELQualifiedNameProvider;
+import ch.vorburger.el.scoping.ELExtensionClassNameProvider;
 import ch.vorburger.el.scoping.ELScopeProvider;
-import ch.vorburger.el.scoping.ELStaticMethodsProvider;
+import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
 import ch.vorburger.el.typing.ELTypeProvider;
+import ch.vorburger.el.typing.Ecore2JvmTypeMapper;
 import ch.vorburger.el.valueconverter.ELValueConverterService;
+
+import com.google.inject.Singleton;
 
 /**
  * Use this class to register components to be used at runtime / without the
  * Equinox extension registry.
  */
+@SuppressWarnings("restriction")
 public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 
 	@Override
@@ -46,8 +50,8 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELQualifiedNameProvider.class;
 	}
 
-	public Class<? extends StaticMethodsFeatureForTypeProvider> bindStaticMethodsFeatureForTypeProvider() {
-		return ELStaticMethodsProvider.class;
+	public Class<? extends StaticMethodsFeatureForTypeProvider.ExtensionClassNameProvider> bindExtensionClassNameProvider() {
+		return ELExtensionClassNameProvider.class;
 	}
 	
 	@Override
@@ -55,6 +59,10 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELTypeProvider.class;
 	}
 
+	public Class<? extends ITypeArgumentContextHelper> bindITypeArgumentContextHelper() {
+		return ELTypeProvider.class;
+	}
+	
 	@Override
 	public Class<? extends IExpressionInterpreter> bindIExpressionInterpreter() {
 		return ELInterpreter.class;
@@ -74,4 +82,13 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	public Class<? extends IScopeProvider> bindIScopeProvider() {
 		return ELScopeProvider.class;
 	}
+
+	public Class<? extends org.eclipse.xtext.common.types.access.IJvmTypeProvider.Factory> bindIJvmTypeProvider$Factory() {
+		return ELJvmTypeProviderFactory.class;
+	}
+	
+	public Class<? extends Ecore2JvmTypeMapper> bindEcore2JvmTypeMapper() {
+		return Ecore2JvmTypeMapper.class;
+	}
+
 }

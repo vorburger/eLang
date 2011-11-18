@@ -1,12 +1,11 @@
 package ch.vorburger.el.scoping;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.access.IJvmTypeProvider;
@@ -15,9 +14,10 @@ import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.MapBasedScope;
+import org.eclipse.xtext.xbase.XAbstractFeatureCall;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
-import ch.vorburger.el.engine.VarTypeAdapter;
+import ch.vorburger.el.engine.ExpressionContext;
 
 import com.google.inject.Inject;
 
@@ -28,26 +28,25 @@ public class ELScopeProvider extends XbaseScopeProvider {
 	private IJvmTypeProvider.Factory typeProviderFactory;
 
 	@Override
-	protected IScope createStaticScope(EObject context, Resource resource,
-			IScope parent) {
-		IScope superScope = super.createStaticScope(context, resource, parent);
-
+	protected IScope createFeatureCallScope(XAbstractFeatureCall call,
+			EReference reference) {
+		IScope superScope =  super.createFeatureCallScope(call, reference);
+		Resource resource = call.eResource();
 		IJvmTypeProvider provider = typeProviderFactory
 				.findOrCreateTypeProvider(resource.getResourceSet());
 
-		Map<String, Class<? extends Object>> varTypes = new HashMap<String, Class<? extends Object>>();
+		ExpressionContext context = null;
 		for(Adapter adapter : resource.eAdapters()) {
-			if (adapter instanceof VarTypeAdapter) {
-				varTypes = ((VarTypeAdapter) adapter).getVarTypes();
+			if (adapter instanceof ExpressionContext) {
+				context = (ExpressionContext) adapter;
 			}
 		}
 		
 		Collection<IEObjectDescription> varDescs = new HashSet<IEObjectDescription>();
-		if (varTypes != null) {
-			for (Map.Entry<String, Class<? extends Object>> entry : varTypes.entrySet()) {
-				QualifiedName varName = QualifiedName.create(entry.getKey());
-				JvmType varType = provider.findTypeByName(entry.getValue()
-						.getCanonicalName());
+		if (context != null) {
+			for (String elementName : context.getElementNames()) {
+				QualifiedName varName = QualifiedName.create(elementName);
+				JvmType varType = provider.findTypeByName(context.getType(elementName).getCanonicalName());
 				varDescs.add(EObjectDescription.create(varName, varType));
 			}
 		}
