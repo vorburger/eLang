@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
+
+  <groupId>ch.vorburger</groupId>
+  <artifactId>eLang</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <name>eLang</name>
+
+  <description>This is an Expression Language, with Grammar / Parser (ANTLR) / Interpreter RT / (TBD) Compiler for both on-the-fly on run time and build/compile time.</description>
+
+  <properties>
+    <tycho-version>0.13.0</tycho-version>    
+		<tycho-groupid>org.eclipse.tycho</tycho-groupid>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>ch.vorburger.el</module>
+    <module>ch.vorburger.el.tests</module>
+    <module>ch.vorburger.el.ui</module>
+    <module>ch.vorburger.el.feature</module>
+    <module>ch.vorburger.el.site</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${tycho-groupid}</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>${tycho-groupid}</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <resolver>p2</resolver>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
+          <pomDependencies>consider</pomDependencies>          
+        </configuration>
+      </plugin>
+    </plugins>
+    
+    <pluginManagement>
+      <plugins>
+	      <plugin>
+	        <groupId>${tycho-groupid}</groupId>
+	        <artifactId>tycho-compiler-plugin</artifactId>
+	        <version>${tycho-version}</version>
+	        <configuration>
+	          <encoding>UTF-8</encoding>
+	          <source>1.6</source>
+	          <target>1.6</target>
+	        </configuration>
+	      </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sonatype snapshots</id>
+      <url>https://repository.sonatype.org/content/repositories/releases/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+	  <pluginRepository>
+	    <id>fornax-snapshots</id>
+	    <url>http://www.fornax-platform.org/archiva/repository/snapshots/</url>
+	    <snapshots>
+	    	<enabled>true</enabled>
+	    </snapshots>
+	  </pluginRepository>
+  </pluginRepositories>
+
+	<repositories>
+	  <repository>
+	    <id>fornax-releases</id>
+	    <url>http://fornax-platform.org/nexus/content/groups/public</url>
+	    <snapshots>
+	    	<enabled>false</enabled>
+	    </snapshots>
+	  </repository>
+		<repository>
+      <id>Eclipse Orbit</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/</url>
+    </repository>
+		<repository>
+      <id>Eclipse Helios Updates</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/eclipse/updates/3.6</url>
+    </repository>
+		<repository>
+      <id>Eclipse Helios</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/helios/</url>
+    </repository>
+		<repository>
+      <id>Eclipse TMF Updates</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</url>
+    </repository>
+	</repositories>
+
+</project>

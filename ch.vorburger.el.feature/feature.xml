@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.vorburger.el.feature"
+      label="EL Feature"
+      version="1.0.0.qualifier"
+      provider-name="vorburger.ch">
+
+   <description url="https://github.com/vorburger/eLang">
+      This is an Expression Language, with Grammar / Parser (ANTLR) / Interpreter RT / (TBD) Compiler for both on-the-fly on run time and build/compile time.
+   </description>
+
+   <copyright url="https://github.com/vorburger/eLang">
+      Copyright (c) 2011 Michael Vorburger (http://www.vorburger.ch) and others.
+   </copyright>
+
+   <license url="https://github.com/vorburger/eLang/blob/master/LICENSE.txt">
+      Eclipse Public License - v 1.0
+   </license>
+
+   <plugin
+         id="ch.vorburger.el"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.vorburger.el.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

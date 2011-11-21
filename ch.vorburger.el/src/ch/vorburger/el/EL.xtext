@@ -16,13 +16,13 @@ XPrimaryExpression returns XExpression:
 	XParenthesizedExpression;
 
 // let's overwrite this to get rid of the "as" function
-//XCastedExpression returns XExpression:
-//	XMemberFeatureCall;
+XCastedExpression returns XExpression:
+	XMemberFeatureCall;
 
 // let's overwrite this to get rid of the "instanceof" function
-//XRelationalExpression returns XExpression:
-//	XOtherOperatorExpression
-//	(=>({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpCompare]) rightOperand=XOtherOperatorExpression)*;
+XRelationalExpression returns XExpression:
+	XOtherOperatorExpression
+	(=>({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpCompare]) rightOperand=XOtherOperatorExpression)*;
 
 // let's overwrite this to get rid of the "->" function
 XOtherOperatorExpression returns XExpression:
@@ -58,5 +58,6 @@ Date_Time:
 	Date INT ':' INT ':' INT;
 
 Number: 
-	(INT '.')? INT (=>(('e'|'E')('-'|'+')? INT) | ID )?;
+	(INT '.')? (INT|EINT);
  
+terminal EINT returns ecore::EInt: ('0'..'9')+ ('e'|'E') ('-'|'+')? ('0'..'9')+;

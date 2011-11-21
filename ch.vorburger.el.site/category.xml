@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/ch.vorburger.el.feature_1.0.0.qualifier.jar" id="ch.vorburger.el.feature" version="1.0.0.qualifier">
+      <category name="ch.vorburger.el"/>
+   </feature>
+   <category-def name="ch.vorburger.el" label="EL"/>
+</site>
