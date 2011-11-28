@@ -3,12 +3,16 @@
  */
 package ch.vorburger.el;
 
+import org.eclipse.xtext.common.types.xtext.AbstractTypeScopeProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
+import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
+import org.eclipse.xtext.xbase.jvmmodel.JvmGlobalScopeProvider;
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider;
 import org.eclipse.xtext.xbase.typing.ITypeArgumentContextHelper;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
@@ -21,7 +25,9 @@ import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
 import ch.vorburger.el.naming.ELQualifiedNameProvider;
 import ch.vorburger.el.scoping.ELExtensionClassNameProvider;
 import ch.vorburger.el.scoping.ELScopeProvider;
+import ch.vorburger.el.scoping.ELTypeScopeProvider;
 import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
+import ch.vorburger.el.typing.ELJvmTypesBuilder;
 import ch.vorburger.el.typing.ELTypeProvider;
 import ch.vorburger.el.typing.Ecore2JvmTypeMapper;
 import ch.vorburger.el.valueconverter.ELValueConverterService;
@@ -90,5 +96,18 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	public Class<? extends Ecore2JvmTypeMapper> bindEcore2JvmTypeMapper() {
 		return Ecore2JvmTypeMapper.class;
 	}
+	
+	public Class<? extends JvmTypesBuilder> bindJvmTypesBuilder() {
+		return ELJvmTypesBuilder.class;
+	}
 
+	@Override
+	public Class<? extends AbstractTypeScopeProvider> bindAbstractTypeScopeProvider() {
+		return ELTypeScopeProvider.class;
+	}
+	
+	@Override
+	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
+		return JvmGlobalScopeProvider.class;
+	}
 }

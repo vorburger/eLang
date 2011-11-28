@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmType;
@@ -17,7 +18,9 @@ import org.eclipse.xtext.scoping.impl.MapBasedScope;
 import org.eclipse.xtext.xbase.XAbstractFeatureCall;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
+import ch.vorburger.el.engine.DynamicExpressionContext;
 import ch.vorburger.el.engine.ExpressionContext;
+import ch.vorburger.el.typing.ELJvmTypeProvider;
 
 import com.google.inject.Inject;
 
@@ -46,8 +49,19 @@ public class ELScopeProvider extends XbaseScopeProvider {
 		if (context != null) {
 			for (String elementName : context.getElementNames()) {
 				QualifiedName varName = QualifiedName.create(elementName);
-				JvmType varType = provider.findTypeByName(context.getType(elementName).getCanonicalName());
-				varDescs.add(EObjectDescription.create(varName, varType));
+				JvmType varType = null;
+				Class<? extends Object> staticType = context.getType(elementName);
+				if(staticType!=null) {
+					String typeName = staticType.getCanonicalName();
+					varType = provider.findTypeByName(typeName);
+				} else if(context instanceof DynamicExpressionContext && provider instanceof ELJvmTypeProvider) {
+					DynamicExpressionContext dynContext = (DynamicExpressionContext) context;
+					EClass dynType = dynContext.getDynType(elementName);
+					varType = ((ELJvmTypeProvider)provider).findTypeByEclass(dynType);
+				}
+				if(varType!=null) {
+					varDescs.add(EObjectDescription.create(varName, varType));
+				}
 			}
 		}
 

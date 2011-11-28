@@ -51,8 +51,13 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 
 	    if(context!=null) {
 			for(String elementName : context.getElementNames()) {
-				
-				evaluationContext.newValue(QualifiedName.create(elementName), context.getInstance(elementName));
+				Object instance = context.getInstance(elementName);
+				if(instance==null && context instanceof DynamicExpressionContext) {
+					instance = ((DynamicExpressionContext)context).getDynInstance(elementName);					
+				}
+				if(instance!=null) {
+					evaluationContext.newValue(QualifiedName.create(elementName), instance);
+				}
 			}
 	    } else {
 	    	context = new ExpressionContext();

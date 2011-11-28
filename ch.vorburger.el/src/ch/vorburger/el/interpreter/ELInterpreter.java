@@ -2,6 +2,9 @@ package ch.vorburger.el.interpreter;
 
 import java.math.BigDecimal;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
@@ -41,4 +44,19 @@ public class ELInterpreter extends XbaseInterpreter {
 		return value;
 	}
 
+	@Override
+	protected Object featureCallField(JvmField jvmField, Object receiver) {
+		if(receiver instanceof EObject) {
+			EObject eObj = (EObject) receiver;
+			EStructuralFeature feature = eObj.eClass().getEStructuralFeature(jvmField.getSimpleName());
+			if(feature!=null) {
+				Object value = eObj.eGet(feature);
+				if(value instanceof Number) {
+					value = new BigDecimal(value.toString());
+				}
+				return value;
+			}
+		}
+		return super.featureCallField(jvmField, receiver);
+	}
 }
