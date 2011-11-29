@@ -1,5 +1,6 @@
 package ch.vorburger.el.scoping;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,10 +42,10 @@ public class ELTypeScope extends AbstractTypeScope {
 			if (adapter instanceof ExpressionContext) {
 				ExpressionContext context = (ExpressionContext) adapter;
 				for(String elementName : context.getElementNames()) {
-					Class<? extends Object> type = context.getType(elementName);
+					Type type = context.getType(elementName);
 					IEObjectDescription primitive = null;
 					if(type!=null) {
-						primitive = createScopedElement(type.getCanonicalName());
+						primitive = createScopedElement(((Class<?>)type).getCanonicalName());
 					} else if(context instanceof DynamicExpressionContext) {
 						EClass dynType = ((DynamicExpressionContext) context).getDynType(elementName);
 						primitive = createScopedElement(dynType.getEPackage() + "." + dynType.getName());
@@ -64,7 +65,7 @@ public class ELTypeScope extends AbstractTypeScope {
 	}
 
 	protected InternalEObject createProxy(String fullyQualifiedName) {
-		URI uri = getTypeProvider().getFullURI(fullyQualifiedName);
+		URI uri = ELJvmTypeProvider.getFullURI(fullyQualifiedName);
 		InternalEObject proxy = (InternalEObject) TypesFactory.eINSTANCE.createJvmVoid();
 		proxy.eSetProxyURI(uri);
 		return proxy;

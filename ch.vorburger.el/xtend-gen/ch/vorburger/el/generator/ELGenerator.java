@@ -2,7 +2,6 @@ package ch.vorburger.el.generator;
 
 import ch.vorburger.el.generator.ELCompiler;
 import com.google.inject.Inject;
-import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -10,7 +9,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.xbase.XExpression;
-import org.eclipse.xtext.xbase.compiler.ImportManager;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xtend2.lib.StringConcatenation;
 
@@ -33,9 +31,8 @@ public class ELGenerator implements IGenerator {
   
   public StringConcatenation compile(final XExpression e) {
     StringConcatenation _builder = new StringConcatenation();
-    ImportManager _importManager = new ImportManager(true);
-    final ImportManager importManager = _importManager;
-    _builder.newLineIfNotEmpty();
+    _builder.append("\u00B4val importManager = new ImportManager(true)\u00AA");
+    _builder.newLine();
     _builder.append("import ch.vorburger.el.engine.*;");
     _builder.newLine();
     _builder.append("import ch.vorburger.el.lib.*;");
@@ -48,15 +45,13 @@ public class ELGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("import java.util.Calendar;");
     _builder.newLine();
-    {
-      List<String> _imports = importManager.getImports();
-      for(final String i : _imports) {
-        _builder.append("import ");
-        _builder.append(i, "");
-        _builder.append(";");
-        _builder.newLineIfNotEmpty();
-      }
-    }
+    _builder.append("\u00B4FOR i:importManager.imports\u00AA");
+    _builder.newLine();
+    _builder.append("\t");
+    _builder.append("import \u00B4i\u00AA;");
+    _builder.newLine();
+    _builder.append("\u00B4ENDFOR\u00AA");
+    _builder.newLine();
     _builder.newLine();
     _builder.append("public class CompiledExpression extends AbstractExpression {");
     _builder.newLine();
@@ -64,9 +59,8 @@ public class ELGenerator implements IGenerator {
     _builder.append("public Object evaluate() throws ExpressionExecutionException {");
     _builder.newLine();
     _builder.append("\t\t");
-    String _compile = this.elCompiler.compile(e, importManager);
-    _builder.append(_compile, "		");
-    _builder.newLineIfNotEmpty();
+    _builder.append("\u00B4elCompiler.compile(e, importManager)\u00AA");
+    _builder.newLine();
     _builder.append("\t");
     _builder.append("}");
     _builder.newLine();

@@ -1,10 +1,10 @@
 package ch.vorburger.el.scoping;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -16,6 +16,7 @@ import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.MapBasedScope;
 import org.eclipse.xtext.xbase.XAbstractFeatureCall;
+import org.eclipse.xtext.xbase.XMemberFeatureCall;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
 import ch.vorburger.el.engine.DynamicExpressionContext;
@@ -34,10 +35,16 @@ public class ELScopeProvider extends XbaseScopeProvider {
 	protected IScope createFeatureCallScope(XAbstractFeatureCall call,
 			EReference reference) {
 		IScope superScope =  super.createFeatureCallScope(call, reference);
+		
+		if(call instanceof XMemberFeatureCall) {
+			return superScope;
+		}
+		
 		Resource resource = call.eResource();
 		IJvmTypeProvider provider = typeProviderFactory
 				.findOrCreateTypeProvider(resource.getResourceSet());
 
+		
 		ExpressionContext context = null;
 		for(Adapter adapter : resource.eAdapters()) {
 			if (adapter instanceof ExpressionContext) {
@@ -50,9 +57,9 @@ public class ELScopeProvider extends XbaseScopeProvider {
 			for (String elementName : context.getElementNames()) {
 				QualifiedName varName = QualifiedName.create(elementName);
 				JvmType varType = null;
-				Class<? extends Object> staticType = context.getType(elementName);
+				Type staticType = context.getType(elementName);
 				if(staticType!=null) {
-					String typeName = staticType.getCanonicalName();
+					String typeName = ((Class)staticType).getCanonicalName();
 					varType = provider.findTypeByName(typeName);
 				} else if(context instanceof DynamicExpressionContext && provider instanceof ELJvmTypeProvider) {
 					DynamicExpressionContext dynContext = (DynamicExpressionContext) context;

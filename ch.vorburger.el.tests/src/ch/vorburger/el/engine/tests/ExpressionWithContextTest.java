@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.xtext.EcoreUtil2;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -36,7 +37,6 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testNumericVariableTypes() throws Exception {
 		ExpressionContext context = new ExpressionContext();
 		context.putInstance("a", 1);
@@ -56,22 +56,33 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 
 		EPackage pkg = helper.createPackage("tests");
 		EClass clazz = helper.createClass(pkg, "NumericTests");
+		EClass embeddedClass = helper.createClass(pkg, "EmbeddedClass");
+		helper.addAttribute(embeddedClass, intType, "x");
+		helper.addAttribute(embeddedClass, embeddedClass, "y");
 		
 		helper.addAttribute(clazz, intType, "a");
 		helper.addAttribute(clazz, intType, "b");
+		helper.addAttribute(clazz, embeddedClass, "c");
 
 		EObject instance = helper.createInstance(clazz);
+		EObject c = helper.createInstance(embeddedClass);
 		helper.setProperty(instance, "a", 5);
 		helper.setProperty(instance, "b", 2);
+		helper.setProperty(instance, "c", c);
+		helper.setProperty(c, "x", 3);
+		helper.setProperty(c, "y", EcoreUtil2.clone(c));
 
 		DynamicExpressionContext context = new DynamicExpressionContext();
-		context.putInstance("x", instance);
+		context.putInstance("t", instance);
 		
-		checkNumericExpression("x.a", context, 5);
-		checkNumericExpression("x.b", context, 2);
-		checkNumericExpression("x.a+x.b", context, 7);
-		checkNumericExpression("x.a-x.b", context, 3);
-		checkNumericExpression("x.a*x.b", context, 10);
-		checkNumericExpression("x.a/x.b", context, new BigDecimal(2.5));
+		checkNumericExpression("t.a", context, 5);
+		checkNumericExpression("t.b", context, 2);
+		checkNumericExpression("t.c.x", context, 3);
+		checkNumericExpression("t.c.y.x", context, 3);
+		checkNumericExpression("t.a+t.b", context, 7);
+		checkNumericExpression("t.a-t.b", context, 3);
+		checkNumericExpression("t.a*t.b", context, 10);
+		checkNumericExpression("t.a/t.b", context, new BigDecimal(2.5));
+		checkNumericExpression("t.c.x+t.c.x*t.b", context, 9);
 	}
 }
