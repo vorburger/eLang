@@ -5,13 +5,12 @@ import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
-import org.eclipse.xtext.xbase.compiler.OnTheFlyJavaCompiler.EclipseRuntimeDependentJavaCompiler;
+//import org.eclipse.xtext.xbase.compiler.OnTheFlyJavaCompiler.EclipseRuntimeDependentJavaCompiler;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.lib.Functions;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
-import org.eclipse.xtext.xtend2.lib.StringConcatenation;
 
 import ch.vorburger.el.generator.ELGenerator;
 import ch.vorburger.el.lib.DecimalExtensions;
@@ -25,7 +24,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
-	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
+//	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
 	@Inject	protected IGenerator generator;
 
 	private XExpression xExpression;
@@ -76,25 +75,26 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	
 	@Override
 	public Expression compile() throws ExpressionCompilationException {
-		initializeClassPath();
-		StringConcatenation concatenation = ((ELGenerator)generator).compile(xExpression);
-		Class<?> clazz = javaCompiler.compileToClass("CompiledExpression", concatenation.toString());
-		try {
-			Expression compiledExpression = (Expression) clazz.newInstance();
-			return compiledExpression;
-		} catch (InstantiationException e) {
-			throw new ExpressionCompilationException("Could not compile expression", e);
-		} catch (IllegalAccessException e) {
-			throw new ExpressionCompilationException("Could not compile expression", e);
-		}
+		return this;
+//		initializeClassPath();
+//		StringConcatenation concatenation = ((ELGenerator)generator).compile(xExpression);
+//		Class<?> clazz = javaCompiler.compileToClass("CompiledExpression", concatenation.toString());
+//		try {
+//			Expression compiledExpression = (Expression) clazz.newInstance();
+//			return compiledExpression;
+//		} catch (InstantiationException e) {
+//			throw new ExpressionCompilationException("Could not compile expression", e);
+//		} catch (IllegalAccessException e) {
+//			throw new ExpressionCompilationException("Could not compile expression", e);
+//		}
 	}
 	
-	protected void initializeClassPath() {
-		javaCompiler.addClassPathOfClass(getClass()); // this bundle
-		javaCompiler.addClassPathOfClass(DecimalExtensions.class); // xbase.lib
-		javaCompiler.addClassPathOfClass(Functions.class); // xbase.lib
-		javaCompiler.addClassPathOfClass(Provider.class);  // google guice
-		javaCompiler.addClassPathOfClass(Supplier.class);  // google collect
-	}
+//	protected void initializeClassPath() {
+//		javaCompiler.addClassPathOfClass(getClass()); // this bundle
+//		javaCompiler.addClassPathOfClass(DecimalExtensions.class); // xbase.lib
+//		javaCompiler.addClassPathOfClass(Functions.class); // xbase.lib
+//		javaCompiler.addClassPathOfClass(Provider.class);  // google guice
+//		javaCompiler.addClassPathOfClass(Supplier.class);  // google collect
+//	}
 
 }

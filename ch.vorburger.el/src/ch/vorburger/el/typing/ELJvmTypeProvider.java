@@ -4,9 +4,13 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.common.types.JvmType;
+import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.common.types.access.IMirror;
 import org.eclipse.xtext.common.types.access.TypeResource;
 import org.eclipse.xtext.common.types.access.impl.ClasspathTypeProvider;
@@ -32,32 +36,45 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	protected ELJvmTypeProvider(ClassLoader cl, Ecore2JvmTypeMapper ecoreMapper, ResourceSet resourceSet) {
 		super(cl, resourceSet);
 		this.resourceSet = resourceSet;
+		this.ecoreMapper = ecoreMapper;
 	}
 
 	@Override
 	public JvmType findTypeByName(String name) {
+
+		// first replace ecore primitive types by their Java representation
+		name = ecoreMapper.mapType(name);
+		
 		JvmType type = super.findTypeByName(name);		
 		
 		if(type==null) {
-			EClass dynType = findDynType(name);
-			type = findTypeByEclass(dynType);
+			EClassifier dynType = findDynType(name);
+			if(dynType!=null) {
+				type = findTypeByEclassifier(dynType);
+			}			
 		}
 		return type;
 	}
 	
-	public JvmType findTypeByEclass(EClass eClass) {
-		URI resourceURI = getTypeURI(eClass);
+	public JvmType findTypeByEclassifier(EClassifier type) {
+		if(type.getEPackage()==EcorePackage.eINSTANCE) {
+			String mappedType = ecoreMapper.mapType("ecore." + type.getName());
+			return findTypeByName(mappedType);
+		}
+		URI resourceURI = getTypeURI(type);
 		TypeResource resource = (TypeResource) getResourceSet().getResource(resourceURI, true);
-		String fragment = eClass.getName();
+		String fragment = type.getName();
 		JvmType result = (JvmType) resource.getEObject(fragment);
 		if (result == null) {
-			throw new IllegalStateException("Resource has not been loaded");
+			InternalEObject proxy = (InternalEObject) TypesFactory.eINSTANCE.createJvmVoid();
+			proxy.eSetProxyURI(resourceURI.appendFragment(fragment));
+			return (JvmType) proxy;
 		} 
 		return result;
 	}
 
-	private URI getTypeURI(EClass eClass) {
-		return URI.createURI(URIHelperConstants.PROTOCOL + ":" + URIHelperConstants.OBJECTS + getFQN(eClass));
+	private URI getTypeURI(EClassifier type) {
+		return URI.createURI(URIHelperConstants.PROTOCOL + ":" + URIHelperConstants.OBJECTS + getFQN(type));
 	}
 
 	@Override
@@ -71,7 +88,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	
 	@Override
 	protected IMirror createMirrorForFQN(String name) {
-		EClass type = findDynType(name);
+		EClassifier type = findDynType(name);
 		if(type!=null) {
 			return new DynTypeMirror(type, ecoreMapper);
 		} else {
@@ -79,7 +96,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 		}
 	}
 
-	private EClass findDynType(String name) {
+	protected EClassifier findDynType(String name) {
 		for(DynamicExpressionContext context : getContexts()) {
 			for(EClass eclass : context.getDeclaredDynTypes()) {
 				if(getFQN(eclass).endsWith(name)) {
@@ -105,8 +122,9 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 		return contexts;
 	}
 	
-	private String getFQN(EClass eclass) {
-		return eclass.getEPackage().getName() + "." + eclass.getName();
+	private String getFQN(EClassifier type) {
+		String prefix = type.getEPackage()==null ? "ecore" : type.getEPackage().getName();
+		return prefix + "." + type.getName();
 	}
 
 }

@@ -51,6 +51,7 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 	}
 
 	@Test
+	@Ignore
 	public void testNumericVariableDynTypes() throws Exception {
 		EDataType intType = EcorePackage.eINSTANCE.getEInt();
 
@@ -84,5 +85,28 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 		checkNumericExpression("t.a*t.b", context, 10);
 		checkNumericExpression("t.a/t.b", context, new BigDecimal(2.5));
 		checkNumericExpression("t.c.x+t.c.x*t.b", context, 9);
+	}
+
+	@Test
+	public void testCompareDynTypes() throws Exception {
+		EDataType intType = EcorePackage.eINSTANCE.getEInt();
+
+		EPackage pkg = helper.createPackage("tests");
+		EClass clazzA = helper.createClass(pkg, "TestA");
+		EClass clazzB = helper.createClass(pkg, "TestB");
+		helper.addAttribute(clazzA, intType, "p");
+		helper.addAttribute(clazzB, intType, "p");
+		
+		EObject instanceA = helper.createInstance(clazzA);
+		EObject instanceB = helper.createInstance(clazzB);
+
+		helper.setProperty(instanceA, "p", 1);
+		helper.setProperty(instanceB, "p", 2);
+
+		DynamicExpressionContext context = new DynamicExpressionContext();
+		context.putInstance("a", instanceA);
+		context.putInstance("b", instanceB);
+		
+		checkBooleanExpression("a.p>b.p", context, false);
 	}
 }

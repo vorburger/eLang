@@ -3,7 +3,7 @@ package ch.vorburger.el.scoping;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
-import org.eclipse.xtext.xbase.scoping.featurecalls.StaticMethodsFeatureForTypeProvider.ExtensionClassNameProvider;
+import org.eclipse.xtext.xbase.scoping.featurecalls.StaticImplicitMethodsFeatureForTypeProvider.ExtensionClassNameProvider;
 
 import ch.vorburger.el.lib.DateExtensions;
 import ch.vorburger.el.lib.DecimalExtensions;

@@ -15,10 +15,6 @@ XPrimaryExpression returns XExpression:
 	XIfExpression |
 	XParenthesizedExpression;
 
-// let's overwrite this to get rid of the "as" function
-XCastedExpression returns XExpression:
-	XMemberFeatureCall;
-
 // let's overwrite this to get rid of the "instanceof" function
 XRelationalExpression returns XExpression:
 	XOtherOperatorExpression
@@ -26,7 +22,11 @@ XRelationalExpression returns XExpression:
 
 // let's overwrite this to get rid of the "->" function
 XOtherOperatorExpression returns XExpression:
-	XAdditiveExpression;
+	XAdditiveExpression (=>({XBinaryOperation.leftOperand=current} feature=[types::JvmIdentifiableElement|OpOther])
+	rightOperand=XAdditiveExpression)*;
+
+OpOther:
+	'..';
 
 XLiteral returns XExpression:
   XBooleanLiteral |

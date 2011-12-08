@@ -1,6 +1,7 @@
 package ch.vorburger.el.typing;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmGenericType;
@@ -10,11 +11,11 @@ import org.eclipse.xtext.common.types.access.TypeResource;
 @SuppressWarnings("restriction")
 public class DynTypeMirror implements IMirror {
 
-	final private EClass type;
+	final private EClassifier type;
 	final private Ecore2JvmTypeMapper ecoreMapper;
 
-	public DynTypeMirror(EClass type, Ecore2JvmTypeMapper ecoreMapper) {
-		this.type = type;
+	public DynTypeMirror(EClassifier type2, Ecore2JvmTypeMapper ecoreMapper) {
+		this.type = type2;
 		this.ecoreMapper = ecoreMapper;
 	}
 	

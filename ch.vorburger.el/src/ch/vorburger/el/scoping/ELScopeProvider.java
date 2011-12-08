@@ -64,7 +64,7 @@ public class ELScopeProvider extends XbaseScopeProvider {
 				} else if(context instanceof DynamicExpressionContext && provider instanceof ELJvmTypeProvider) {
 					DynamicExpressionContext dynContext = (DynamicExpressionContext) context;
 					EClass dynType = dynContext.getDynType(elementName);
-					varType = ((ELJvmTypeProvider)provider).findTypeByEclass(dynType);
+					varType = ((ELJvmTypeProvider)provider).findTypeByEclassifier(dynType);
 				}
 				if(varType!=null) {
 					varDescs.add(EObjectDescription.create(varName, varType));

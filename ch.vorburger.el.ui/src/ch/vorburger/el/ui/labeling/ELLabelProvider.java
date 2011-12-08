@@ -5,6 +5,12 @@ package ch.vorburger.el.ui.labeling;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
+import org.eclipse.xtext.xbase.XExpression;
+import org.eclipse.xtext.xbase.XIfExpression;
+import org.eclipse.xtext.xbase.XMemberFeatureCall;
+import org.eclipse.xtext.xbase.XStringLiteral;
+
+import ch.vorburger.el.eL.DecimalLiteral;
 
 import com.google.inject.Inject;
 
@@ -13,22 +19,32 @@ import com.google.inject.Inject;
  * 
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#labelProvider
  */
+@SuppressWarnings("restriction")
 public class ELLabelProvider extends DefaultEObjectLabelProvider {
 
 	@Inject
 	public ELLabelProvider(AdapterFactoryLabelProvider delegate) {
 		super(delegate);
 	}
-
-/*
-	//Labels and icons can be computed like this:
 	
-	String text(MyModel ele) {
-	  return "my "+ele.getName();
+	public String text(XStringLiteral literal) {
+		return literal.getValue();
 	}
-	 
-    String image(MyModel ele) {
-      return "MyModel.gif";
-    }
-*/
+
+	public String text(DecimalLiteral literal) {
+		return literal.getValue();
+	}
+	
+	public String text(XExpression expr) {
+		return expr.toString();
+	}
+	
+	public String text(XIfExpression expr) {
+		return "IF";
+	}
+	
+	public String text(XMemberFeatureCall call) {
+		return call.getMemberCallTarget().toString();
+	}
+
 }
