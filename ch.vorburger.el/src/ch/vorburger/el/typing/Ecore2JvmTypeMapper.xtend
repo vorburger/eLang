@@ -19,7 +19,7 @@ class Ecore2JvmTypeMapper {
 			for(feature : eClass.EStructuralFeatures) {
 				members += mapFeature(feature, rs)
 			}
-			documentation = "Dynamic Type " + eClass.name
+			documentation = eClass.documentation
 			for(superType : eClass.ESuperTypes) {
 				superTypes += newTypeRef(rs, superType.fullyQualifiedName.toString)
 			}
@@ -33,14 +33,14 @@ class Ecore2JvmTypeMapper {
 	def dispatch mapFeature(EAttribute eAttr, ResourceSet rs) {
 		eAttr.toField(eAttr.name, newTypeRef(rs, mapType(eAttr.EType.fullyQualifiedName.toString))) [
 			visibility = JvmVisibility::PUBLIC
-			documentation = "Dynamic Property " + eClass.name
+			documentation = eAttr.documentation
 		]
 	}
 
 	def dispatch mapFeature(EReference eRef, ResourceSet rs) {
 		eRef.toField(eRef.name, newTypeRef(rs, mapType(eRef.EType.fullyQualifiedName.toString))) [
 			visibility = JvmVisibility::PUBLIC
-			documentation = "Dynamic Property " + eClass.name
+			documentation = eRef.documentation
 		]
 	}
 

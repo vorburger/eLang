@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.common.types.access.IMirror;
-import org.eclipse.xtext.common.types.access.TypeResource;
 import org.eclipse.xtext.common.types.access.impl.ClasspathTypeProvider;
 import org.eclipse.xtext.common.types.access.impl.URIHelperConstants;
 
@@ -23,6 +22,8 @@ import com.google.common.collect.Iterables;
 
 @SuppressWarnings("restriction")
 public class ELJvmTypeProvider extends ClasspathTypeProvider {
+	
+	public static final String PROTOCOL = "dynecore";
 	
 	private ResourceSet resourceSet;
 	private Ecore2JvmTypeMapper ecoreMapper;
@@ -37,6 +38,12 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 		super(cl, resourceSet);
 		this.resourceSet = resourceSet;
 		this.ecoreMapper = ecoreMapper;
+	}
+
+	@Override
+	protected void registerProtocol(ResourceSet resourceSet) {
+		resourceSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put(URIHelperConstants.PROTOCOL, this);
+		resourceSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put(ELJvmTypeProvider.PROTOCOL, this);
 	}
 
 	@Override
@@ -62,7 +69,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 			return findTypeByName(mappedType);
 		}
 		URI resourceURI = getTypeURI(type);
-		TypeResource resource = (TypeResource) getResourceSet().getResource(resourceURI, true);
+		Resource resource = getResourceSet().getResource(resourceURI, true);
 		String fragment = type.getName();
 		JvmType result = (JvmType) resource.getEObject(fragment);
 		if (result == null) {
@@ -74,7 +81,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	}
 
 	private URI getTypeURI(EClassifier type) {
-		return URI.createURI(URIHelperConstants.PROTOCOL + ":" + URIHelperConstants.OBJECTS + getFQN(type));
+		return URI.createURI(PROTOCOL + ":" + URIHelperConstants.OBJECTS + getFQN(type));
 	}
 
 	@Override
@@ -83,7 +90,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	}
 
 	static public URI getFullURI(String fullyQualifiedName) {
-		return URI.createURI(URIHelperConstants.PROTOCOL + ":" + URIHelperConstants.OBJECTS + fullyQualifiedName);
+		return URI.createURI(PROTOCOL + ":" + URIHelperConstants.OBJECTS + fullyQualifiedName);
 	}
 	
 	@Override

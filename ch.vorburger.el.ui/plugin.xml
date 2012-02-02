@@ -231,5 +231,12 @@
             extensions="expr">
     </provider>
   </extension>
+  <extension
+        point="org.eclipse.xtext.protocol_resourceServiceProvider">
+     <resourceServiceProvider
+           class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceServiceProvider"
+           protocolName="dynecore">
+     </resourceServiceProvider>
+  </extension>
 
 </plugin>

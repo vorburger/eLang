@@ -1,10 +1,13 @@
 package ch.vorburger.el.typing;
 
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.util.TypeReferences;
+import org.eclipse.xtext.xbase.compiler.DocumentationAdapter;
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
@@ -36,6 +39,17 @@ public class ELJvmTypesBuilder extends JvmTypesBuilder {
 	public JvmTypeReference newTypeRef(ResourceSet resourceSet, String typeName, JvmTypeReference... typeArgs) {
 		JvmTypeReference ref = references.getTypeForName(typeName, resourceSet, typeArgs);
 		return ref;
+	}
+
+	public String getDocumentation(EObject source) {
+		if (source == null)
+			return null;
+		if (source instanceof ENamedElement) {
+			DocumentationAdapter adapter = (DocumentationAdapter) EcoreUtil.getAdapter(source.eAdapters(), DocumentationAdapter.class);
+			if (adapter != null)
+				return adapter.getDocumentation();
+		}
+		return super.getDocumentation(source);
 	}
 
 }

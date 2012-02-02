@@ -5,17 +5,11 @@ import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
-//import org.eclipse.xtext.xbase.compiler.OnTheFlyJavaCompiler.EclipseRuntimeDependentJavaCompiler;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
-import org.eclipse.xtext.xbase.lib.Functions;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
-import ch.vorburger.el.generator.ELGenerator;
-import ch.vorburger.el.lib.DecimalExtensions;
-
-import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 

@@ -11,11 +11,14 @@ public class ExpressionContext extends EContentAdapter {
 
 	protected Map<String, Type> types = new HashMap<String, Type>();
 	protected Map<String, Object> elements = new HashMap<String, Object>();
+	protected Type returnType;
 	
 	public void putInstance(String name, Object instance) {
-		Object mappedInstance = mapToExpressionType(instance);
+		Object mappedInstance = instance!=null ? mapToExpressionType(instance) : null;
 		elements.put(name, mappedInstance);
-		putType(name, mappedInstance.getClass());
+		if(mappedInstance!=null) {
+			putType(name, mappedInstance.getClass());
+		}
 	}
 
 	public void putType(String name, Type type) {
@@ -38,6 +41,14 @@ public class ExpressionContext extends EContentAdapter {
 	public Iterable<Type> getDeclaredTypes() {
 		return types.values();
 	}
+	
+	public void setExpectedReturnType(Type returnType) {
+		this.returnType = returnType;
+	}
+
+	public Object getExpectedReturnType() {
+		return returnType;
+	}
 
 	private Object mapToExpressionType(Object instance) {
 		if(instance instanceof Number) {
@@ -51,5 +62,10 @@ public class ExpressionContext extends EContentAdapter {
 			return BigDecimal.class;
 		}
 		return type;
+	}
+	
+	@Override
+	public boolean isAdapterForType(Object type) {
+		return type==ExpressionContext.class;
 	}
 }

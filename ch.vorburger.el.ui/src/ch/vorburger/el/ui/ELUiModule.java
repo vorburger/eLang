@@ -4,8 +4,10 @@
 package ch.vorburger.el.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 
 import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
+import ch.vorburger.el.ui.hovering.ELEObjectDocumentationProvider;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -18,6 +20,10 @@ public class ELUiModule extends ch.vorburger.el.ui.AbstractELUiModule {
 	
 	public Class<? extends org.eclipse.xtext.common.types.access.IJvmTypeProvider.Factory> bindIJvmTypeProvider$Factory() {
 		return ELJvmTypeProviderFactory.class;
+	}
+
+	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProviderr() {
+		return ELEObjectDocumentationProvider.class;
 	}
 
 }

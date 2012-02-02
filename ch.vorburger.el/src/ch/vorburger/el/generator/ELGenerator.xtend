@@ -3,18 +3,15 @@
  */
 package ch.vorburger.el.generator
 
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
-import org.eclipse.xtext.naming.IQualifiedNameProvider
 import com.google.inject.Inject
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.compiler.ImportManager
 
 class ELGenerator implements IGenerator {
-	
-	@Inject extension IQualifiedNameProvider nameProvider
-	
+		
 	@Inject ELCompiler elCompiler
 	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {

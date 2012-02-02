@@ -10,6 +10,13 @@
        genModel = "ch/vorburger/el/EL.genmodel" /> 
 	
   </extension>
+  <extension
+        point="org.eclipse.emf.ecore.protocol_parser">
+     <parser
+           class="org.eclipse.xtext.resource.XtextResourceFactory"
+           protocolName="dynecore">
+     </parser>
+  </extension>
 
 
 
