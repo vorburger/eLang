@@ -41,7 +41,7 @@ public class ExpressionFactory {
 	protected Injector guiceInjector;
 	protected XtextResourceSet resourceSet;
 
-	private boolean alwaysCompile = false;
+	protected boolean alwaysCompile = false;
 
 	public ExpressionFactory() {
 		super();

@@ -93,7 +93,7 @@ public class ELJavaValidator extends XbaseJavaValidator {
 				}
 				JvmTypeReference returnedType = typeProvider.getType(obj, false);
 
-				if(expectedJvmType!=null && returnedType!=null && !conformanceComputer.isConformant(returnedType, expectedJvmType, true)) {
+				if(expectedJvmType!=null && returnedType!=null && !conformanceComputer.isConformant(expectedJvmType, returnedType, true)) {
 					error("Expression does not match expected return type " + expectedJvmType.getSimpleName(), obj.eContainingFeature());
 				}
 			}

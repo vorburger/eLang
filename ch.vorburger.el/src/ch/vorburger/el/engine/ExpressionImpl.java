@@ -21,7 +21,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 //	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
 	@Inject	protected IGenerator generator;
 
-	private XExpression xExpression;
+	protected XExpression xExpression;
 
 	@Inject
 	public ExpressionImpl() {}
