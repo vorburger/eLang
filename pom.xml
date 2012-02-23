@@ -79,7 +79,7 @@
     </pluginRepository>
 	  <pluginRepository>
 	    <id>fornax-snapshots</id>
-	    <url>http://www.fornax-platform.org/archiva/repository/snapshots/</url>
+	    <url>http://fornax.itemis.de/nexus/content/repositories/snapshots/</url>
 	    <snapshots>
 	    	<enabled>true</enabled>
 	    </snapshots>
@@ -89,7 +89,7 @@
 	<repositories>
 	  <repository>
 	    <id>fornax-releases</id>
-	    <url>http://fornax-platform.org/nexus/content/groups/public</url>
+	    <url>http://fornax.itemis.de/nexus/content/repositories/public/</url>
 	    <snapshots>
 	    	<enabled>false</enabled>
 	    </snapshots>
