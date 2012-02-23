@@ -21,7 +21,6 @@ import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
-import org.eclipse.xtext.xbase.lib.StringExtensions;
 
 @SuppressWarnings("all")
 public class Ecore2JvmTypeMapper {
@@ -43,9 +42,8 @@ public class Ecore2JvmTypeMapper {
               JvmField _mapFeature = Ecore2JvmTypeMapper.this.mapFeature(feature, rs);
               CollectionExtensions.<JvmField>operator_add(_members, _mapFeature);
             }
-            String _name = eClass.getName();
-            String _operator_plus = StringExtensions.operator_plus("Dynamic Type ", _name);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _operator_plus);
+            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eClass);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
             EList<EClass> _eSuperTypes = eClass.getESuperTypes();
             for (final EClass superType : _eSuperTypes) {
               EList<JvmTypeReference> _superTypes = it.getSuperTypes();
@@ -83,10 +81,8 @@ public class Ecore2JvmTypeMapper {
         public void apply(final JvmField it) {
           {
             it.setVisibility(JvmVisibility.PUBLIC);
-            EClass _eClass = it.eClass();
-            String _name = _eClass.getName();
-            String _operator_plus = StringExtensions.operator_plus("Dynamic Property ", _name);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _operator_plus);
+            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eAttr);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
           }
         }
       };
@@ -105,10 +101,8 @@ public class Ecore2JvmTypeMapper {
         public void apply(final JvmField it) {
           {
             it.setVisibility(JvmVisibility.PUBLIC);
-            EClass _eClass = it.eClass();
-            String _name = _eClass.getName();
-            String _operator_plus = StringExtensions.operator_plus("Dynamic Property ", _name);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _operator_plus);
+            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eRef);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
           }
         }
       };
