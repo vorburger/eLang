@@ -12,6 +12,12 @@ import ch.vorburger.el.eL.DateTimeLiteral;
 import ch.vorburger.el.eL.DecimalLiteral;
 import ch.vorburger.el.lib.DateExtensions;
 
+/**
+ * This class does the code generation for expressions (beware, the name "compiler" is a bit misleading here).
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 @SuppressWarnings("restriction")
 public class ELCompiler extends XbaseCompiler {
 
@@ -46,18 +52,4 @@ public class ELCompiler extends XbaseCompiler {
 		b.append(")");
 	}
 
-//	protected void _toJavaStatement(DateLiteral expr, IAppendable b,
-//			boolean isReferenced) {
-//		generateComment(expr, b, isReferenced);
-//	}
-//
-//	protected void _toJavaStatement(DateTimeLiteral expr, IAppendable b,
-//			boolean isReferenced) {
-//		generateComment(expr, b, isReferenced);
-//	}
-//
-//	protected void _toJavaStatement(DecimalLiteral expr, IAppendable b,
-//			boolean isReferenced) {
-//		generateComment(expr, b, isReferenced);
-//	}
 }

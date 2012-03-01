@@ -13,6 +13,13 @@ import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
+/**
+ * We provide our own type scope provider implementation as by default a jdt/classpath
+ * strategy is used. Our implementation simply does not provide any types.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 @SuppressWarnings("restriction")
 public class ELTypeScopeProvider extends AbstractTypeScopeProvider {
 
@@ -25,7 +32,7 @@ public class ELTypeScopeProvider extends AbstractTypeScopeProvider {
 	@Override
 	public AbstractTypeScope createTypeScope(IJvmTypeProvider typeProvider,
 			Predicate<IEObjectDescription> filter) {
-		return new ELTypeScope(typeProvider, qualifiedNameConverter, filter);
+		return new AbstractTypeScope(typeProvider, qualifiedNameConverter, filter) {};
 	}
 
 	@Override

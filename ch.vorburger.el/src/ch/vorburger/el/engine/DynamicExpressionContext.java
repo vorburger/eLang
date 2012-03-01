@@ -1,7 +1,6 @@
 package ch.vorburger.el.engine;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,43 +9,72 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import com.google.common.collect.Iterables;
+import ch.vorburger.el.typing.ELJvmTypeProvider;
 
+import com.google.common.collect.Sets;
+
+/**
+ * A {@link DynamicExpressionContext} is an enhanced {@link ExpressionContext} which additionally
+ * provides support for dynamic types and instances.
+ * 
+ * These dynamic types are defined through dynamic EMF/ecore. Types can be put into the context as {@link EClassifier}s 
+ * and instances are simply {@link EObject}s.  
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 public class DynamicExpressionContext extends ExpressionContext {
 
-	protected Map<String, EClass> dynTypes = new HashMap<String, EClass>();
-	protected Map<String, EObject> dynElements = new HashMap<String, EObject>();
-	protected Set<EClass> declaredTypes = new HashSet<EClass>();
+	/**
+	 * Map of Variable Names to their Dynamic Types.
+	 */
+	protected Map<String, EClassifier> dynTypes = new HashMap<String, EClassifier>();
+	
+	/**
+	 * Map of Variable Names to their Dynamic Instance Values.
+	 */
+	protected Map<String, EObject> dynInstances = new HashMap<String, EObject>();
+	
+	/**
+	 * Map of Type Names to their Dynamic Types.
+	 * These Types are not Variables, but include the Types of all Properties of all Dynamic Types,
+	 * as well as the Dynamic Enumeration Types.
+	 */
+	protected Map<String, EClassifier> declaredTypes = new HashMap<String, EClassifier>();
+	
 	protected EClass returnType = null;
 	
-	public void putInstance(String name, EObject instance) {
-		dynElements.put(name, instance);
+	public void putInstance(String variableName, EObject instance) {
+		dynInstances.put(variableName, instance);
 		if(instance!=null) {
-			putType(name, instance.eClass());
+			putType(variableName, instance.eClass());
 		}
 	}
 
-	public void putType(String name, EClass eclass) {
-		dynTypes.put(name, eclass);
-		addDeclaredType(eclass);
+	public void putType(String variableName, EClassifier eclassifier) {
+		dynTypes.put(variableName, eclassifier);
+		addDeclaredType(eclassifier);
 	}
 	
-	public void addDeclaredType(EClass eclass) {
-		declaredTypes.add(eclass);
+	public void addDeclaredType(EClassifier eclassifier) {
+		declaredTypes.put(ELJvmTypeProvider.getFQN(eclassifier), eclassifier);
 		
-		for(EStructuralFeature feature : eclass.getEAllStructuralFeatures()) {
-			EClassifier eType = feature.getEType();
-			if(eType instanceof EClass && !declaredTypes.contains(eType)) {
-				addDeclaredType((EClass) eType);
+		if(eclassifier instanceof EClass) {
+			EClass eclass = (EClass) eclassifier;
+			for(EStructuralFeature feature : eclass.getEAllStructuralFeatures()) {
+				EClassifier eType = feature.getEType();
+				if(eType instanceof EClass && !declaredTypes.containsValue(eType)) {
+					addDeclaredType((EClass) eType);
+				}
 			}
 		}
 	}
 	
 	public EObject getDynInstance(String name) {
-		return dynElements.get(name);
+		return dynInstances.get(name);
 	}
 	
-	public EClass getDynType(String name) {
+	public EClassifier getDynType(String name) {
 		return dynTypes.get(name);
 	}
 	
@@ -64,11 +92,15 @@ public class DynamicExpressionContext extends ExpressionContext {
 	}
 	
 	@Override
-	public Iterable<String> getElementNames() {
-		return Iterables.concat(super.getElementNames(), dynElements.keySet());
+	public Set<String> getVariableNames() {
+		return Sets.union(super.getVariableNames(), Sets.union(dynInstances.keySet(), dynTypes.keySet()));
 	}
 	
-	public Iterable<EClass> getDeclaredDynTypes() {
-		return declaredTypes;		
+	public Iterable<EClassifier> getDeclaredDynTypes() {
+		return declaredTypes.values();		
+	}
+	
+	public EClassifier getDeclaredDynType(String name) {
+		return declaredTypes.get(name);
 	}
 }

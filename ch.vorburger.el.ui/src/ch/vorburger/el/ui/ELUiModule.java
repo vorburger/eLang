@@ -4,9 +4,11 @@
 package ch.vorburger.el.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.common.types.xtext.ui.ITypesProposalProvider;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 
 import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
+import ch.vorburger.el.ui.contentassist.ELTypeProposalProvider;
 import ch.vorburger.el.ui.hovering.ELEObjectDocumentationProvider;
 
 /**
@@ -26,4 +28,8 @@ public class ELUiModule extends ch.vorburger.el.ui.AbstractELUiModule {
 		return ELEObjectDocumentationProvider.class;
 	}
 
+	@Override
+	public Class<? extends ITypesProposalProvider> bindITypesProposalProvider() {
+		return ELTypeProposalProvider.class;
+	}
 }

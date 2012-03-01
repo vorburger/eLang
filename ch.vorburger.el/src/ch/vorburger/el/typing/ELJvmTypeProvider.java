@@ -3,12 +3,13 @@ package ch.vorburger.el.typing;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.xtext.common.types.JvmDeclaredType;
+import org.eclipse.xtext.common.types.JvmEnumerationType;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.common.types.access.IMirror;
@@ -20,6 +21,12 @@ import ch.vorburger.el.engine.DynamicExpressionContext;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 
+/**
+ * This class makes dynamic types (i.e. {@link EClassifier}s) available as jvm types to be used in expressions/Xbase.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 @SuppressWarnings("restriction")
 public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	
@@ -29,13 +36,13 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 	private Ecore2JvmTypeMapper ecoreMapper;
 	
 	public ELJvmTypeProvider(Ecore2JvmTypeMapper ecoreMapper, ResourceSet resourceSet) {
-		super(ELTypeProvider.class.getClassLoader(), resourceSet);
+		super(ELTypeProvider.class.getClassLoader(), resourceSet, null);
 		this.resourceSet = resourceSet;
 		this.ecoreMapper = ecoreMapper;
 	}
 
 	protected ELJvmTypeProvider(ClassLoader cl, Ecore2JvmTypeMapper ecoreMapper, ResourceSet resourceSet) {
-		super(cl, resourceSet);
+		super(cl, resourceSet, null);
 		this.resourceSet = resourceSet;
 		this.ecoreMapper = ecoreMapper;
 	}
@@ -105,9 +112,9 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 
 	protected EClassifier findDynType(String name) {
 		for(DynamicExpressionContext context : getContexts()) {
-			for(EClass eclass : context.getDeclaredDynTypes()) {
-				if(getFQN(eclass).endsWith(name)) {
-					return eclass;
+			for(EClassifier eclassifier : context.getDeclaredDynTypes()) {
+				if(getFQN(eclassifier).endsWith(name)) {
+					return eclassifier;
 				}
 			}
 		}
@@ -129,7 +136,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 		return contexts;
 	}
 	
-	private String getFQN(EClassifier type) {
+	public static String getFQN(EClassifier type) {
 		String prefix = type.getEPackage()==null ? "ecore" : type.getEPackage().getName();
 		return prefix + "." + type.getName();
 	}

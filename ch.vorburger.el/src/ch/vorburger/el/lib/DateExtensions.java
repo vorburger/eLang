@@ -2,6 +2,13 @@ package ch.vorburger.el.lib;
 
 import java.util.GregorianCalendar;
 
+/**
+ * This class provides extensions for expressions that deal with the handling of dates.
+ * 
+ * @author Kai Kreuzer
+ * @author Michael Vorburger
+ *
+ */
 public class DateExtensions {
 	
 	public static GregorianCalendar parseDateTime(String dateTime) {

@@ -8,8 +8,13 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.common.types.JvmVisibility
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.eclipse.emf.ecore.EDataType
+import org.eclipse.emf.ecore.EEnum
+import org.eclipse.emf.ecore.EEnumLiteral
+import org.eclipse.xtext.common.types.util.TypeReferences
 
 class Ecore2JvmTypeMapper {
+	
+	@Inject private TypeReferences references
 	
 	@Inject extension ELJvmTypesBuilder jvmTypesBuilder
 	@Inject extension IQualifiedNameProvider
@@ -30,6 +35,20 @@ class Ecore2JvmTypeMapper {
 		eDatatype.toClass(rs, eDatatype.fullyQualifiedName.toString) []
 	}
 
+
+	def dispatch map(EEnum eEnum, ResourceSet rs) {
+		eEnum.toEnumerationType(eEnum.fullyQualifiedName.toString) [
+			setStatic(true)
+			for(literal : eEnum.ELiterals) {
+				val l = mapLiteral(literal, rs)
+				l.type =  references.createTypeRef(it)
+				members += l 
+			}
+			documentation = eEnum.documentation
+			superTypes += newTypeRef(rs, "java.lang.Comparable", references.createTypeRef(it))
+		]
+	}
+
 	def dispatch mapFeature(EAttribute eAttr, ResourceSet rs) {
 		eAttr.toField(eAttr.name, newTypeRef(rs, mapType(eAttr.EType.fullyQualifiedName.toString))) [
 			visibility = JvmVisibility::PUBLIC
@@ -41,6 +60,14 @@ class Ecore2JvmTypeMapper {
 		eRef.toField(eRef.name, newTypeRef(rs, mapType(eRef.EType.fullyQualifiedName.toString))) [
 			visibility = JvmVisibility::PUBLIC
 			documentation = eRef.documentation
+		]
+	}
+
+	def mapLiteral(EEnumLiteral eEnumLiteral, ResourceSet rs) {
+		eEnumLiteral.toEnumerationLiteral(eEnumLiteral.name) [
+			setStatic(true)
+			visibility = JvmVisibility::PUBLIC
+			documentation = eEnumLiteral.documentation
 		]
 	}
 

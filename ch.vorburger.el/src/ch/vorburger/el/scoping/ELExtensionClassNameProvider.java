@@ -17,6 +17,7 @@ public class ELExtensionClassNameProvider extends ExtensionClassNameProvider {
 	protected Multimap<Class<?>, Class<?>> simpleComputeExtensionClasses() {
 		Multimap<Class<?>, Class<?>> result = super.simpleComputeExtensionClasses();
 
+		// adding our own extensions here
 		result.put(BigDecimal.class, DecimalExtensions.class);
 		result.put(GregorianCalendar.class, DateExtensions.class);
 		return result;

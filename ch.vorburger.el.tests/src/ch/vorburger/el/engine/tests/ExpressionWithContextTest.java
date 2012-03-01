@@ -2,10 +2,14 @@ package ch.vorburger.el.engine.tests;
 
 
 
+import static org.junit.Assert.assertEquals;
+
 import java.math.BigDecimal;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -14,6 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.vorburger.el.engine.DynamicExpressionContext;
+import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
 import ch.vorburger.el.engine.tests.helper.ECoreHelper;
@@ -51,7 +56,6 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testNumericVariableDynTypes() throws Exception {
 		EDataType intType = EcorePackage.eINSTANCE.getEInt();
 
@@ -109,4 +113,43 @@ public class ExpressionWithContextTest extends AbstractExpressionTestBase {
 		
 		checkBooleanExpression("a.p>b.p", context, false);
 	}
+	
+	@Test
+	public void testDynEnums() throws Exception {
+		EPackage pkg = helper.createPackage("tests");
+		EEnum enumType = helper.createEnum(pkg, "TestEnum");
+		EEnumLiteral enumLiteral = helper.addEnumLiteral(enumType, "YES");
+		EClass clazz = helper.createClass(pkg, "ClassWithEnumAttribute");
+		helper.addAttribute(clazz, enumType, "p");
+
+		EObject instance1 = helper.createInstance(clazz);
+		helper.setProperty(instance1, "p", enumLiteral);
+		
+		DynamicExpressionContext context = new DynamicExpressionContext();
+		context.addDeclaredType(enumType);
+		context.putInstance("a", instance1);
+		
+		checkBooleanExpression("a.p==tests::TestEnum::YES", context, true);
+		checkBooleanExpression("a.p==TestEnum::YES", context, true);
+	}
+	
+	@Test
+	public void testExpressionParsingWithDynTypes() throws Exception {
+		EPackage pkg = helper.createPackage("tests");
+		EClass clazz = helper.createClass(pkg, "DynamicClass");
+		
+		ExpressionFactory factory = new ExpressionFactory();
+
+		DynamicExpressionContext parsingContext = new DynamicExpressionContext();
+		parsingContext.putType("a", clazz);
+		Expression expression = factory.newExpressionFromString("a", parsingContext);
+
+		DynamicExpressionContext executingContext = new DynamicExpressionContext();
+		EObject a = helper.createInstance(clazz);
+		executingContext.putInstance("a", a);
+		EObject aa = (EObject) expression.evaluate(executingContext);
+		assertEquals(a, aa);
+	}
+	
+	// TODO More tests using static Java classes instead of dyn types - which should also still work... (but probably wont yet) 
 }

@@ -43,7 +43,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	    evaluationContext.newValue(XbaseScopeProvider.THIS, thisElement);
 
 	    if(context!=null) {
-			for(String elementName : context.getElementNames()) {
+			for(String elementName : context.getVariableNames()) {
 				Object instance = context.getInstance(elementName);
 				if(instance==null && context instanceof DynamicExpressionContext) {
 					instance = ((DynamicExpressionContext)context).getDynInstance(elementName);					
@@ -66,6 +66,10 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	public Object evaluate() throws ExpressionExecutionException {
 		return evaluate(null);
 	}
+	
+	// Xbase does no longer support on the fly compilation of expressions, see
+	// https://bugs.eclipse.org/bugs/show_bug.cgi?id=365870
+	// Therefore this feature has been deactivated.
 	
 	@Override
 	public Expression compile() throws ExpressionCompilationException {

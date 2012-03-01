@@ -2,7 +2,14 @@ package ch.vorburger.el.lib;
 
 import java.math.BigDecimal;
 
+/**
+ * This class provides extensions for expressions that deal with the handling of decimal numbers.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 public class DecimalExtensions {
+
 	public static BigDecimal operator_plus(BigDecimal x, BigDecimal y) {
 		return x.add(y);
 	}

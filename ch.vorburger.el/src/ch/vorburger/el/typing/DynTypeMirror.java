@@ -4,10 +4,18 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.xtext.common.types.JvmGenericType;
+import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.common.types.access.IMirror;
 import org.eclipse.xtext.common.types.access.TypeResource;
 
+/**
+ * This class serves as a proxy for dynamic types (i.e. {@link EClassifier}s).
+ * The according jvm type (which must be in an EMF resource) is only lazily created once the
+ * resource is loaded.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 @SuppressWarnings("restriction")
 public class DynTypeMirror implements IMirror {
 
@@ -31,7 +39,7 @@ public class DynTypeMirror implements IMirror {
 	@Override
 	public EObject getEObject(Resource resource, String fragment,
 			Fallback fallback) {
-		if(fragment.equals(getTypeName())) {
+		if(fragment.equals(type.getName())) {
 			if (resource.getContents().isEmpty()) {
 				return null;
 			}
@@ -42,12 +50,8 @@ public class DynTypeMirror implements IMirror {
 
 	@Override
 	public void initialize(TypeResource typeResource) {
-		JvmGenericType jvmType = ecoreMapper.map(type, typeResource.getResourceSet());
+		JvmDeclaredType jvmType = ecoreMapper.map(type, typeResource.getResourceSet());
 		typeResource.getContents().add(jvmType);
-	}
-
-	protected String getTypeName() {
-		return type.getName();
 	}
 
 }

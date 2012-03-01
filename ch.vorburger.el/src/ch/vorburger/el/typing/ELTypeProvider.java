@@ -15,6 +15,13 @@ import ch.vorburger.el.eL.DecimalLiteral;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * This class extends the {@link XbaseTypeProvider} to also handle our own DSL literals for 
+ * decimals and dates.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 @SuppressWarnings("restriction")
 @Singleton
 public class ELTypeProvider extends XbaseTypeProvider {

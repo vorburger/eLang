@@ -39,7 +39,7 @@ public abstract class AbstractExpressionTestBase {
 	}
 	protected void checkStringExpression(String expressionText, ExpressionContext context, String expectedText) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
-		String stringResult = expression.evaluateExpectingString();
+		String stringResult = expression.evaluateExpectingString(context);
 		Assert.assertEquals(expectedText, stringResult);
 	}
 
@@ -48,7 +48,7 @@ public abstract class AbstractExpressionTestBase {
 	}
 	protected void checkDateExpression(String expressionText, ExpressionContext context, GregorianCalendar expectedDateTime) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
-		GregorianCalendar dateResult = expression.evaluateExpectingGregorianCalendar();
+		GregorianCalendar dateResult = expression.evaluateExpectingGregorianCalendar(context);
 		Assert.assertEquals(expectedDateTime, dateResult);
 	}
 
@@ -57,7 +57,7 @@ public abstract class AbstractExpressionTestBase {
 	}
 	protected void checkBooleanExpression(String expressionText, ExpressionContext context, Boolean expectedBoolean) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
-		Boolean boolResult = expression.evaluateExpectingBoolean();
+		Boolean boolResult = expression.evaluateExpectingBoolean(context);
 		Assert.assertEquals(expectedBoolean, boolResult);
 	}
 

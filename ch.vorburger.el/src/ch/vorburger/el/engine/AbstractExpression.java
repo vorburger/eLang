@@ -4,6 +4,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * This is an abstract implementation of the {@link Expression} interface, which brings default
+ * implementations of all evaluate functions.
+ * 
+ * @author Kai Kreuzer
+ *
+ */
 public abstract class AbstractExpression implements Expression {
 
 	public AbstractExpression() {

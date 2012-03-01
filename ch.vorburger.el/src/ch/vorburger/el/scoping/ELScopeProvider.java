@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.xtext.common.types.JvmEnumerationLiteral;
+import org.eclipse.xtext.common.types.JvmEnumerationType;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.access.IJvmTypeProvider;
 import org.eclipse.xtext.naming.QualifiedName;
@@ -16,6 +19,7 @@ import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.MapBasedScope;
 import org.eclipse.xtext.xbase.XAbstractFeatureCall;
+import org.eclipse.xtext.xbase.XFeatureCall;
 import org.eclipse.xtext.xbase.XMemberFeatureCall;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
@@ -32,29 +36,74 @@ public class ELScopeProvider extends XbaseScopeProvider {
 	private IJvmTypeProvider.Factory typeProviderFactory;
 
 	@Override
-	protected IScope createFeatureCallScope(XAbstractFeatureCall call,
-			EReference reference) {
-		IScope superScope =  super.createFeatureCallScope(call, reference);
+	protected IScope createTypeScope(EObject obj, EReference reference) {
+		IScope superScope =  super.createTypeScope(obj, reference);
 		
-		if(call instanceof XMemberFeatureCall) {
-			return superScope;
-		}
-		
-		Resource resource = call.eResource();
-		IJvmTypeProvider provider = typeProviderFactory
-				.findOrCreateTypeProvider(resource.getResourceSet());
+		// get the jvm type provider
+		Resource resource = obj.eResource();
+		IJvmTypeProvider provider = typeProviderFactory.findOrCreateTypeProvider(resource.getResourceSet());
 
-		
-		ExpressionContext context = null;
-		for(Adapter adapter : resource.eAdapters()) {
-			if (adapter instanceof ExpressionContext) {
-				context = (ExpressionContext) adapter;
-			}
-		}
+		// get the expression context
+		ExpressionContext context = getExpressionContext(resource);
 		
 		Collection<IEObjectDescription> varDescs = new HashSet<IEObjectDescription>();
+		
+		// add types to scope
 		if (context != null) {
-			for (String elementName : context.getElementNames()) {
+			// first scan the declared static (Java) types
+			for(Type type : context.getDeclaredTypes()) {
+				String typeName = ((Class)type).getCanonicalName();
+				JvmType varType = provider.findTypeByName(typeName);
+				if(varType!=null) {
+					QualifiedName qname = QualifiedName.create(typeName.split("\\."));
+					varDescs.add(EObjectDescription.create(qname, varType));
+				}
+			}
+			if(context instanceof DynamicExpressionContext && provider instanceof ELJvmTypeProvider) {
+				DynamicExpressionContext dynContext = (DynamicExpressionContext) context;
+				for(EClassifier classifier : dynContext.getDeclaredDynTypes()) {
+					JvmType varType = ((ELJvmTypeProvider)provider).findTypeByEclassifier(classifier);
+					if(varType!=null) {
+						QualifiedName qname = QualifiedName.create(varType.getQualifiedName().split("\\."));
+						varDescs.add(EObjectDescription.create(qname, varType));
+					}
+				}
+			}
+		}
+		return MapBasedScope.createScope(superScope, varDescs);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public IScope createSimpleFeatureCallScope(EObject callContext,
+			EReference reference, Resource resource,
+			boolean includeCurrentBlock, int idx) {
+		IScope scope = super.createSimpleFeatureCallScope(callContext, reference, resource,
+				includeCurrentBlock, idx);
+
+		// we only provide root targets as features, but no member feature calls
+		if(callContext instanceof XMemberFeatureCall) {
+			return scope;
+		}
+
+		// do not care about calls that are done on some declared type
+		if(callContext instanceof XFeatureCall) {
+			XFeatureCall featureCall = (XFeatureCall) callContext;
+			if(featureCall.getDeclaringType()!=null) {
+				return scope;
+			}
+		}
+
+		IJvmTypeProvider provider = typeProviderFactory.findOrCreateTypeProvider(resource.getResourceSet());
+		
+		// get the expression context
+		ExpressionContext context = getExpressionContext(resource);
+		
+		Collection<IEObjectDescription> varDescs = new HashSet<IEObjectDescription>();
+		
+		if (context != null) {
+			// iterate over all instances
+			for (String elementName : context.getVariableNames()) {
 				QualifiedName varName = QualifiedName.create(elementName);
 				JvmType varType = null;
 				Type staticType = context.getType(elementName);
@@ -63,7 +112,7 @@ public class ELScopeProvider extends XbaseScopeProvider {
 					varType = provider.findTypeByName(typeName);
 				} else if(context instanceof DynamicExpressionContext && provider instanceof ELJvmTypeProvider) {
 					DynamicExpressionContext dynContext = (DynamicExpressionContext) context;
-					EClass dynType = dynContext.getDynType(elementName);
+					EClassifier dynType = dynContext.getDynType(elementName);
 					varType = ((ELJvmTypeProvider)provider).findTypeByEclassifier(dynType);
 				}
 				if(varType!=null) {
@@ -72,6 +121,19 @@ public class ELScopeProvider extends XbaseScopeProvider {
 			}
 		}
 
-		return MapBasedScope.createScope(superScope, varDescs);
+		scope = MapBasedScope.createScope(scope, varDescs);
+
+		return scope;
+	}
+
+	public static ExpressionContext getExpressionContext(Resource resource) {
+		ExpressionContext context = null;
+		for(Adapter adapter : resource.eAdapters()) {
+			if (adapter instanceof ExpressionContext) {
+				context = (ExpressionContext) adapter;
+				break;
+			}
+		}
+		return context;
 	}
 }
