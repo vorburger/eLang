@@ -8,14 +8,21 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.xtext.common.types.JvmDeclaredType;
+import org.eclipse.xtext.common.types.JvmEnumerationLiteral;
+import org.eclipse.xtext.common.types.JvmEnumerationType;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmMember;
+import org.eclipse.xtext.common.types.JvmParameterizedTypeReference;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.JvmVisibility;
+import org.eclipse.xtext.common.types.util.TypeReferences;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.xbase.lib.CollectionExtensions;
@@ -25,12 +32,15 @@ import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 @SuppressWarnings("all")
 public class Ecore2JvmTypeMapper {
   @Inject
+  private TypeReferences references;
+  
+  @Inject
   private ELJvmTypesBuilder jvmTypesBuilder;
   
   @Inject
   private IQualifiedNameProvider _iQualifiedNameProvider;
   
-  protected JvmGenericType _map(final EClass eClass, final ResourceSet rs) {
+  protected JvmDeclaredType _map(final EClass eClass, final ResourceSet rs) {
     QualifiedName _fullyQualifiedName = this._iQualifiedNameProvider.getFullyQualifiedName(eClass);
     String _string = _fullyQualifiedName.toString();
     final Procedure1<JvmGenericType> _function = new Procedure1<JvmGenericType>() {
@@ -59,7 +69,7 @@ public class Ecore2JvmTypeMapper {
     return _class;
   }
   
-  protected JvmGenericType _map(final EDataType eDatatype, final ResourceSet rs) {
+  protected JvmDeclaredType _map(final EDataType eDatatype, final ResourceSet rs) {
     QualifiedName _fullyQualifiedName = this._iQualifiedNameProvider.getFullyQualifiedName(eDatatype);
     String _string = _fullyQualifiedName.toString();
     final Procedure1<JvmGenericType> _function = new Procedure1<JvmGenericType>() {
@@ -68,6 +78,37 @@ public class Ecore2JvmTypeMapper {
       };
     JvmGenericType _class = this.jvmTypesBuilder.toClass(eDatatype, rs, _string, _function);
     return _class;
+  }
+  
+  protected JvmDeclaredType _map(final EEnum eEnum, final ResourceSet rs) {
+    QualifiedName _fullyQualifiedName = this._iQualifiedNameProvider.getFullyQualifiedName(eEnum);
+    String _string = _fullyQualifiedName.toString();
+    final Procedure1<JvmEnumerationType> _function = new Procedure1<JvmEnumerationType>() {
+        public void apply(final JvmEnumerationType it) {
+          {
+            it.setStatic(true);
+            EList<EEnumLiteral> _eLiterals = eEnum.getELiterals();
+            for (final EEnumLiteral literal : _eLiterals) {
+              {
+                JvmEnumerationLiteral _mapLiteral = Ecore2JvmTypeMapper.this.mapLiteral(literal, rs);
+                final JvmEnumerationLiteral l = _mapLiteral;
+                JvmParameterizedTypeReference _createTypeRef = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
+                l.setType(_createTypeRef);
+                EList<JvmMember> _members = it.getMembers();
+                CollectionExtensions.<JvmEnumerationLiteral>operator_add(_members, l);
+              }
+            }
+            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnum);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
+            EList<JvmTypeReference> _superTypes = it.getSuperTypes();
+            JvmParameterizedTypeReference _createTypeRef_1 = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
+            JvmTypeReference _newTypeRef = Ecore2JvmTypeMapper.this.jvmTypesBuilder.newTypeRef(rs, "java.lang.Comparable", _createTypeRef_1);
+            CollectionExtensions.<JvmTypeReference>operator_add(_superTypes, _newTypeRef);
+          }
+        }
+      };
+    JvmEnumerationType _enumerationType = this.jvmTypesBuilder.toEnumerationType(eEnum, _string, _function);
+    return _enumerationType;
   }
   
   protected JvmField _mapFeature(final EAttribute eAttr, final ResourceSet rs) {
@@ -108,6 +149,22 @@ public class Ecore2JvmTypeMapper {
       };
     JvmField _field = this.jvmTypesBuilder.toField(eRef, _name, _newTypeRef, _function);
     return _field;
+  }
+  
+  public JvmEnumerationLiteral mapLiteral(final EEnumLiteral eEnumLiteral, final ResourceSet rs) {
+    String _name = eEnumLiteral.getName();
+    final Procedure1<JvmEnumerationLiteral> _function = new Procedure1<JvmEnumerationLiteral>() {
+        public void apply(final JvmEnumerationLiteral it) {
+          {
+            it.setStatic(true);
+            it.setVisibility(JvmVisibility.PUBLIC);
+            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnumLiteral);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
+          }
+        }
+      };
+    JvmEnumerationLiteral _enumerationLiteral = this.jvmTypesBuilder.toEnumerationLiteral(eEnumLiteral, _name, _function);
+    return _enumerationLiteral;
   }
   
   public String mapType(final String typeName) {
@@ -203,14 +260,16 @@ public class Ecore2JvmTypeMapper {
     return _switchResult;
   }
   
-  public JvmGenericType map(final EClassifier eClass, final ResourceSet rs) {
-    if (eClass instanceof EClass) {
-      return _map((EClass)eClass, rs);
-    } else if (eClass instanceof EDataType) {
-      return _map((EDataType)eClass, rs);
+  public JvmDeclaredType map(final EClassifier eEnum, final ResourceSet rs) {
+    if (eEnum instanceof EEnum) {
+      return _map((EEnum)eEnum, rs);
+    } else if (eEnum instanceof EClass) {
+      return _map((EClass)eEnum, rs);
+    } else if (eEnum instanceof EDataType) {
+      return _map((EDataType)eEnum, rs);
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
-        Arrays.<Object>asList(eClass, rs).toString());
+        Arrays.<Object>asList(eEnum, rs).toString());
     }
   }
   

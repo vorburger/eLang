@@ -1,13 +1,11 @@
 package ch.vorburger.el.jvmmodel;
 
-import com.google.inject.Inject;
 import java.util.Arrays;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer;
-import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 
 /**
  * <p>Infers a JVM model from the source model.</p>
@@ -17,12 +15,6 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
  */
 @SuppressWarnings("all")
 public class ELJvmModelInferrer extends AbstractModelInferrer {
-  /**
-   * conveninence API to build and initialize JvmTypes and their members.
-   */
-  @Inject
-  private JvmTypesBuilder _jvmTypesBuilder;
-  
   /**
    * Is called for each instance of the first argument's type contained in a resource.
    * 

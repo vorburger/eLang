@@ -32,7 +32,7 @@ public class ELTypeScopeProvider extends AbstractTypeScopeProvider {
 	@Override
 	public AbstractTypeScope createTypeScope(IJvmTypeProvider typeProvider,
 			Predicate<IEObjectDescription> filter) {
-		return new AbstractTypeScope(typeProvider, qualifiedNameConverter, filter) {};
+		return new ELTypeScope(typeProvider, qualifiedNameConverter, filter);
 	}
 
 	@Override

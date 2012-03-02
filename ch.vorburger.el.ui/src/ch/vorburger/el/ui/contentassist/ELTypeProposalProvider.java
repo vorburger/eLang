@@ -20,7 +20,6 @@ public class ELTypeProposalProvider extends AbstractTypesProposalProvider {
 	@Inject
 	IScopeProvider scopeProvider;
 	
-	@Override
 	public void createTypeProposals(ICompletionProposalFactory proposalFactory,
 			ContentAssistContext context, EReference typeReference,
 			Filter filter, IValueConverter<String> valueConverter,
@@ -40,7 +39,6 @@ public class ELTypeProposalProvider extends AbstractTypesProposalProvider {
 		}
 	}
 
-	@Override
 	public void createSubTypeProposals(JvmType superType,
 			ICompletionProposalFactory proposalFactory,
 			ContentAssistContext context, EReference typeReference,
