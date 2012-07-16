@@ -29,12 +29,12 @@ public class ELCompiler extends XbaseCompiler {
 	}
 
 	protected void _toJavaExpression(DecimalLiteral expr, IAppendable b) {
-		b.append("new BigDecimal(\"" + expr.getValue() + "\")");
+		b.append("new java.math.BigDecimal(\"" + expr.getValue() + "\")");
 	}
 
 	protected void _toJavaExpression(DateLiteral expr, IAppendable b) {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
-		b.append("new GregorianCalendar(");
+		b.append("new java.util.GregorianCalendar(");
 		for(int i=0; i<6; i++) {
 			b.append(String.valueOf(args[i]));
 			if(i<5) b.append(", ");
@@ -44,7 +44,7 @@ public class ELCompiler extends XbaseCompiler {
 
 	protected void _toJavaExpression(DateTimeLiteral expr, IAppendable b) {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
-		b.append("new GregorianCalendar(");
+		b.append("new java.util.GregorianCalendar(");
 		for(int i=0; i<6; i++) {
 			b.append(String.valueOf(args[i]));
 			if(i<5) b.append(", ");
