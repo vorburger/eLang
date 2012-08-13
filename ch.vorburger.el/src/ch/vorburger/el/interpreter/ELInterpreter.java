@@ -24,7 +24,6 @@ import ch.vorburger.el.engine.DynamicExpressionContext;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.lib.DateExtensions;
 import ch.vorburger.el.scoping.ELScopeProvider;
-import ch.vorburger.el.typing.ELJvmTypeProvider;
 
 /**
  * This is the Xtext/Xbase internal interpreter for our DSL.
@@ -33,7 +32,6 @@ import ch.vorburger.el.typing.ELJvmTypeProvider;
  * @author Kai Kreuzer
  *
  */
-@SuppressWarnings("restriction")
 public class ELInterpreter extends XbaseInterpreter {
 
 	protected Object _evaluateDecimalLiteral(DecimalLiteral literal, IEvaluationContext context, CancelIndicator indicator) {
@@ -49,6 +47,7 @@ public class ELInterpreter extends XbaseInterpreter {
 		return DateExtensions.parseDateTime(literal.getValue());
 	}
 	
+	@Override
 	protected Object _featureCallJvmIdentifyableElement(JvmIdentifiableElement identifiable, XFeatureCall featureCall, Object receiver,
 			IEvaluationContext context, CancelIndicator indicator) {
 		Object value = super._featureCallJvmIdentifyableElement(identifiable, featureCall, receiver, context, indicator);

@@ -8,8 +8,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.xtext.common.types.JvmDeclaredType;
-import org.eclipse.xtext.common.types.JvmEnumerationType;
 import org.eclipse.xtext.common.types.JvmType;
 import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.common.types.access.IMirror;
@@ -126,6 +124,7 @@ public class ELJvmTypeProvider extends ClasspathTypeProvider {
 			Iterables.filter(
 				Iterables.concat(
 						Iterables.transform(resourceSet.getResources(), new Function<Resource, EList<Adapter>>() {
+							@Override
 							public EList<Adapter> apply(Resource from) {
 								return from.eAdapters();
 							}

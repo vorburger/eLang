@@ -89,6 +89,7 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELScopeProvider.class;
 	}
 
+	@Override
 	public Class<? extends org.eclipse.xtext.common.types.access.IJvmTypeProvider.Factory> bindIJvmTypeProvider$Factory() {
 		return ELJvmTypeProviderFactory.class;
 	}

@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.xtext.EcoreUtil2;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.vorburger.el.engine.DynamicExpressionContext;

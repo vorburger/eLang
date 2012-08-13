@@ -11,13 +11,13 @@ import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 import org.eclipse.xtext.xbase.validation.XbaseJavaValidator;
 
-import com.google.inject.Inject;
-
 import ch.vorburger.el.eL.DateLiteral;
 import ch.vorburger.el.eL.DateTimeLiteral;
 import ch.vorburger.el.eL.ELPackage;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.lib.DateExtensions;
+
+import com.google.inject.Inject;
  
 
 @SuppressWarnings("restriction")

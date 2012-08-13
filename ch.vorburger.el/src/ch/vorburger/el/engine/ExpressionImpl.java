@@ -37,6 +37,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 		return xExpression;
 	}
 	
+	@Override
 	public Object evaluate(ExpressionContext context) throws ExpressionExecutionException {
 		Object thisElement = null;
 	    IEvaluationContext evaluationContext = contextProvider.get();
@@ -63,6 +64,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	    return result.getResult();
 	}
 
+	@Override
 	public Object evaluate() throws ExpressionExecutionException {
 		return evaluate(null);
 	}

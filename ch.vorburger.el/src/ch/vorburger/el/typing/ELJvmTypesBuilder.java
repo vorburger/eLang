@@ -50,6 +50,7 @@ public class ELJvmTypesBuilder extends JvmTypesBuilder {
 		return ref;
 	}
 
+	@Override
 	public String getDocumentation(EObject source) {
 		if (source == null)
 			return null;

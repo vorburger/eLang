@@ -6,7 +6,6 @@ import org.eclipse.xtext.common.types.JvmIdentifiableElement;
 import org.eclipse.xtext.documentation.impl.MultiLineCommentDocumentationProvider;
 import org.eclipse.xtext.xbase.compiler.DocumentationAdapter;
 
-@SuppressWarnings("restriction")
 public class ELEObjectDocumentationProvider extends MultiLineCommentDocumentationProvider {
 
 	@Override

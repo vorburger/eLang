@@ -178,6 +178,7 @@ public class ExpressionFactory {
 	protected Iterable<Issue> getValidationErrors(final EObject model) {
 		final List<Issue> validate = validate(model);
 		Iterable<Issue> issues = filter(validate, new Predicate<Issue>() {
+			@Override
 			public boolean apply(Issue input) {
 				return Severity.ERROR == input.getSeverity();
 			}

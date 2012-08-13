@@ -14,7 +14,6 @@ import ch.vorburger.el.ui.hovering.ELEObjectDocumentationProvider;
 /**
  * Use this class to register components to be used within the IDE.
  */
-@SuppressWarnings("restriction")
 public class ELUiModule extends ch.vorburger.el.ui.AbstractELUiModule {
 	public ELUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
