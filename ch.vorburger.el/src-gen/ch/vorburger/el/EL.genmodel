@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/ch.vorburger.el/src-gen"
+    editDirectory="/ch.vorburger.el.edit/src" editorDirectory="/ch.vorburger.el.editor/src"
+    modelPluginID="ch.vorburger.el" forceOverwrite="true" modelName="EL" updateClasspath="false"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" complianceLevel="5.0"
+    copyrightFields="false" editPluginID="ch.vorburger.el.edit" editorPluginID="ch.vorburger.el.editor"
+    usedGenPackages="../../../../../org.eclipse.xtext.xbase/model/Xbase.genmodel#//xbase">
+  <genPackages prefix="EL" basePackage="ch.vorburger.el" disposableProviderFactory="true"
+      ecorePackage="EL.ecore#/">
+    <genClasses ecoreClass="EL.ecore#//DateLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EL.ecore#//DateLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="EL.ecore#//DateTimeLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EL.ecore#//DateTimeLiteral/value"/>
+    </genClasses>
+    <genClasses ecoreClass="EL.ecore#//DecimalLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EL.ecore#//DecimalLiteral/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
