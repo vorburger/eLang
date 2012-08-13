@@ -78,10 +78,10 @@
       </releases>
     </pluginRepository>
 	  <pluginRepository>
-	    <id>fornax-snapshots</id>
-	    <url>http://fornax.itemis.de/nexus/content/repositories/snapshots/</url>
+	    <id>fornax-releases</id>
+	    <url>http://fornax.itemis.de/nexus/content/repositories/public/</url>
 	    <snapshots>
-	    	<enabled>true</enabled>
+	    	<enabled>false</enabled>
 	    </snapshots>
 	  </pluginRepository>
   </pluginRepositories>
