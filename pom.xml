@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <prerequisites>
-    <maven>3.0</maven>
+    <maven>3.0.4</maven>
   </prerequisites>
 
   <groupId>ch.vorburger</groupId>
@@ -99,16 +99,19 @@
       <layout>p2</layout>
       <url>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository/</url>
     </repository>
-		<repository>
-      <id>Eclipse Helios Updates</id>
-      <layout>p2</layout>
-      <url>http://download.eclipse.org/eclipse/updates/3.6</url>
-    </repository>
+	
 		<repository>
       <id>Eclipse Helios</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/helios/</url>
+      <url>http://download.eclipse.org/releases/indigo/</url>
     </repository>
+    
+		<repository>
+			<id>EMF</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/modeling/emf/emf/updates/</url>
+		</repository>    
+    
 		<repository>
       <id>Eclipse TMF Updates</id>
       <layout>p2</layout>
