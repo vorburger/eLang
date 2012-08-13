@@ -1,6 +1,7 @@
 package ch.vorburger.el.generator;
 
 import ch.vorburger.el.generator.ELCompiler;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import java.util.List;
 import org.eclipse.emf.common.util.EList;
@@ -19,12 +20,11 @@ public class ELGenerator implements IGenerator {
   private ELCompiler elCompiler;
   
   public void doGenerate(final Resource resource, final IFileSystemAccess fsa) {
-      EList<EObject> _contents = resource.getContents();
-      Iterable<XExpression> _filter = IterableExtensions.<XExpression>filter(_contents, org.eclipse.xtext.xbase.XExpression.class);
-      XExpression _head = IterableExtensions.<XExpression>head(_filter);
-      final XExpression expr = _head;
-      CharSequence _compile = this.compile(expr);
-      fsa.generateFile("CompiledExpression.java", _compile);
+    EList<EObject> _contents = resource.getContents();
+    Iterable<XExpression> _filter = Iterables.<XExpression>filter(_contents, XExpression.class);
+    final XExpression expr = IterableExtensions.<XExpression>head(_filter);
+    CharSequence _compile = this.compile(expr);
+    fsa.generateFile("CompiledExpression.java", _compile);
   }
   
   public CharSequence compile(final XExpression e) {

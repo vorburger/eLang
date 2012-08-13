@@ -6,6 +6,7 @@ import org.eclipse.xtext.common.types.JvmDeclaredType;
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer;
+import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor;
 
 /**
  * <p>Infers a JVM model from the source model.</p>
@@ -27,11 +28,15 @@ public class ELJvmModelInferrer extends AbstractModelInferrer {
   protected void _infer(final XExpression element, final IAcceptor<JvmDeclaredType> acceptor, final boolean isPrelinkingPhase) {
   }
   
-  public void infer(final EObject element, final IAcceptor<JvmDeclaredType> acceptor, final boolean isPrelinkingPhase) {
-    if (element instanceof XExpression) {
-      _infer((XExpression)element, acceptor, isPrelinkingPhase);
-    } else if (element != null) {
-      _infer(element, acceptor, isPrelinkingPhase);
+  public void infer(final EObject element, final Object acceptor, final boolean isPrelinkingPhase) {
+    if (element instanceof XExpression
+         && acceptor instanceof IAcceptor) {
+      _infer((XExpression)element, (IAcceptor<JvmDeclaredType>)acceptor, isPrelinkingPhase);
+      return;
+    } else if (element != null
+         && acceptor instanceof IJvmDeclaredTypeAcceptor) {
+      _infer(element, (IJvmDeclaredTypeAcceptor)acceptor, isPrelinkingPhase);
+      return;
     } else {
       throw new IllegalArgumentException("Unhandled parameter types: " +
         Arrays.<Object>asList(element, acceptor, isPrelinkingPhase).toString());

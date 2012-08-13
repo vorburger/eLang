@@ -15,12 +15,13 @@ import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISyn
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynTransition;
 import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 
-@SuppressWarnings("restriction")
-public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
+@SuppressWarnings("all")
+public abstract class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected ELGrammarAccess grammarAccess;
 	protected AbstractElementAlias match_XBlockExpression_SemicolonKeyword_2_1_q;
 	protected AbstractElementAlias match_XBooleanLiteral_FALSEKeyword_1_0_1_or_FalseKeyword_1_0_0;
+	protected AbstractElementAlias match_XConstructorCall___LeftParenthesisKeyword_4_0_RightParenthesisKeyword_4_2__q;
 	protected AbstractElementAlias match_XExpressionInClosure_SemicolonKeyword_1_1_q;
 	protected AbstractElementAlias match_XFunctionTypeRef___LeftParenthesisKeyword_0_0_RightParenthesisKeyword_0_2__q;
 	protected AbstractElementAlias match_XNullLiteral_NULLKeyword_1_1_or_NullKeyword_1_0;
@@ -32,6 +33,7 @@ public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 		grammarAccess = (ELGrammarAccess) access;
 		match_XBlockExpression_SemicolonKeyword_2_1_q = new TokenAlias(false, true, grammarAccess.getXBlockExpressionAccess().getSemicolonKeyword_2_1());
 		match_XBooleanLiteral_FALSEKeyword_1_0_1_or_FalseKeyword_1_0_0 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getXBooleanLiteralAccess().getFALSEKeyword_1_0_1()), new TokenAlias(false, false, grammarAccess.getXBooleanLiteralAccess().getFalseKeyword_1_0_0()));
+		match_XConstructorCall___LeftParenthesisKeyword_4_0_RightParenthesisKeyword_4_2__q = new GroupAlias(false, true, new TokenAlias(false, false, grammarAccess.getXConstructorCallAccess().getLeftParenthesisKeyword_4_0()), new TokenAlias(false, false, grammarAccess.getXConstructorCallAccess().getRightParenthesisKeyword_4_2()));
 		match_XExpressionInClosure_SemicolonKeyword_1_1_q = new TokenAlias(false, true, grammarAccess.getXExpressionInClosureAccess().getSemicolonKeyword_1_1());
 		match_XFunctionTypeRef___LeftParenthesisKeyword_0_0_RightParenthesisKeyword_0_2__q = new GroupAlias(false, true, new TokenAlias(false, false, grammarAccess.getXFunctionTypeRefAccess().getLeftParenthesisKeyword_0_0()), new TokenAlias(false, false, grammarAccess.getXFunctionTypeRefAccess().getRightParenthesisKeyword_0_2()));
 		match_XNullLiteral_NULLKeyword_1_1_or_NullKeyword_1_0 = new AlternativeAlias(false, false, new TokenAlias(false, false, grammarAccess.getXNullLiteralAccess().getNULLKeyword_1_1()), new TokenAlias(false, false, grammarAccess.getXNullLiteralAccess().getNullKeyword_1_0()));
@@ -46,6 +48,11 @@ public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 		return "";
 	}
 	
+	/**
+	 * OpSingleAssign:
+	 * 	'='
+	 * ;
+	 */
 	protected String getOpSingleAssignToken(EObject semanticObject, RuleCall ruleCall, INode node) {
 		if (node != null)
 			return getTokenText(node);
@@ -62,6 +69,8 @@ public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 				emit_XBlockExpression_SemicolonKeyword_2_1_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_XBooleanLiteral_FALSEKeyword_1_0_1_or_FalseKeyword_1_0_0.equals(syntax))
 				emit_XBooleanLiteral_FALSEKeyword_1_0_1_or_FalseKeyword_1_0_0(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if(match_XConstructorCall___LeftParenthesisKeyword_4_0_RightParenthesisKeyword_4_2__q.equals(syntax))
+				emit_XConstructorCall___LeftParenthesisKeyword_4_0_RightParenthesisKeyword_4_2__q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_XExpressionInClosure_SemicolonKeyword_1_1_q.equals(syntax))
 				emit_XExpressionInClosure_SemicolonKeyword_1_1_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if(match_XFunctionTypeRef___LeftParenthesisKeyword_0_0_RightParenthesisKeyword_0_2__q.equals(syntax))
@@ -86,9 +95,17 @@ public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 	
 	/**
 	 * Syntax:
-	 *     'false' | 'FALSE'
+	 *     'FALSE' | 'false'
 	 */
 	protected void emit_XBooleanLiteral_FALSEKeyword_1_0_1_or_FalseKeyword_1_0_0(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Syntax:
+	 *     ('(' ')')?
+	 */
+	protected void emit_XConstructorCall___LeftParenthesisKeyword_4_0_RightParenthesisKeyword_4_2__q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	
@@ -110,7 +127,7 @@ public class AbstractELSyntacticSequencer extends AbstractSyntacticSequencer {
 	
 	/**
 	 * Syntax:
-	 *     'NULL' | 'null'
+	 *     'null' | 'NULL'
 	 */
 	protected void emit_XNullLiteral_NULLKeyword_1_1_or_NullKeyword_1_0(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);

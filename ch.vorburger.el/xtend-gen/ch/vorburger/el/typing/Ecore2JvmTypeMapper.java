@@ -1,6 +1,7 @@
 package ch.vorburger.el.typing;
 
 import ch.vorburger.el.typing.ELJvmTypesBuilder;
+import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import java.util.Arrays;
 import org.eclipse.emf.common.util.EList;
@@ -25,8 +26,6 @@ import org.eclipse.xtext.common.types.JvmVisibility;
 import org.eclipse.xtext.common.types.util.TypeReferences;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.naming.QualifiedName;
-import org.eclipse.xtext.xbase.lib.CollectionExtensions;
-import org.eclipse.xtext.xbase.lib.ObjectExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 @SuppressWarnings("all")
@@ -45,23 +44,21 @@ public class Ecore2JvmTypeMapper {
     String _string = _fullyQualifiedName.toString();
     final Procedure1<JvmGenericType> _function = new Procedure1<JvmGenericType>() {
         public void apply(final JvmGenericType it) {
-          {
-            EList<EStructuralFeature> _eStructuralFeatures = eClass.getEStructuralFeatures();
-            for (final EStructuralFeature feature : _eStructuralFeatures) {
-              EList<JvmMember> _members = it.getMembers();
-              JvmField _mapFeature = Ecore2JvmTypeMapper.this.mapFeature(feature, rs);
-              CollectionExtensions.<JvmField>operator_add(_members, _mapFeature);
-            }
-            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eClass);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
-            EList<EClass> _eSuperTypes = eClass.getESuperTypes();
-            for (final EClass superType : _eSuperTypes) {
-              EList<JvmTypeReference> _superTypes = it.getSuperTypes();
-              QualifiedName _fullyQualifiedName = Ecore2JvmTypeMapper.this._iQualifiedNameProvider.getFullyQualifiedName(superType);
-              String _string = _fullyQualifiedName.toString();
-              JvmTypeReference _newTypeRef = Ecore2JvmTypeMapper.this.jvmTypesBuilder.newTypeRef(rs, _string);
-              CollectionExtensions.<JvmTypeReference>operator_add(_superTypes, _newTypeRef);
-            }
+          EList<EStructuralFeature> _eStructuralFeatures = eClass.getEStructuralFeatures();
+          for (final EStructuralFeature feature : _eStructuralFeatures) {
+            EList<JvmMember> _members = it.getMembers();
+            JvmField _mapFeature = Ecore2JvmTypeMapper.this.mapFeature(feature, rs);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.<JvmField>operator_add(_members, _mapFeature);
+          }
+          String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eClass);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
+          EList<EClass> _eSuperTypes = eClass.getESuperTypes();
+          for (final EClass superType : _eSuperTypes) {
+            EList<JvmTypeReference> _superTypes = it.getSuperTypes();
+            QualifiedName _fullyQualifiedName = Ecore2JvmTypeMapper.this._iQualifiedNameProvider.getFullyQualifiedName(superType);
+            String _string = _fullyQualifiedName.toString();
+            JvmTypeReference _newTypeRef = Ecore2JvmTypeMapper.this.jvmTypesBuilder.newTypeRef(rs, _string);
+            Ecore2JvmTypeMapper.this.jvmTypesBuilder.<JvmTypeReference>operator_add(_superTypes, _newTypeRef);
           }
         }
       };
@@ -85,26 +82,23 @@ public class Ecore2JvmTypeMapper {
     String _string = _fullyQualifiedName.toString();
     final Procedure1<JvmEnumerationType> _function = new Procedure1<JvmEnumerationType>() {
         public void apply(final JvmEnumerationType it) {
-          {
-            it.setStatic(true);
-            EList<EEnumLiteral> _eLiterals = eEnum.getELiterals();
-            for (final EEnumLiteral literal : _eLiterals) {
-              {
-                JvmEnumerationLiteral _mapLiteral = Ecore2JvmTypeMapper.this.mapLiteral(literal, rs);
-                final JvmEnumerationLiteral l = _mapLiteral;
-                JvmParameterizedTypeReference _createTypeRef = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
-                l.setType(_createTypeRef);
-                EList<JvmMember> _members = it.getMembers();
-                CollectionExtensions.<JvmEnumerationLiteral>operator_add(_members, l);
-              }
+          it.setStatic(true);
+          EList<EEnumLiteral> _eLiterals = eEnum.getELiterals();
+          for (final EEnumLiteral literal : _eLiterals) {
+            {
+              final JvmEnumerationLiteral l = Ecore2JvmTypeMapper.this.mapLiteral(literal, rs);
+              JvmParameterizedTypeReference _createTypeRef = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
+              l.setType(_createTypeRef);
+              EList<JvmMember> _members = it.getMembers();
+              Ecore2JvmTypeMapper.this.jvmTypesBuilder.<JvmEnumerationLiteral>operator_add(_members, l);
             }
-            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnum);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
-            EList<JvmTypeReference> _superTypes = it.getSuperTypes();
-            JvmParameterizedTypeReference _createTypeRef_1 = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
-            JvmTypeReference _newTypeRef = Ecore2JvmTypeMapper.this.jvmTypesBuilder.newTypeRef(rs, "java.lang.Comparable", _createTypeRef_1);
-            CollectionExtensions.<JvmTypeReference>operator_add(_superTypes, _newTypeRef);
           }
+          String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnum);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
+          EList<JvmTypeReference> _superTypes = it.getSuperTypes();
+          JvmParameterizedTypeReference _createTypeRef = Ecore2JvmTypeMapper.this.references.createTypeRef(it);
+          JvmTypeReference _newTypeRef = Ecore2JvmTypeMapper.this.jvmTypesBuilder.newTypeRef(rs, "java.lang.Comparable", _createTypeRef);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.<JvmTypeReference>operator_add(_superTypes, _newTypeRef);
         }
       };
     JvmEnumerationType _enumerationType = this.jvmTypesBuilder.toEnumerationType(eEnum, _string, _function);
@@ -120,11 +114,9 @@ public class Ecore2JvmTypeMapper {
     JvmTypeReference _newTypeRef = this.jvmTypesBuilder.newTypeRef(rs, _mapType);
     final Procedure1<JvmField> _function = new Procedure1<JvmField>() {
         public void apply(final JvmField it) {
-          {
-            it.setVisibility(JvmVisibility.PUBLIC);
-            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eAttr);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
-          }
+          it.setVisibility(JvmVisibility.PUBLIC);
+          String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eAttr);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
         }
       };
     JvmField _field = this.jvmTypesBuilder.toField(eAttr, _name, _newTypeRef, _function);
@@ -140,11 +132,9 @@ public class Ecore2JvmTypeMapper {
     JvmTypeReference _newTypeRef = this.jvmTypesBuilder.newTypeRef(rs, _mapType);
     final Procedure1<JvmField> _function = new Procedure1<JvmField>() {
         public void apply(final JvmField it) {
-          {
-            it.setVisibility(JvmVisibility.PUBLIC);
-            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eRef);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
-          }
+          it.setVisibility(JvmVisibility.PUBLIC);
+          String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eRef);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
         }
       };
     JvmField _field = this.jvmTypesBuilder.toField(eRef, _name, _newTypeRef, _function);
@@ -155,12 +145,10 @@ public class Ecore2JvmTypeMapper {
     String _name = eEnumLiteral.getName();
     final Procedure1<JvmEnumerationLiteral> _function = new Procedure1<JvmEnumerationLiteral>() {
         public void apply(final JvmEnumerationLiteral it) {
-          {
-            it.setStatic(true);
-            it.setVisibility(JvmVisibility.PUBLIC);
-            String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnumLiteral);
-            Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
-          }
+          it.setStatic(true);
+          it.setVisibility(JvmVisibility.PUBLIC);
+          String _documentation = Ecore2JvmTypeMapper.this.jvmTypesBuilder.getDocumentation(eEnumLiteral);
+          Ecore2JvmTypeMapper.this.jvmTypesBuilder.setDocumentation(it, _documentation);
         }
       };
     JvmEnumerationLiteral _enumerationLiteral = this.jvmTypesBuilder.toEnumerationLiteral(eEnumLiteral, _name, _function);
@@ -169,92 +157,92 @@ public class Ecore2JvmTypeMapper {
   
   public String mapType(final String typeName) {
     String _switchResult = null;
-    boolean matched = false;
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EInt")) {
-        matched=true;
+    boolean _matched = false;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EInt")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EShort")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EShort")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.ELong")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.ELong")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EFloat")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EFloat")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EDouble")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EDouble")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EIntegerObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EIntegerObject")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EShortObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EShortObject")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.ELongObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.ELongObject")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EFloatObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EFloatObject")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EDoubleObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EDoubleObject")) {
+        _matched=true;
         _switchResult = "java.math.BigDecimal";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EDate")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EDate")) {
+        _matched=true;
         _switchResult = "java.util.GregorianCalendar";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EBoolean")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EBoolean")) {
+        _matched=true;
         _switchResult = "java.lang.Boolean";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EBooleanObject")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EBooleanObject")) {
+        _matched=true;
         _switchResult = "java.lang.Boolean";
       }
     }
-    if (!matched) {
-      if (ObjectExtensions.operator_equals(typeName,"ecore.EString")) {
-        matched=true;
+    if (!_matched) {
+      if (Objects.equal(typeName,"ecore.EString")) {
+        _matched=true;
         _switchResult = "java.lang.String";
       }
     }
-    if (!matched) {
+    if (!_matched) {
       _switchResult = typeName;
     }
     return _switchResult;

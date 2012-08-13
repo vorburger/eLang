@@ -74,7 +74,8 @@ public class ELJvmTypesBuilder extends JvmTypesBuilder {
 	 * 
 	 * @return a {@link result} representing a Java class of the given name.
 	 */
-	public JvmEnumerationLiteral toEnumerationLiteral(EObject sourceElement, String name, Procedure1<JvmEnumerationLiteral> initializer) {
+	@Override
+	public JvmEnumerationLiteral toEnumerationLiteral(EObject sourceElement, String name, Procedure1<? super JvmEnumerationLiteral> initializer) {
 		if (sourceElement == null)
 			return null;
 		if (name == null)

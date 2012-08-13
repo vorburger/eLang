@@ -14,7 +14,6 @@ import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.jvmmodel.JvmGlobalScopeProvider;
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 import org.eclipse.xtext.xbase.scoping.featurecalls.StaticImplicitMethodsFeatureForTypeProvider;
-import org.eclipse.xtext.xbase.typing.ITypeArgumentContextHelper;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
 import ch.vorburger.el.engine.Expression;
@@ -65,7 +64,7 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELTypeProvider.class;
 	}
 
-	public Class<? extends ITypeArgumentContextHelper> bindITypeArgumentContextHelper() {
+	public Class<? extends ITypeProvider> bindITypeArgumentContextHelper() {
 		return ELTypeProvider.class;
 	}
 	

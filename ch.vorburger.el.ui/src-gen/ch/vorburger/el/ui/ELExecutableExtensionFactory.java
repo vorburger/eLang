@@ -8,6 +8,8 @@ import org.osgi.framework.Bundle;
 
 import com.google.inject.Injector;
 
+import ch.vorburger.el.ui.internal.ELActivator;
+
 /**
  * This class was generated. Customizations should only happen in a newly
  * introduced subclass. 
@@ -16,12 +18,12 @@ public class ELExecutableExtensionFactory extends AbstractGuiceAwareExecutableEx
 
 	@Override
 	protected Bundle getBundle() {
-		return ch.vorburger.el.ui.internal.ELActivator.getInstance().getBundle();
+		return ELActivator.getInstance().getBundle();
 	}
 	
 	@Override
 	protected Injector getInjector() {
-		return ch.vorburger.el.ui.internal.ELActivator.getInstance().getInjector("ch.vorburger.el.EL");
+		return ELActivator.getInstance().getInjector(ELActivator.CH_VORBURGER_EL_EL);
 	}
 	
 }

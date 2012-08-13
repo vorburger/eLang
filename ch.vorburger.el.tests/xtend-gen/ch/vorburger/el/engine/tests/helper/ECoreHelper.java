@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 
 /**
  * This class contains helper methods to simplify the way how to interact with dynamic EMF
@@ -19,42 +18,38 @@ import org.eclipse.xtext.xbase.lib.CollectionExtensions;
 @SuppressWarnings("all")
 public class ECoreHelper {
   public EPackage createPackage(final String name) {
-      EPackage _createEPackage = EcoreFactory.eINSTANCE.createEPackage();
-      final EPackage epkg = _createEPackage;
-      epkg.setName(name);
-      return epkg;
+    final EPackage epkg = EcoreFactory.eINSTANCE.createEPackage();
+    epkg.setName(name);
+    return epkg;
   }
   
   public EClass createClass(final EPackage epkg, final String name) {
-      EClass _createEClass = EcoreFactory.eINSTANCE.createEClass();
-      final EClass eclass = _createEClass;
-      eclass.setName(name);
-      EList<EClassifier> _eClassifiers = epkg.getEClassifiers();
-      CollectionExtensions.<EClass>operator_add(_eClassifiers, eclass);
-      return eclass;
+    final EClass eclass = EcoreFactory.eINSTANCE.createEClass();
+    eclass.setName(name);
+    EList<EClassifier> _eClassifiers = epkg.getEClassifiers();
+    _eClassifiers.add(eclass);
+    return eclass;
   }
   
   public EEnum createEnum(final EPackage epkg, final String name) {
-      EEnum _createEEnum = EcoreFactory.eINSTANCE.createEEnum();
-      final EEnum eEnum = _createEEnum;
-      eEnum.setName(name);
-      EList<EClassifier> _eClassifiers = epkg.getEClassifiers();
-      CollectionExtensions.<EEnum>operator_add(_eClassifiers, eEnum);
-      return eEnum;
+    final EEnum eEnum = EcoreFactory.eINSTANCE.createEEnum();
+    eEnum.setName(name);
+    EList<EClassifier> _eClassifiers = epkg.getEClassifiers();
+    _eClassifiers.add(eEnum);
+    return eEnum;
   }
   
   public boolean addAttribute(final EClass eclass, final EClassifier type, final String attributeName) {
     boolean _xblockexpression = false;
     {
-      EAttribute _createEAttribute = EcoreFactory.eINSTANCE.createEAttribute();
-      final EAttribute attribute = _createEAttribute;
+      final EAttribute attribute = EcoreFactory.eINSTANCE.createEAttribute();
       attribute.setName(attributeName);
       attribute.setUnsettable(false);
       attribute.setChangeable(true);
       attribute.setEType(type);
       EList<EStructuralFeature> _eStructuralFeatures = eclass.getEStructuralFeatures();
-      boolean _operator_add = CollectionExtensions.<EAttribute>operator_add(_eStructuralFeatures, attribute);
-      _xblockexpression = (_operator_add);
+      boolean _add = _eStructuralFeatures.add(attribute);
+      _xblockexpression = (_add);
     }
     return _xblockexpression;
   }
@@ -62,11 +57,10 @@ public class ECoreHelper {
   public EEnumLiteral addEnumLiteral(final EEnum eEnum, final String literalName) {
     EEnumLiteral _xblockexpression = null;
     {
-      EEnumLiteral _createEEnumLiteral = EcoreFactory.eINSTANCE.createEEnumLiteral();
-      final EEnumLiteral literal = _createEEnumLiteral;
+      final EEnumLiteral literal = EcoreFactory.eINSTANCE.createEEnumLiteral();
       literal.setName(literalName);
       EList<EEnumLiteral> _eLiterals = eEnum.getELiterals();
-      CollectionExtensions.<EEnumLiteral>operator_add(_eLiterals, literal);
+      _eLiterals.add(literal);
       _xblockexpression = (literal);
     }
     return _xblockexpression;

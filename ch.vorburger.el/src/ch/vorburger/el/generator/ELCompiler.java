@@ -6,6 +6,7 @@ import org.eclipse.xtext.xbase.compiler.IAppendable;
 import org.eclipse.xtext.xbase.compiler.ImportManager;
 import org.eclipse.xtext.xbase.compiler.StringBuilderBasedAppendable;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
+import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
 
 import ch.vorburger.el.eL.DateLiteral;
 import ch.vorburger.el.eL.DateTimeLiteral;
@@ -16,16 +17,17 @@ import ch.vorburger.el.lib.DateExtensions;
  * This class does the code generation for expressions (beware, the name "compiler" is a bit misleading here).
  * 
  * @author Kai Kreuzer
- *
  */
 @SuppressWarnings("restriction")
 public class ELCompiler extends XbaseCompiler {
 
 	public String compile(XExpression expression, ImportManager importManager) {
-		StringBuilderBasedAppendable appendable = new StringBuilderBasedAppendable(
-				importManager);
-		return compile(expression, appendable,
-				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
+		StringBuilderBasedAppendable appendable = new StringBuilderBasedAppendable(importManager);
+		if (appendable instanceof ITreeAppendable) {
+			ITreeAppendable treeAppendable = (ITreeAppendable) appendable;
+			return compile(expression, treeAppendable, TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
+		}
+		return null;
 	}
 
 	protected void _toJavaExpression(DecimalLiteral expr, IAppendable b) {
