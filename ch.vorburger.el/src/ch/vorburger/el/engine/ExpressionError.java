@@ -12,7 +12,7 @@ package ch.vorburger.el.engine;
  */
 public final class ExpressionError {
 	
-	private final int column;
+	private final int offset;
 	private final int length;
 	private final int line;
 	
@@ -24,13 +24,13 @@ public final class ExpressionError {
 	 * 
 	 * @param message Error Message
 	 * @param line Line number, or -1 if unknown
-	 * @param column Column number, or -1 if unknown 
+	 * @param offset Column number, or -1 if unknown 
 	 * @param length Length, or -1 if unknown
 	 */
-	public ExpressionError(final String message, final int line, final int column, final int length) {
+	public ExpressionError(final String message, final int line, final int offset, final int length) {
 		this.message = message;
 		this.line = line;
-		this.column = column;
+		this.offset = offset;
 		this.length = length;
 	}
 
@@ -51,9 +51,9 @@ public final class ExpressionError {
 			sb.append("; line ");
 			sb.append(line);
 		}
-		if (column != -1) {
+		if (offset != -1) {
 			sb.append(", column ");
-			sb.append(column);
+			sb.append(offset);
 		}
 		if (length != -1) {
 			sb.append(", length ");
@@ -75,7 +75,7 @@ public final class ExpressionError {
 	 * @return The column number. Returns -1 if a column number is unavailable.
 	 */
 	public int getColumnNumber() {
-		return column;
+		return offset;
 	}
     
     /**

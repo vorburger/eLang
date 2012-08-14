@@ -41,12 +41,12 @@ public abstract class ExpressionException extends Exception {
 		this.errors = new LinkedList<ExpressionError>();
 	}
 
-	public ExpressionException(final String message, final String expressionText, final int line, final int column, final int length) {
-		this(expressionText, new ExpressionError(message, line, column, length));
+	public ExpressionException(final String message, final String expressionText, final int line, final int offset, final int length) {
+		this(expressionText, new ExpressionError(message, line, offset, length));
 	}
 	
-	public ExpressionException(final Throwable cause, final String message, final String expressionText, final int line, final int column, final int length) {
-		this(cause, expressionText, new ExpressionError(message, line, column, length));
+	public ExpressionException(final Throwable cause, final String message, final String expressionText, final int line, final int offset, final int length) {
+		this(cause, expressionText, new ExpressionError(message, line, offset, length));
 	}
 
 	private ExpressionException(final Throwable cause, final String expressionText, final ExpressionError error) {
