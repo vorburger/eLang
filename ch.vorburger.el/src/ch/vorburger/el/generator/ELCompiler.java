@@ -4,8 +4,8 @@ import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.IAppendable;
 import org.eclipse.xtext.xbase.compiler.ImportManager;
-import org.eclipse.xtext.xbase.compiler.StringBuilderBasedAppendable;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
+import org.eclipse.xtext.xbase.compiler.output.FakeTreeAppendable;
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
 
 import ch.vorburger.el.eL.DateLiteral;
@@ -22,19 +22,16 @@ import ch.vorburger.el.lib.DateExtensions;
 public class ELCompiler extends XbaseCompiler {
 
 	public String compile(XExpression expression, ImportManager importManager) {
-		StringBuilderBasedAppendable appendable = new StringBuilderBasedAppendable(importManager);
-		if (appendable instanceof ITreeAppendable) {
-			ITreeAppendable treeAppendable = (ITreeAppendable) appendable;
-			return compile(expression, treeAppendable, TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
-		}
-		return null;
+		FakeTreeAppendable appendable = new FakeTreeAppendable(importManager);
+		return compile(expression, appendable,
+				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
 	}
 
-	protected void _toJavaExpression(DecimalLiteral expr, IAppendable b) {
+	protected void _toJavaExpression(DecimalLiteral expr, ITreeAppendable b) {
 		b.append("new java.math.BigDecimal(\"" + expr.getValue() + "\")");
 	}
 
-	protected void _toJavaExpression(DateLiteral expr, IAppendable b) {
+	protected void _toJavaExpression(DateLiteral expr, ITreeAppendable b) {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
 		b.append("new java.util.GregorianCalendar(");
 		for(int i=0; i<6; i++) {
@@ -44,7 +41,7 @@ public class ELCompiler extends XbaseCompiler {
 		b.append(")");
 	}
 
-	protected void _toJavaExpression(DateTimeLiteral expr, IAppendable b) {
+	protected void _toJavaExpression(DateTimeLiteral expr, ITreeAppendable b) {
 		int[] args = DateExtensions.getGregorianCalendarConstructorArgs(expr.getValue());
 		b.append("new java.util.GregorianCalendar(");
 		for(int i=0; i<6; i++) {
