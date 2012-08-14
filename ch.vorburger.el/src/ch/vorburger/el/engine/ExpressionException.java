@@ -1,6 +1,9 @@
 package ch.vorburger.el.engine;
 
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -123,6 +126,13 @@ public abstract class ExpressionException extends Exception {
 				sb.append(". ");
 			}
 			sb.append(e.getMessage());
+			if (e.getException() != null) {
+				sb.append("\n      ");
+				final Writer stackTrace = new StringWriter();
+			    final PrintWriter printWriter = new PrintWriter(stackTrace);
+			    e.getException().printStackTrace(printWriter);
+			    sb.append(stackTrace.toString());
+			}
 		}
 		return sb.toString();
 	}

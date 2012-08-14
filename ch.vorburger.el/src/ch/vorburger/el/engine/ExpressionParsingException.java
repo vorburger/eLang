@@ -31,7 +31,7 @@ public class ExpressionParsingException extends ExpressionException {
 				this.getErrors().add(new ExpressionError(e.getMessage(), e.getLine(), e.getOffset(), e.getLength()));				
 			} else if (emfDiagnosticError instanceof ExceptionDiagnostic) {
 				ExceptionDiagnostic e = (ExceptionDiagnostic) emfDiagnosticError;
-				this.getErrors().add(new ExpressionError(e.getMessage(), e.getLine(), e.getOffset(), e.getLength()));				
+				this.getErrors().add(new ExpressionError(e.getMessage(), e.getLine(), e.getOffset(), e.getLength(), e.getException()));				
 			} else {
 				this.getErrors().add(new ExpressionError(emfDiagnosticError.getMessage(), -1, -1, -1));				
 			}

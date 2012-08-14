@@ -16,9 +16,9 @@ public final class ExpressionError {
 	private final int length;
 	private final int line;
 	
-	// TODO Internationalize!  Not an Error string, but a key...
 	private final String message;
-
+	private Exception exception;
+	
 	/**
 	 * Creates new ExpressionError.
 	 * 
@@ -35,6 +35,12 @@ public final class ExpressionError {
 	}
 
 	
+	public ExpressionError(String message, int line, int offset, int length, Exception exception) {
+		this(message, line, offset, length);
+		this.exception = exception;
+	}
+
+
 	/**
 	 * Returns a message containing the String passed to a constructor as well as line and column numbers if any of these are known.
 	 * @return The error message.
@@ -78,5 +84,9 @@ public final class ExpressionError {
      */
 	public int getLength() {
 		return length;
+	}
+	
+	public Exception getException() {
+		return exception;
 	}
 }
