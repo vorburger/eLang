@@ -1,10 +1,8 @@
 package ch.vorburger.el.jvmmodel
 
-import org.eclipse.xtext.xbase.XExpression
-import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
-import org.eclipse.jdt.annotation.NonNull
-import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
+import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
