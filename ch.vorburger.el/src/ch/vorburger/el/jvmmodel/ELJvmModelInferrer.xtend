@@ -4,6 +4,7 @@ import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.jdt.annotation.NonNull
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
+import org.eclipse.emf.ecore.EObject
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -27,7 +28,7 @@ class ELJvmModelInferrer extends AbstractModelInferrer {
 	 * @param isPreLinkingPhase - whether the method is called in a pre linking phase, i.e. when the global index isn't fully updated. You
 	 *        must not rely on linking using the index if iPrelinkingPhase is <code>true</code>
 	 */
-   	def dispatch void infer(XExpression element, IJvmDeclaredTypeAcceptor acceptor, boolean isPrelinkingPhase) {
+   	override public dispatch void infer(EObject element, IJvmDeclaredTypeAcceptor acceptor, boolean isPrelinkingPhase) {
    		
    		// Here you explain how your model is mapped to Java elements, by writing the actual translation code.
    		// An example based on the initial hellow world example could look like this:

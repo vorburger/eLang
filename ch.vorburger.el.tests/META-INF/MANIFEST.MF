@@ -13,7 +13,6 @@ Require-Bundle: ch.vorburger.el,
  org.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
  org.eclipse.xtext.xbase.lib;bundle-version="[2.3.0,2.4.0)",
- org.eclipse.xtend2.lib;bundle-version="[2.3.0,2.4.0)",
  org.eclipse.jdt.core;resolution:=optional
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
