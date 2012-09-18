@@ -64,10 +64,6 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELTypeProvider.class;
 	}
 
-	public Class<? extends ITypeProvider> bindITypeArgumentContextHelper() {
-		return ELTypeProvider.class;
-	}
-	
 	@Override
 	public Class<? extends IExpressionInterpreter> bindIExpressionInterpreter() {
 		return ELInterpreter.class;
