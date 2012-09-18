@@ -1,5 +1,3 @@
 target
 bin
-src-gen/ch
-.*.java._trace
-*.smap
+src-gen
