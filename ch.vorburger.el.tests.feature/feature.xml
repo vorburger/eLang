@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.vorburger.el.tests.feature"
+      label="Test of EL Feature"
+      version="2.0.0.qualifier"
+      provider-name="vorburger.ch">
+
+   <description url="https://github.com/vorburger/eLang">
+      Test feature for the EL Feature
+   </description>
+
+   <copyright url="https://github.com/vorburger/eLang">
+      Copyright (c) 2011 Michael Vorburger (http://www.vorburger.ch) and others.
+   </copyright>
+
+   <license url="https://github.com/vorburger/eLang/blob/master/LICENSE.txt">
+      Eclipse Public License - v 1.0
+   </license>
+
+   <plugin
+         id="ch.vorburger.el.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

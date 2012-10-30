@@ -29,6 +29,7 @@
 		<module>ch.vorburger.el.tests</module>
 		<module>ch.vorburger.el.ui</module>
 		<module>ch.vorburger.el.feature</module>
+		<module>ch.vorburger.el.tests.feature</module>
 		<module>ch.vorburger.el.site</module>
 	</modules>
 
