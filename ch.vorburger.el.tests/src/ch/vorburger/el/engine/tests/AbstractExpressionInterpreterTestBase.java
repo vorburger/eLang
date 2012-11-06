@@ -12,11 +12,11 @@ import ch.vorburger.el.engine.ExpressionException;
 import ch.vorburger.el.engine.ExpressionFactory;
 
 
-public abstract class AbstractExpressionTestBase {
+public abstract class AbstractExpressionInterpreterTestBase {
 
 	protected final ExpressionFactory expressionFactory;
 
-	public AbstractExpressionTestBase(ExpressionFactory expressionFactory) {
+	public AbstractExpressionInterpreterTestBase(ExpressionFactory expressionFactory) {
 		super();
 		this.expressionFactory = expressionFactory;
 	}

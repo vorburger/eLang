@@ -17,17 +17,18 @@ import ch.vorburger.el.engine.ExpressionParsingException;
 
 /**
  * Basic Tests for the Expression Engine.
+ * This tests will "interpret" expressions.
  * 
  * @author Michael Vorburger
  * @author Kai Kreuzer
-*/
-public class BasicExpressionTest extends AbstractExpressionTestBase {
+ */
+public class BasicExpressionInterpreterTest extends AbstractExpressionInterpreterTestBase {
 	
-	public BasicExpressionTest() {
+	public BasicExpressionInterpreterTest() {
 		super(new ExpressionFactory());
 	}
 
-	protected BasicExpressionTest(ExpressionFactory expressionFactory) {
+	protected BasicExpressionInterpreterTest(ExpressionFactory expressionFactory) {
 		super(expressionFactory);
 	}
 

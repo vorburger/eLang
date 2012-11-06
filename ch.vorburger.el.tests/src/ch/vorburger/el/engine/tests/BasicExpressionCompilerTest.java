@@ -5,7 +5,7 @@ package ch.vorburger.el.engine.tests;
  * 
  * @author Kai Kreuzer
  */
-public class BasicExpressionCompilerTest extends BasicExpressionTest {
+public class BasicExpressionCompilerTest extends BasicExpressionInterpreterTest {
 
 		public BasicExpressionCompilerTest() {
 			expressionFactory.setAlwaysCompile(true);

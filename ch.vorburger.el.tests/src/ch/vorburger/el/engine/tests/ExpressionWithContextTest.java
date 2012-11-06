@@ -28,7 +28,7 @@ import ch.vorburger.el.engine.tests.helper.ECoreHelper;
  * 
  * @author Kai Kreuzer
 */
-public class ExpressionWithContextTest extends AbstractExpressionTestBase {
+public class ExpressionWithContextTest extends AbstractExpressionInterpreterTestBase {
 	
 	private static ECoreHelper helper = new ECoreHelper();
 	
