@@ -32,12 +32,12 @@ public class BasicExpressionGeneratorTest {
 	protected void checkGeneration(String expressionText, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException, ExpressionCompilationException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		String genJavaCode = expression.generateJavaCode();
-		assertEquals(expectedGeneratedJavaCode, genJavaCode);
+		assertEquals(expectedGeneratedJavaCode, genJavaCode.trim());
 	}
 
 	@Test
 	public void testNumberLiteral() throws Exception {
-		checkGeneration("23.7", "new java.math.BigDecimal(\"23.7\")");
+		checkGeneration("23.7", "return new java.math.BigDecimal(\"23.7\");");
 	}
 
 }

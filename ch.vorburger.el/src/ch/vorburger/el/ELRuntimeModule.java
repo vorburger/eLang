@@ -9,6 +9,7 @@ import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
+import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.jvmmodel.JvmGlobalScopeProvider;
@@ -18,6 +19,7 @@ import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
 import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionImpl;
+import ch.vorburger.el.generator.ELCompiler;
 import ch.vorburger.el.generator.ELGenerator;
 import ch.vorburger.el.interpreter.ELInterpreter;
 import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
@@ -40,6 +42,10 @@ import com.google.inject.Singleton;
 @SuppressWarnings("restriction")
 public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 
+	public Class<? extends XbaseCompiler> bindXbaseCompiler() {
+		return ELCompiler.class;
+	}
+	
 	@Override
 	public Class<? extends IValueConverterService> bindIValueConverterService() {
 		return ELValueConverterService.class;

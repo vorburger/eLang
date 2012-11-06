@@ -1,16 +1,17 @@
 package ch.vorburger.el.engine;
 
 
+import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.ImportManager;
+import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
+import org.eclipse.xtext.xbase.compiler.output.FakeTreeAppendable;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
-
-import ch.vorburger.el.generator.ELCompiler;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -22,7 +23,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	@Inject protected Provider<IEvaluationContext> contextProvider;
 //	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
 
-	@Inject protected ELCompiler compiler;
+	@Inject protected XbaseCompiler compiler;
 //	@Inject	protected IGenerator generator;
 
 	protected XExpression xExpression;
@@ -76,7 +77,9 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	@Override
 	public String generateJavaCode() {
 		ImportManager importManager = new ImportManager(false);
-		return compiler.compile(getXExpression(), importManager);
+		FakeTreeAppendable appendable = new FakeTreeAppendable(importManager);
+		return compiler.compile(getXExpression(), appendable,
+				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
 	}
 	
 	// Xbase does no longer support on the fly compilation of expressions, see
