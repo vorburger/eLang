@@ -1,14 +1,16 @@
 package ch.vorburger.el.engine;
 
 
-import org.eclipse.xtext.generator.IGenerator;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
+import org.eclipse.xtext.xbase.compiler.ImportManager;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
+
+import ch.vorburger.el.generator.ELCompiler;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -19,7 +21,9 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
 //	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
-	@Inject	protected IGenerator generator;
+
+	@Inject protected ELCompiler compiler;
+//	@Inject	protected IGenerator generator;
 
 	protected XExpression xExpression;
 
@@ -67,6 +71,12 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	@Override
 	public Object evaluate() throws ExpressionExecutionException {
 		return evaluate(null);
+	}
+
+	@Override
+	public String generateJavaCode() {
+		ImportManager importManager = new ImportManager(false);
+		return compiler.compile(getXExpression(), importManager);
 	}
 	
 	// Xbase does no longer support on the fly compilation of expressions, see
