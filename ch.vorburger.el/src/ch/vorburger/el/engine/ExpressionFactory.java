@@ -41,8 +41,6 @@ public class ExpressionFactory {
 	protected Injector guiceInjector;
 	protected XtextResourceSet resourceSet;
 
-	protected boolean alwaysCompile = false;
-
 	public ExpressionFactory() {
 		super();
 		// http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
@@ -62,63 +60,14 @@ public class ExpressionFactory {
 	 * @throws ExpressionParsingException
 	 * @throws ExpressionCompilationException 
 	 */
-	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException, ExpressionCompilationException {
+	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException {
 		return newExpressionFromString(expressionAsString, null);
 	}
 
-	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException, ExpressionCompilationException {
-		if(alwaysCompile) return newCompiledExpressionFromString(expressionAsString, context);
+	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException {
 		ExpressionImpl expression = guiceInjector.getInstance(ExpressionImpl.class);
 		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString, context));
 		return expression;
-	}
-
-	/**
-	 * Parse text expression and return a parsed expression object.
-	 * 
-	 * @see ExpressionEngine
-	 * 
-	 * @param expressionAsString Expression expression
-	 * @param varTypes 
-	 * @return expression object, which can be evaluated 
-	 * @throws ExpressionCompilationException 
-	 */
-	public Expression newCompiledExpressionFromString(final String expressionAsString) throws ExpressionParsingException, ExpressionCompilationException {
-		return newCompiledExpressionFromString(expressionAsString, null);
-	}
-
-	/**
-	 * Parse text expression and return a parsed expression object.
-	 * 
-	 * @see ExpressionEngine
-	 * 
-	 * @param expressionAsString Expression expression
-	 * @param varTypes 
-	 * @return expression object, which can be evaluated 
-	 * @throws ExpressionCompilationException 
-	 */
-	public Expression newCompiledExpressionFromString(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException, ExpressionCompilationException {
-		Expression expression = guiceInjector.getInstance(Expression.class);
-		((ExpressionImpl)expression).setXExpression(parseExpressionIntoXTextEObject(expressionAsString, context));
-		return expression.compile();
-	}
-
-	/**
-	 * Determines whether the factory pre-compiles all parsed expressions.
-	 * 
-	 * @return true, if pre-compilation is activated
-	 */
-	public boolean isAlwaysCompile() {
-		return alwaysCompile;
-	}
-
-	/**
-	 * Sets the pre-compilation behaviour of the factory.
-	 * 
-	 * @param alwaysCompile if true, newExpressionFromString will behave just like newCompiledExpressionFromString 
-	 */
-	public void setAlwaysCompile(boolean alwaysCompile) {
-		this.alwaysCompile = alwaysCompile;
 	}
 
 	/**
@@ -127,7 +76,6 @@ public class ExpressionFactory {
 	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=287413
 	 */
 	protected XExpression parseExpressionIntoXTextEObject(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException {
-
 		Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
 		if(context!=null) {
 			resource.eAdapters().add(context);

@@ -21,7 +21,6 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
-//	@Inject	protected EclipseRuntimeDependentJavaCompiler javaCompiler;
 
 	@Inject protected XbaseCompiler compiler;
 //	@Inject	protected IGenerator generator;
@@ -82,32 +81,4 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
 	}
 	
-	// Xbase does no longer support on the fly compilation of expressions, see
-	// https://bugs.eclipse.org/bugs/show_bug.cgi?id=365870
-	// Therefore this feature has been deactivated.
-	
-	@Override
-	public Expression compile() throws ExpressionCompilationException {
-		return this;
-//		initializeClassPath();
-//		StringConcatenation concatenation = ((ELGenerator)generator).compile(xExpression);
-//		Class<?> clazz = javaCompiler.compileToClass("CompiledExpression", concatenation.toString());
-//		try {
-//			Expression compiledExpression = (Expression) clazz.newInstance();
-//			return compiledExpression;
-//		} catch (InstantiationException e) {
-//			throw new ExpressionCompilationException("Could not compile expression", e);
-//		} catch (IllegalAccessException e) {
-//			throw new ExpressionCompilationException("Could not compile expression", e);
-//		}
-	}
-	
-//	protected void initializeClassPath() {
-//		javaCompiler.addClassPathOfClass(getClass()); // this bundle
-//		javaCompiler.addClassPathOfClass(DecimalExtensions.class); // xbase.lib
-//		javaCompiler.addClassPathOfClass(Functions.class); // xbase.lib
-//		javaCompiler.addClassPathOfClass(Provider.class);  // google guice
-//		javaCompiler.addClassPathOfClass(Supplier.class);  // google collect
-//	}
-
 }

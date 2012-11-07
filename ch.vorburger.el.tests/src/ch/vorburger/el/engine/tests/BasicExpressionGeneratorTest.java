@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import ch.vorburger.el.engine.Expression;
-import ch.vorburger.el.engine.ExpressionCompilationException;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
 import ch.vorburger.el.engine.ExpressionParsingException;
@@ -25,11 +24,11 @@ public class BasicExpressionGeneratorTest {
 		this.expressionFactory = new ExpressionFactory();
 	}
 	
-	protected void checkGeneration(String expressionText, String expectedGeneratedJavaCode) throws ExpressionParsingException, ExpressionCompilationException {
+	protected void checkGeneration(String expressionText, String expectedGeneratedJavaCode) throws ExpressionParsingException {
 		checkGeneration(expressionText, null, expectedGeneratedJavaCode);
 	}
 
-	protected void checkGeneration(String expressionText, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException, ExpressionCompilationException {
+	protected void checkGeneration(String expressionText, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		String genJavaCode = expression.generateJavaCode();
 		assertEquals(expectedGeneratedJavaCode, genJavaCode.trim());

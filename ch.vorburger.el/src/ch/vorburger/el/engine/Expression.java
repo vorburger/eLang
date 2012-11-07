@@ -34,8 +34,6 @@ public interface Expression {
 	public Boolean evaluateExpectingBoolean() throws ExpressionExecutionException;
 	public Boolean evaluateExpectingBoolean(ExpressionContext context) throws ExpressionExecutionException;
 	
-	public Expression compile() throws ExpressionCompilationException;
-
 	public String generateJavaCode();
 	
 }

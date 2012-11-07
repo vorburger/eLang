@@ -103,10 +103,5 @@ public abstract class AbstractExpression implements Expression {
 					"Expression does not evaluate to a Boolean.");
 		}
 	}
-	
-	@Override
-	public Expression compile() throws ExpressionCompilationException {
-		return this;
-	}
 
 }

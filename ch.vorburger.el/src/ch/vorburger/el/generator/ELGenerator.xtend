@@ -8,7 +8,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.xbase.XExpression
-import org.eclipse.xtext.xbase.compiler.ImportManager
 
 class ELGenerator implements IGenerator {
 		
@@ -20,20 +19,20 @@ class ELGenerator implements IGenerator {
 	}
 	
 	def compile(XExpression e) ''' 
-		«val importManager = new ImportManager(true)»
+		ï¿½val importManager = new ImportManager(true)ï¿½
 		import ch.vorburger.el.engine.*;
 		import ch.vorburger.el.lib.*;
 		import org.eclipse.xtext.xbase.lib.*;
 		import java.math.BigDecimal;
 		import java.util.GregorianCalendar;
 		import java.util.Calendar;
-		«FOR i:importManager.imports»
-			import «i»;
-		«ENDFOR»
+		ï¿½FOR i:importManager.importsï¿½
+			import ï¿½iï¿½;
+		ï¿½ENDFORï¿½
 		
 		public class CompiledExpression extends AbstractExpression {
 			public Object evaluate() throws ExpressionExecutionException {
-				«elCompiler.compile(e, importManager)»
+				ï¿½elCompiler.compile(e, importManager)ï¿½
 			}
 		}
 	'''	
