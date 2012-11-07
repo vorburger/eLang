@@ -1,42 +1,34 @@
 package ch.vorburger.el.engine.tests;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-import ch.vorburger.el.engine.Expression;
-import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
-import ch.vorburger.el.engine.ExpressionParsingException;
 
 /**
  * Basic Tests for the Expression Engine.
- * This tests will "generate" expressions.
+ * These tests will assert corrected of Java Code generated from EL expressions.
  * 
  * @author Michael Vorburger
  */
-public class BasicExpressionGeneratorTest {
-
-	protected final ExpressionFactory expressionFactory;
+public class BasicExpressionGeneratorTest extends AbstractExpressionGeneratorTestBase {
 
 	public BasicExpressionGeneratorTest() {
-		super();
-		this.expressionFactory = new ExpressionFactory();
-	}
-	
-	protected void checkGeneration(String expressionText, String expectedGeneratedJavaCode) throws ExpressionParsingException {
-		checkGeneration(expressionText, null, expectedGeneratedJavaCode);
-	}
-
-	protected void checkGeneration(String expressionText, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException {
-		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
-		String genJavaCode = expression.generateJavaCode();
-		assertEquals(expectedGeneratedJavaCode, genJavaCode.trim());
+		super(new ExpressionFactory());
 	}
 
 	@Test
 	public void testNumberLiteral() throws Exception {
-		checkGeneration("23.7", "return new java.math.BigDecimal(\"23.7\");");
+		checkGeneration("23.7", "new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n  public Object apply() {\n    return new java.math.BigDecimal(\"23.7\");\n  }\n}.apply()");
+	}
+
+	@Test
+	public void testNotNull() throws Exception {
+		checkGeneration("\"Saluton\" == null", "new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n  public Object apply() {\n    boolean _equals = com.google.common.base.Objects.equal(\"Saluton\", null);\n    return _equals;\n  }\n}.apply()");
+	}
+
+	@Test
+	public void testIfExpression() throws Exception {
+		checkGeneration("if (true) true else false", "new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n  public Object apply() {\n    boolean _xifexpression = false;\n    if (true) {\n      _xifexpression = true;\n    } else {\n      _xifexpression = false;\n    }\n    return _xifexpression;\n  }\n}.apply()");
 	}
 
 }

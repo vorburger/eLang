@@ -12,15 +12,12 @@ import ch.vorburger.el.engine.ExpressionException;
 import ch.vorburger.el.engine.ExpressionFactory;
 
 
-public abstract class AbstractExpressionInterpreterTestBase {
-
-	protected final ExpressionFactory expressionFactory;
+public abstract class AbstractExpressionInterpreterTestBase extends AbstractExpressionTestBase {
 
 	public AbstractExpressionInterpreterTestBase(ExpressionFactory expressionFactory) {
-		super();
-		this.expressionFactory = expressionFactory;
+		super(expressionFactory);
 	}
-
+	
 	protected void checkNumericExpression(String expressionText, Number expectedNumber) throws ExpressionException {
 		checkNumericExpression(expressionText, null, expectedNumber);
 	}

@@ -77,7 +77,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	public String generateJavaCode() {
 		ImportManager importManager = new ImportManager(false);
 		FakeTreeAppendable appendable = new FakeTreeAppendable(importManager);
-		return compiler.compile(getXExpression(), appendable,
+		return compiler.compileAsJavaExpression(getXExpression(), appendable,
 				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
 	}
 	
