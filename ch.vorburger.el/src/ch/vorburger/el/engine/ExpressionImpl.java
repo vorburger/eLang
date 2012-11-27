@@ -1,17 +1,17 @@
 package ch.vorburger.el.engine;
 
 
-import org.eclipse.xtext.common.types.TypesFactory;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.ImportManager;
-import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.compiler.output.FakeTreeAppendable;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationContext;
 import org.eclipse.xtext.xbase.interpreter.IEvaluationResult;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
+
+import ch.vorburger.el.generator.ELCompiler;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -22,8 +22,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
 
-	@Inject protected XbaseCompiler compiler;
-//	@Inject	protected IGenerator generator;
+	@Inject protected ELCompiler compiler;
 
 	protected XExpression xExpression;
 
@@ -74,11 +73,10 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	}
 
 	@Override
-	public String generateJavaCode() {
+	public String generateJavaCode(Class<?> expectedType) {
 		ImportManager importManager = new ImportManager(false);
 		FakeTreeAppendable appendable = new FakeTreeAppendable(importManager);
-		return compiler.compileAsJavaExpression(getXExpression(), appendable,
-				TypesFactory.eINSTANCE.createJvmAnyTypeReference()).toString();
+		return compiler.compileAsJavaExpression(getXExpression(), appendable, expectedType).toString();
 	}
 	
 }

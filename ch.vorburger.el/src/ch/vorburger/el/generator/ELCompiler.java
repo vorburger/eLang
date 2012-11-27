@@ -3,11 +3,14 @@ package ch.vorburger.el.generator;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 
 import ch.vorburger.el.eL.DateLiteral;
 import ch.vorburger.el.eL.DateTimeLiteral;
 import ch.vorburger.el.eL.DecimalLiteral;
 import ch.vorburger.el.lib.DateExtensions;
+
+import com.google.inject.Inject;
 
 /**
  * This class does the code generation for expressions (beware, the name "compiler" is a bit misleading here).
@@ -18,6 +21,12 @@ import ch.vorburger.el.lib.DateExtensions;
 @SuppressWarnings("restriction")
 public class ELCompiler extends XbaseCompiler {
 
+	private @Inject JvmTypesBuilder jvmTypesBuilder;
+	
+	public ITreeAppendable compileAsJavaExpression(XExpression obj, ITreeAppendable parentAppendable, Class<?> expectedType) {
+		return compileAsJavaExpression(obj, parentAppendable, jvmTypesBuilder.newTypeRef(obj, expectedType));
+	}
+	
 	@Override
 	public void _toJavaStatement(XExpression obj, ITreeAppendable appendable, boolean isReferenced) {
 		if (obj instanceof DecimalLiteral) {

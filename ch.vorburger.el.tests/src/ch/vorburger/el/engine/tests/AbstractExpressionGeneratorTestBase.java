@@ -17,13 +17,13 @@ public abstract class AbstractExpressionGeneratorTestBase extends AbstractExpres
 		super(expressionFactory);
 	}
 
-	protected void checkGeneration(String expressionText, String expectedGeneratedJavaCode) throws ExpressionParsingException {
-		checkGeneration(expressionText, null, expectedGeneratedJavaCode);
+	protected void checkGeneration(String expressionText, Class<?> expectedType, String expectedGeneratedJavaCode) throws ExpressionParsingException {
+		checkGeneration(expressionText, expectedType, null, expectedGeneratedJavaCode);
 	}
 
-	protected void checkGeneration(String expressionText, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException {
+	protected void checkGeneration(String expressionText, Class<?> expectedType, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
-		String genJavaCode = expression.generateJavaCode();
+		String genJavaCode = expression.generateJavaCode(expectedType);
 		assertEquals(expectedGeneratedJavaCode, genJavaCode.trim());
 	}
 
