@@ -28,15 +28,15 @@ import ch.vorburger.el.engine.tests.helper.ECoreHelper;
  * 
  * @author Kai Kreuzer
 */
-public class ExpressionWithContextTest extends AbstractExpressionInterpreterTestBase {
+public class ExpressionWithContextInterpreterTest extends AbstractExpressionInterpreterTestBase {
 	
 	private static ECoreHelper helper = new ECoreHelper();
 	
-	public ExpressionWithContextTest() {
+	public ExpressionWithContextInterpreterTest() {
 		super(new ExpressionFactory());
 	}
 
-	protected ExpressionWithContextTest(ExpressionFactory expressionFactory) {
+	protected ExpressionWithContextInterpreterTest(ExpressionFactory expressionFactory) {
 		super(expressionFactory);
 	}
 
