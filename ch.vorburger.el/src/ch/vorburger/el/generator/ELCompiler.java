@@ -1,5 +1,6 @@
 package ch.vorburger.el.generator;
 
+import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
@@ -23,8 +24,14 @@ public class ELCompiler extends XbaseCompiler {
 
 	private @Inject JvmTypesBuilder jvmTypesBuilder;
 	
+	public ITreeAppendable compile(XExpression obj, ITreeAppendable appendable, Class<?> expectedType) {
+		final JvmTypeReference newTypeRef = jvmTypesBuilder.newTypeRef(obj, expectedType);
+		return compile(obj, appendable, newTypeRef);
+	}
+	
 	public ITreeAppendable compileAsJavaExpression(XExpression obj, ITreeAppendable parentAppendable, Class<?> expectedType) {
-		return compileAsJavaExpression(obj, parentAppendable, jvmTypesBuilder.newTypeRef(obj, expectedType));
+		final JvmTypeReference newTypeRef = jvmTypesBuilder.newTypeRef(obj, expectedType);
+		return compileAsJavaExpression(obj, parentAppendable, newTypeRef);
 	}
 	
 	@Override
