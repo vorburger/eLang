@@ -50,6 +50,14 @@ public class ExpressionFactory {
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 	}
 	
+	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException {
+		return newExpressionFromString(expressionAsString, true);
+	}
+	
+	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException {
+		return newExpressionFromString(expressionAsString, context, true);
+	}
+	
 	/**
 	 * Parse text expression and return a parsed expression object.
 	 * 
@@ -60,22 +68,23 @@ public class ExpressionFactory {
 	 * @throws ExpressionParsingException
 	 * @throws ExpressionCompilationException 
 	 */
-	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException {
-		return newExpressionFromString(expressionAsString, null);
+	public Expression newExpressionFromString(final String expressionAsString, boolean validate) throws ExpressionParsingException {
+		return newExpressionFromString(expressionAsString, null, validate);
 	}
 
-	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException {
+	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context, boolean validate) throws ExpressionParsingException {
 		ExpressionImpl expression = guiceInjector.getInstance(ExpressionImpl.class);
-		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString, context));
+		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString, context, validate));
 		return expression;
 	}
 
 	/**
+	 * @param validate 
 	 * @param varTypes 
 	 * @see http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=287413
 	 */
-	protected XExpression parseExpressionIntoXTextEObject(final String expressionAsString, ExpressionContext context) throws ExpressionParsingException {
+	protected XExpression parseExpressionIntoXTextEObject(final String expressionAsString, ExpressionContext context, boolean validate) throws ExpressionParsingException {
 		Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
 		if(context!=null) {
 			resource.eAdapters().add(context);
@@ -93,25 +102,28 @@ public class ExpressionFactory {
 		}
 		
 		EList<EObject> contents = resource.getContents();
-
 		if (!contents.isEmpty()) {
-			Iterable<Issue> validationErrors = getValidationErrors(contents.get(0));
-			if(!validationErrors.iterator().hasNext()) {
-				return (XExpression) contents.get(0);
-			} else {
-				throw new ExpressionParsingException("Failed to parse expression (due to managed ValidationError/s)", expressionAsString).addValidationIssues(validationErrors);
+			if (validate) {
+				Iterable<Issue> validationErrors = getValidationErrors(contents.get(0));
+				if(validationErrors.iterator().hasNext()) {
+					throw new ExpressionParsingException("Failed to parse expression (due to managed ValidationError/s)", expressionAsString).addValidationIssues(validationErrors);
+				}
 			}
+			return (XExpression) contents.get(0);
 		} else {
 			return null;
 		}
 	}
 	
+	/**
+	 * This code is copy/pasted from org.eclipse.xtext.junit4.util.ParseHelper.computeUnusedUri(ResourceSet).
+	 * We have only change the String concatenation to use StringBuilder.
+	 */
 	protected URI computeUnusedUri(ResourceSet resourceSet) {
-		String name = "__synthetic";
-		final int MAX_TRIES=1000;
-		for(int i=0; i<MAX_TRIES; i++) {
+		StringBuilder name = new StringBuilder("__synthetic");
+		for(int i=0; i < Integer.MAX_VALUE; i++) {
 			// NOTE: The "filename extension" ("expr") must match the file.extensions in the *.mwe2
-			URI syntheticUri = URI.createURI(name+Math.random()+ "." + getFileExtension());
+			URI syntheticUri = URI.createURI(name.append(i).append('.').append(getFileExtension()).toString());
 			if (resourceSet.getResource(syntheticUri, false)==null)
 				return syntheticUri;
 		} 
