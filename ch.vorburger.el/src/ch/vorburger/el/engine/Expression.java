@@ -15,25 +15,25 @@ import java.util.GregorianCalendar;
  */
 public interface Expression {
 
-	public Object evaluate() throws ExpressionExecutionException;
+	Object evaluate() throws ExpressionExecutionException;
 
-	public Object evaluate(ExpressionContext context) throws ExpressionExecutionException;
+	Object evaluate(ExpressionContext context) throws ExpressionExecutionException;
 
-	public BigDecimal evaluateExpectingNumber() throws ExpressionExecutionException;
-	public BigDecimal evaluateExpectingNumber(ExpressionContext context) throws ExpressionExecutionException;
+	BigDecimal evaluateExpectingNumber() throws ExpressionExecutionException;
+	BigDecimal evaluateExpectingNumber(ExpressionContext context) throws ExpressionExecutionException;
 
-	public GregorianCalendar evaluateExpectingGregorianCalendar() throws ExpressionExecutionException;
-	public GregorianCalendar evaluateExpectingGregorianCalendar(ExpressionContext context) throws ExpressionExecutionException;
+	GregorianCalendar evaluateExpectingGregorianCalendar() throws ExpressionExecutionException;
+	GregorianCalendar evaluateExpectingGregorianCalendar(ExpressionContext context) throws ExpressionExecutionException;
 
-	public Date evaluateExpectingDate() throws ExpressionExecutionException;
-	public Date evaluateExpectingDate(ExpressionContext context) throws ExpressionExecutionException;
+	Date evaluateExpectingDate() throws ExpressionExecutionException;
+	Date evaluateExpectingDate(ExpressionContext context) throws ExpressionExecutionException;
 
-	public String evaluateExpectingString() throws ExpressionExecutionException;
-	public String evaluateExpectingString(ExpressionContext context) throws ExpressionExecutionException;
+	String evaluateExpectingString() throws ExpressionExecutionException;
+	String evaluateExpectingString(ExpressionContext context) throws ExpressionExecutionException;
 
-	public Boolean evaluateExpectingBoolean() throws ExpressionExecutionException;
-	public Boolean evaluateExpectingBoolean(ExpressionContext context) throws ExpressionExecutionException;
+	Boolean evaluateExpectingBoolean() throws ExpressionExecutionException;
+	Boolean evaluateExpectingBoolean(ExpressionContext context) throws ExpressionExecutionException;
 	
-	public String generateJavaCode(Class<?> expectedType);
+	String generateJavaCode(Class<?> expectedType);
 	
 }
