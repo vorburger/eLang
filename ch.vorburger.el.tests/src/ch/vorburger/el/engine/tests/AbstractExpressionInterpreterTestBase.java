@@ -27,6 +27,7 @@ public abstract class AbstractExpressionInterpreterTestBase extends AbstractExpr
 		}
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		BigDecimal numericResult = expression.evaluateExpectingNumber(context);
+		expression.dispose();
 		if(numericResult==null && numericResult==null) return;
 		Assert.assertEquals(0, numericResult.compareTo((BigDecimal) expectedNumber));
 	}
@@ -37,6 +38,7 @@ public abstract class AbstractExpressionInterpreterTestBase extends AbstractExpr
 	protected void checkStringExpression(String expressionText, ExpressionContext context, String expectedText) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		String stringResult = expression.evaluateExpectingString(context);
+		expression.dispose();
 		Assert.assertEquals(expectedText, stringResult);
 	}
 
@@ -46,6 +48,7 @@ public abstract class AbstractExpressionInterpreterTestBase extends AbstractExpr
 	protected void checkDateExpression(String expressionText, ExpressionContext context, GregorianCalendar expectedDateTime) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		GregorianCalendar dateResult = expression.evaluateExpectingGregorianCalendar(context);
+		expression.dispose();
 		Assert.assertEquals(expectedDateTime, dateResult);
 	}
 
@@ -55,6 +58,7 @@ public abstract class AbstractExpressionInterpreterTestBase extends AbstractExpr
 	protected void checkBooleanExpression(String expressionText, ExpressionContext context, Boolean expectedBoolean) throws ExpressionException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		Boolean boolResult = expression.evaluateExpectingBoolean(context);
+		expression.dispose();
 		Assert.assertEquals(expectedBoolean, boolResult);
 	}
 

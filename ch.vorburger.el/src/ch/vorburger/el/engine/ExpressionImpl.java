@@ -1,6 +1,9 @@
 package ch.vorburger.el.engine;
 
 
+import java.io.IOException;
+
+import org.apache.log4j.Logger;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.xbase.XExpression;
@@ -19,6 +22,8 @@ import com.google.inject.Provider;
 @SuppressWarnings("restriction")
 public class ExpressionImpl extends AbstractExpression {
 
+	private final static Logger LOGGER = Logger.getLogger(ExpressionImpl.class);
+	
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
 
@@ -26,6 +31,11 @@ public class ExpressionImpl extends AbstractExpression {
 	
 	protected XExpression xExpression;
 
+	
+	// TODO This is a mess/short-term hack... must improve @see http://rd.oams.com/browse/DS-5853
+	public void setELCompiler(ELCompiler compiler) {
+		this.compiler = compiler;
+	}
 
 	/* package-local */
 	 void setXExpression(XExpression xExpression) {
@@ -35,6 +45,21 @@ public class ExpressionImpl extends AbstractExpression {
 	/* package-local */
 	XExpression getXExpression() {
 		return xExpression;
+	}
+	
+	@Override
+	public void dispose() {
+		try {
+			xExpression.eResource().delete(null);
+		} catch (IOException e) {
+			final String message = "XExpression.eResource.delete failed";
+			System.err.println(message);
+			e.printStackTrace(System.err);
+			LOGGER.warn(message, e);
+			
+			// If we cannot delete, can we at least unload?
+			xExpression.eResource().unload();
+		}
 	}
 	
 	@Override
