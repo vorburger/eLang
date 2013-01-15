@@ -17,17 +17,14 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 @SuppressWarnings("restriction")
-public class ExpressionImpl extends AbstractExpression implements Expression {
+public class ExpressionImpl extends AbstractExpression {
 
 	@Inject protected IExpressionInterpreter elInterpreter;
 	@Inject protected Provider<IEvaluationContext> contextProvider;
 
 	@Inject protected ELCompiler compiler;
-
+	
 	protected XExpression xExpression;
-
-	@Inject
-	public ExpressionImpl() {}
 
 
 	/* package-local */
@@ -60,7 +57,7 @@ public class ExpressionImpl extends AbstractExpression implements Expression {
 	    	context = new ExpressionContext();
 	    }
 
-	    IEvaluationResult result = elInterpreter.evaluate(xExpression, evaluationContext, CancelIndicator.NullImpl);
+	    IEvaluationResult result = elInterpreter.evaluate(getXExpression(), evaluationContext, CancelIndicator.NullImpl);
 	    if (result.getException() != null) {
 	        throw new ExpressionExecutionException("Boo!", result.getException());
 	    } 

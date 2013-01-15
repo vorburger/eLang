@@ -45,6 +45,9 @@ public class ExpressionFactory {
 		super();
 		// http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 		// new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("../");
+		/*
+		 *  HARD CODING THIS TO DS EL IS CONFUSING, AS IT means subclasses such as ALLOW DS EL change it via their constructor :-(
+		 */
 		this.guiceInjector = new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
 		this.resourceSet = guiceInjector.getInstance(XtextResourceSet.class);
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
@@ -73,7 +76,7 @@ public class ExpressionFactory {
 	}
 
 	public Expression newExpressionFromString(final String expressionAsString, ExpressionContext context, boolean validate) throws ExpressionParsingException {
-		ExpressionImpl expression = guiceInjector.getInstance(ExpressionImpl.class);
+		ExpressionImpl expression = (ExpressionImpl) guiceInjector.getInstance(Expression.class);
 		expression.setXExpression(parseExpressionIntoXTextEObject(expressionAsString, context, validate));
 		return expression;
 	}
