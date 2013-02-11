@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ch.vorburger.el.tests.feature"
-      label="Test of EL Feature"
-      version="2.0.0.qualifier"
+      label="Tests of EL Feature"
+      version="2.1.0.qualifier"
       provider-name="vorburger.ch">
 
    <description url="https://github.com/vorburger/eLang">

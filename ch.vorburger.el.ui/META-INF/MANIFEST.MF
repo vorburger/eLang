@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el.ui
 Bundle-Vendor: vorburger.ch
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 2.1.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: ch.vorburger.el;visibility:=reexport,

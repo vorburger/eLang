@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.vorburger.el.feature_2.0.0.qualifier.jar" id="ch.vorburger.el.feature" version="2.0.0.qualifier">
+   <feature url="features/ch.vorburger.el.feature_2.1.0.qualifier.jar" id="ch.vorburger.el.feature" version="2.1.0.qualifier">
       <category name="ch.vorburger.el"/>
    </feature>
-   <feature url="features/ch.vorburger.el.tests.feature_2.0.0.qualifier.jar" id="ch.vorburger.el.tests.feature" version="2.0.0.qualifier">
+   <feature url="features/ch.vorburger.el.tests.feature_2.1.0.qualifier.jar" id="ch.vorburger.el.tests.feature" version="2.1.0.qualifier">
       <category name="ch.vorburger.el.tests"/>
    </feature>
    <category-def name="ch.vorburger.el" label="EL"/>
