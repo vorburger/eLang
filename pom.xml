@@ -17,8 +17,8 @@
 	<description>This is an Expression Language, with Grammar / Parser (ANTLR) / Interpreter RT / (TBD) Compiler for both on-the-fly on run time and build/compile time.</description>
 
 	<properties>
+		<xtext-version>2.3.1</xtext-version>
 		<tycho-version>0.16.0</tycho-version>
-		<tycho-groupid>org.eclipse.tycho</tycho-groupid>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -34,27 +34,26 @@
 	</modules>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
-				<groupId>${tycho-groupid}</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>
-				<groupId>${tycho-groupid}</groupId>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
 					<resolver>p2</resolver>
-					<ignoreTychoRepositories>true</ignoreTychoRepositories>
 					<pomDependencies>consider</pomDependencies>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -75,22 +74,115 @@
 								<include>**</include>
 							</includes>
 						</fileset>
+						<fileset>
+							<directory>${basedir}/bin</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/target</directory>
+							<includes>
+								<include>**</include>
+							</includes>
+						</fileset>
 					</filesets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src-gen</source>
+								<source>xtend-gen</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>${tycho-groupid}</groupId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
 						<encoding>UTF-8</encoding>
 						<source>1.6</source>
 						<target>1.6</target>
+						<excludeResources>
+							<excludeResource>**/*.xtend</excludeResource>
+						</excludeResources>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.fornax.toolsupport</groupId>
+					<artifactId>fornax-oaw-m2-plugin</artifactId>
+					<version>3.4.0</version>
+					<configuration>
+						<workflowEngine>mwe2</workflowEngine>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>run-workflow</goal>
+							</goals>
+						</execution>
+					</executions>
+			    </plugin>
+				<plugin>
+					<groupId>org.eclipse.xtend</groupId>
+					<artifactId>xtend-maven-plugin</artifactId>
+					<version>${xtext-version}</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compile</goal>
+								<goal>testCompile</goal>
+							</goals>
+							<configuration>
+								<!-- need to prefix by basedir to generate to currently built module -->
+								<outputDirectory>${basedir}/xtend-gen</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.xtend</groupId>
+							<artifactId>org.eclipse.xtend.lib</artifactId>
+							<version>${xtext-version}</version>
+							<type>pom</type>
+						</dependency>
+					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -107,12 +199,18 @@
 				<enabled>true</enabled>
 			</releases>
 		</pluginRepository>
+		<!-- Repository to resolve fornax-oaw-m2-plugin -->
 		<pluginRepository>
 			<id>fornax-releases</id>
 			<url>http://fornax.itemis.de/nexus/content/repositories/public/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</pluginRepository>
+		<!-- Repository to resolve xtend-maven-plugin -->
+		<pluginRepository>
+			<id>xtend</id>
+			<url>http://build.eclipse.org/common/xtend/maven/</url>
 		</pluginRepository>
 	</pluginRepositories>
 

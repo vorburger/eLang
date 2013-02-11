@@ -15,13 +15,69 @@
   <name>EL Tests</name>
   <packaging>eclipse-test-plugin</packaging>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-surefire-plugin</artifactId>
-        <version>${tycho-version}</version>
-      </plugin>
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<!-- @see The ui/pom.xml about this... -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration combine.self="override">
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- The unit tests do not have to be executed as plugin-test, there use 
+				the default maven surefire plugin and disable the tycho plug-in -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.13</version>
+				<inherited>true</inherited>
+				<dependencies>
+					<!-- This is required, because without this, surefire chooses to run
+						 the tests under Junit3 instead of Junit4, and then does e.g. not 
+						 honor @Ignore annotations. @see http://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html -->
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.13</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<configuration>
+							<excludes>
+								<exclude>**/Abstract*</exclude>
+							</excludes>
+							<forkMode>once</forkMode>
+							<reportFormat>xml</reportFormat>
+							<testClassesDirectory>target/classes</testClassesDirectory>
+						</configuration>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
