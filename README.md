@@ -11,3 +11,5 @@ This is using Xtext and xBase now (an older version was based on xText without x
 Copyright (c) 2011 Michael Vorburger (http://www.vorburger.ch) and others.
 
 Licensed under the Eclipse Public License (EPL).
+
+[![Build Status](https://travis-ci.org/vorburger/eLang.png?branch=master)](https://travis-ci.org/vorburger/eLang)
