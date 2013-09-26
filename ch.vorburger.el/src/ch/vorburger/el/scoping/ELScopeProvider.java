@@ -18,6 +18,7 @@ import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.impl.MapBasedScope;
 import org.eclipse.xtext.xbase.XFeatureCall;
 import org.eclipse.xtext.xbase.XMemberFeatureCall;
+import org.eclipse.xtext.xbase.scoping.LocalVariableScopeContext;
 import org.eclipse.xtext.xbase.scoping.XbaseScopeProvider;
 
 import ch.vorburger.el.engine.DynamicExpressionContext;
@@ -33,11 +34,15 @@ public class ELScopeProvider extends XbaseScopeProvider {
 	private IJvmTypeProvider.Factory typeProviderFactory;
 
 	@Override
-	protected IScope createTypeScope(EObject obj, EReference reference) {
-		IScope superScope =  super.createTypeScope(obj, reference);
+	// WAS: protected IScope createTypeScope(EObject obj, EReference reference) {
+	// 		  IScope superScope =  super.createTypeScope(obj, reference);
+	//        Resource resource = obj.eResource();
+	protected IScope createImplicitFeatureCallScope(EObject obj, Resource resource, IScope parent, IScope localVariableScope) {
+	// protected LocalVariableScopeContext createLocalVariableScopeContext(final EObject obj, EReference reference, boolean includeCurrentBlock, int idx) {
+		
+		IScope superScope =  super.createImplicitFeatureCallScope(obj, resource, parent, localVariableScope);
 		
 		// get the jvm type provider
-		Resource resource = obj.eResource();
 		IJvmTypeProvider provider = typeProviderFactory.findOrCreateTypeProvider(resource.getResourceSet());
 
 		// get the expression context
@@ -86,9 +91,9 @@ public class ELScopeProvider extends XbaseScopeProvider {
 		// do not care about calls that are done on some declared type
 		if(callContext instanceof XFeatureCall) {
 			XFeatureCall featureCall = (XFeatureCall) callContext;
-			if(featureCall.getDeclaringType()!=null) {
-				return scope;
-			}
+//			if(featureCall.getDeclaringType()!=null) {
+//				return scope;
+//			}
 		}
 
 		IJvmTypeProvider provider = typeProviderFactory.findOrCreateTypeProvider(resource.getResourceSet());

@@ -46,7 +46,7 @@ public class ELInterpreter extends XbaseInterpreter {
 	protected Object _evaluateDateTimeLiteral(DateTimeLiteral literal, IEvaluationContext context, CancelIndicator indicator) {
 		return DateExtensions.parseDateTime(literal.getValue());
 	}
-	
+/*
 	@Override
 	protected Object _featureCallJvmIdentifyableElement(JvmIdentifiableElement identifiable, XFeatureCall featureCall, Object receiver,
 			IEvaluationContext context, CancelIndicator indicator) {
@@ -58,7 +58,7 @@ public class ELInterpreter extends XbaseInterpreter {
 
 		return value;
 	}
-
+*/
 	@Override
 	protected Object featureCallField(JvmField jvmField, Object receiver) {
 		if(receiver instanceof EObject) {
@@ -74,7 +74,7 @@ public class ELInterpreter extends XbaseInterpreter {
 		}
 		return super.featureCallField(jvmField, receiver);
 	}
-
+/*
 	@Override
 	protected Object _featureCallField(JvmField jvmField, XAbstractFeatureCall featureCall, Object receiver, IEvaluationContext context, CancelIndicator indicator) {
 		if (jvmField instanceof JvmEnumerationLiteral) {
@@ -96,6 +96,6 @@ public class ELInterpreter extends XbaseInterpreter {
 		}
 		return super._featureCallField(jvmField, featureCall, receiver, context, indicator);
 	}
-	
+*/	
 	
 }

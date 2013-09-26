@@ -1,4 +1,7 @@
 language: java
 script: mvn clean install
 jdk:
-  - openjdk6
+- openjdk6
+env:
+  global:
+    secure: dQywTUZ4YQuo0v2DmDp6uknrJIQkTNWrG6sfynCgy3cn8P+Nu7vqc1cfx8Nh21fJ6QUGMhLxP1bTrJ/jePMyIHdpo4vpO9ROZowzYMQtuAoAS24uuGbHY/4521ycXMj5plPJrozGM/OQ2UOZ0tuMfHNDJtzwc7EigYyCTA18dNI=

@@ -6,7 +6,9 @@ package ch.vorburger.el;
 import org.eclipse.xtext.common.types.xtext.AbstractTypeScopeProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
+import org.eclipse.xtext.resource.DerivedStateAwareResource;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
@@ -61,7 +63,8 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELQualifiedNameProvider.class;
 	}
 
-	public Class<? extends StaticImplicitMethodsFeatureForTypeProvider.ExtensionClassNameProvider> bindExtensionClassNameProvider() {
+	@Override
+	public Class<? extends org.eclipse.xtext.xbase.scoping.featurecalls.StaticImplicitMethodsFeatureForTypeProvider.ExtensionClassNameProvider> bindStaticImplicitMethodsFeatureForTypeProvider$ExtensionClassNameProvider() {
 		return ELExtensionClassNameProvider.class;
 	}
 	
@@ -112,4 +115,12 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
 		return JvmGlobalScopeProvider.class;
 	}
+	
+	@Override
+	public Class<? extends org.eclipse.xtext.resource.XtextResource> bindXtextResource() {
+		// NOT return org.eclipse.xtext.xbase.resource.BatchLinkableResource.class;
+		// but let's use the classic older one (which I understand..), to debug more easily:
+		return DerivedStateAwareResource.class;
+	}
+
 }
