@@ -5,7 +5,6 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.vorburger.el.engine.DynamicExpressionContext;
@@ -27,7 +26,6 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 	}
 
 	@Test
-	@Ignore // as this is indeed not yet working - but not actually used, so doesn't matter (PageDSELCompiler does it's own thing anyways)
 	public void testGenerateWithExpressionContext() throws Exception {
 		EDataType intType = EcorePackage.eINSTANCE.getEInt();
 
@@ -40,7 +38,7 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 		DynamicExpressionContext context = new DynamicExpressionContext();
 		context.putInstance("t", instance);
 		
-		checkGeneration("t.a == 5", Boolean.class, context, "new org.eclipse.xtext.xbase.lib.Functions.Function0<Boolean>() {\n  public Boolean apply() {\n    tests.NumericTests _t = t;\n    boolean _equals = com.google.common.base.Objects.equal(_t.a, new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n      public Object apply() {\n        return new java.math.BigDecimal(\"5\");\n      }\n    }.apply());\n    return _equals;\n  }\n}.apply()");
+		checkGeneration("t.a == 5", Boolean.class, context, "new org.eclipse.xtext.xbase.lib.Functions.Function0<Boolean>() {\n  public Boolean apply() {\n    tests.NumericTests _NumericTests = NumericTests;\n    boolean _equals = com.google.common.base.Objects.equal(_NumericTests.a, new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n      public Object apply() {\n        return new java.math.BigDecimal(\"5\");\n      }\n    }.apply());\n    return _equals;\n  }\n}.apply()");
 	}
 
 }
