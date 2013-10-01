@@ -19,7 +19,7 @@ import ch.vorburger.el.generator.ELCompiler;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "restriction", "deprecation" })
 public class ExpressionImpl extends AbstractExpression {
 
 	private final static Logger LOGGER = Logger.getLogger(ExpressionImpl.class);

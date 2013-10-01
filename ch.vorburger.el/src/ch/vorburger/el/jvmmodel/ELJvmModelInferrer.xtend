@@ -1,44 +1,53 @@
 package ch.vorburger.el.jvmmodel
 
-import org.eclipse.emf.ecore.EObject
+import javax.inject.Inject
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.jdt.annotation.NonNull
+import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
+import ch.vorburger.el.engine.AbstractExpression
+import ch.vorburger.el.engine.ExpressionExecutionException
 
 /**
- * <p>Infers a JVM model from the source model.</p> 
- *
- * <p>The JVM model should contain all elements that would appear in the Java code 
- * which is generated from the source model. Other models link against the JVM model rather than the source model.</p>     
+ * The IJvmModelInferrer for Vorburger's EL.
+ * 
+ * Please note that this seems to be required EVEN IF we do not actually want to 
+ * gen. complete *.java class extends AbstractExpression source files (the Gen.
+ * is not actually currently used; but would now automatically also work thanks
+ * to this), just fragments of expression to insert else where.  --  Without this,
+ * you'd hit internal problems later, because Xbase (now, new?) appears to expect
+ * an IDerivedStateComputer to have run this to create the JvmModel.
+ * 
+ * The ch.vorburger.el.newpuretests.ELCompilerTest.testNotNull
+ * with checkCompilationViaDirectCompilerCall() illustrates this;
+ * it used to fail with a 'Couldn't resolve reference to
+ * JvmIdentifiableElement '=='.' on XBinaryOperation before this.
+ * 
+ * @since upgrade of EL to Xtext 2.4.3.
+ * 
+ * @author Michael Vorburger
  */
 class ELJvmModelInferrer extends AbstractModelInferrer {
 
-    /**
-     * conveninence API to build and initialize JvmTypes and their members.
-     */
-//	@Inject extension JvmTypesBuilder
+	// This implementation is "strongly inspired" (mostly copy/pasted)
+	// from the org.eclipse.xtext.purexbase.jvmmodel.PureXbaseJvmModelInferrer
 
-	/**
-	 * Is called for each instance of the first argument's type contained in a resource.
-	 * 
-	 * @param element - the model to create one or more JvmDeclaredTypes from.
-	 * @param acceptor - each created JvmDeclaredType without a container should be passed to the acceptor in order get attached to the
-	 *                   current resource.
-	 * @param isPreLinkingPhase - whether the method is called in a pre linking phase, i.e. when the global index isn't fully updated. You
-	 *        must not rely on linking using the index if iPrelinkingPhase is <code>true</code>
-	 */
-   	override public dispatch void infer(EObject element, IJvmDeclaredTypeAcceptor acceptor, boolean isPrelinkingPhase) {
-   		
-   		// Here you explain how your model is mapped to Java elements, by writing the actual translation code.
-   		// An example based on the initial hellow world example could look like this:
-   		
-//   		acceptor.accept(element.toClass("my.company.greeting.MyGreetings") [
-//   			for (greeting : element.greetings) {
-//   				members += greeting.toMethod(greeting.name, greeting.newTypeRef(typeof(String))) [
-//   					it.body ['''
-//   						return "Hello «greeting.name»";
-//   					''']
-//   				]
-//   			}
-//   		])
+	@Inject extension JvmTypesBuilder
+
+   	def dispatch void infer(XExpression e, @NonNull IJvmDeclaredTypeAcceptor acceptor, boolean prelinkingPhase) {
+   		acceptor.accept(e.toClass(e.eResource.name)).initializeLater [
+   			superTypes += e.newTypeRef(AbstractExpression)
+   			members += e.toMethod("evaluate", inferredType) [
+   				exceptions += e.newTypeRef(ExpressionExecutionException)
+   				body = e
+   			]
+   		]
    	}
+   	
+   	def name(Resource res) {
+		val s = res.URI.lastSegment
+		return "VorburgerELCompiledExpression_" +  s.substring(0, s.length - '.xbase'.length)
+	}
 }

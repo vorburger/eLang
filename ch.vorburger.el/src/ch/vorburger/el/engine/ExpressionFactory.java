@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.util.CancelIndicator;
@@ -38,9 +39,11 @@ import com.google.inject.Injector;
 @SuppressWarnings("restriction")
 public class ExpressionFactory {
 
+	// TODO use @Inject here (see also below)
 	protected Injector guiceInjector;
 	protected XtextResourceSet resourceSet;
-
+	protected IResourceFactory resourceFactory;
+	
 	public ExpressionFactory() {
 		super();
 		// http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
@@ -50,6 +53,9 @@ public class ExpressionFactory {
 		 */
 		this.guiceInjector = new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
 		this.resourceSet = guiceInjector.getInstance(XtextResourceSet.class);
+		this.resourceFactory = guiceInjector.getInstance(IResourceFactory.class);
+		
+		// Do NOT do this, see below and http://www.eclipse.org/forums/index.php/m/1118458/#msg_1118458
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
 	}
 	
@@ -82,19 +88,25 @@ public class ExpressionFactory {
 	}
 
 	/**
-	 * @param validate 
-	 * @param varTypes 
+	 * Parsing Helper.
+	 * 
+	 * @see org.eclipse.xtext.junit4.util.ParseHelper<T>
 	 * @see http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
 	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=287413
 	 */
 	protected XExpression parseExpressionIntoXTextEObject(final String expressionAsString, ExpressionContext context, boolean validate) throws ExpressionParsingException {
-		Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
+		// USED TO BE: Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
+		Resource resource = resourceFactory.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
+		
+		resourceSet.getResources().add(resource);
 		if(context!=null) {
 			resource.eAdapters().add(context);
 		}
 		
 		try {
-			resource.load(new StringInputStream(expressionAsString), resourceSet.getLoadOptions());
+			// @see http://www.eclipse.org/forums/index.php/m/1118458/#msg_1118458
+			// resourceSet.getLoadOptions() == org.eclipse.xtext.resource.XtextResource.RESOLVE_ALL=true
+			resource.load(new StringInputStream(expressionAsString), null /* NOT resourceSet.getLoadOptions() !!!!!!!!!!!!! */);
 		} catch (IOException e) {
 			throw new ExpressionParsingException("Unexpected IOException; from close() of a String-based ByteArrayInputStream, no real I/O; how is that possible???", expressionAsString, e);
 		}
@@ -125,7 +137,6 @@ public class ExpressionFactory {
 	protected URI computeUnusedUri(ResourceSet resourceSet) {
 		StringBuilder name = new StringBuilder("__synthetic");
 		for(int i=0; i < Integer.MAX_VALUE; i++) {
-			// NOTE: The "filename extension" ("expr") must match the file.extensions in the *.mwe2
 			URI syntheticUri = URI.createURI(name.append(i).append('.').append(getFileExtension()).toString());
 			if (resourceSet.getResource(syntheticUri, false)==null)
 				return syntheticUri;
@@ -150,6 +161,7 @@ public class ExpressionFactory {
 	}
 
 	protected String getFileExtension() {
+		// NOTE: The "filename extension" ("expr") must match the file.extensions in the *.mwe2
 		return "expr";
 	}
 }

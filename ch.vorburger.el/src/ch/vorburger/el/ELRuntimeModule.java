@@ -5,8 +5,6 @@ package ch.vorburger.el;
 
 import org.eclipse.xtext.common.types.xtext.AbstractTypeScopeProvider;
 import org.eclipse.xtext.conversion.IValueConverterService;
-import org.eclipse.xtext.generator.IGenerator;
-import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.resource.DerivedStateAwareResource;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
@@ -16,13 +14,11 @@ import org.eclipse.xtext.xbase.featurecalls.IdentifiableSimpleNameProvider;
 import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.jvmmodel.JvmGlobalScopeProvider;
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
-import org.eclipse.xtext.xbase.scoping.featurecalls.StaticImplicitMethodsFeatureForTypeProvider;
 import org.eclipse.xtext.xbase.typing.ITypeProvider;
 
 import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionImpl;
 import ch.vorburger.el.generator.ELCompiler;
-import ch.vorburger.el.generator.ELGenerator;
 import ch.vorburger.el.interpreter.ELInterpreter;
 import ch.vorburger.el.jvmmodel.ELIdentifiableSimpleNameProvider;
 import ch.vorburger.el.naming.ELQualifiedNameProvider;
@@ -41,9 +37,19 @@ import com.google.inject.Singleton;
  * Use this class to register components to be used at runtime / without the
  * Equinox extension registry.
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({"restriction", "deprecation"})
 public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 
+	// Strictly EL-related (non-Xtext) bindings
+	
+	public Class<? extends Expression> bindExpression() {
+		return ExpressionImpl.class;
+	}
+
+	
+ 	// -------------------------------------------------------------------
+ 	// Usual Xtext API relating binding overrides
+	
 	public Class<? extends XbaseCompiler> bindXbaseCompiler() {
 		return ELCompiler.class;
 	}
@@ -79,15 +85,6 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	}
 	
 	@Override
-	public Class<? extends IGenerator> bindIGenerator() {
-		return ELGenerator.class;
-	}
-	
-	public Class<? extends Expression> bindExpression() {
-		return ExpressionImpl.class;
-	}
-
-	@Override
 	@Singleton
 	public Class<? extends IScopeProvider> bindIScopeProvider() {
 		return ELScopeProvider.class;
@@ -119,8 +116,9 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 	@Override
 	public Class<? extends org.eclipse.xtext.resource.XtextResource> bindXtextResource() {
 		// NOT return org.eclipse.xtext.xbase.resource.BatchLinkableResource.class;
-		// but let's use the classic older one (which I understand..), to debug more easily:
+		// but let's use the classic older one (which I understand..), to debug more easily when stuff goes wrong:
+		// (Historical note: There was some confusion at the time of DS-6553 <http://www.eclipse.org/forums/index.php/m/1118458/#msg_1118458>
+		//  that this caused issues during the upgrade from Xtext v2.3.1 to v2.4.3, but it turned out those were unrelated to this.) 
 		return DerivedStateAwareResource.class;
 	}
-
 }
