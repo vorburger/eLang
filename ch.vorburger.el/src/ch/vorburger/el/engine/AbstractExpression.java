@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
  * implementations of all evaluate functions.
  * 
  * @author Kai Kreuzer
- *
  */
 public abstract class AbstractExpression implements Expression {
 

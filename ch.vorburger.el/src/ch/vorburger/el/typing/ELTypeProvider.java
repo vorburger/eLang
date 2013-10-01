@@ -20,10 +20,9 @@ import com.google.inject.Singleton;
  * decimals and dates.
  * 
  * @author Kai Kreuzer
- *
  */
-@SuppressWarnings("restriction")
 @Singleton
+@SuppressWarnings("deprecation")
 public class ELTypeProvider extends XbaseTypeProvider {
 
 	@Inject
