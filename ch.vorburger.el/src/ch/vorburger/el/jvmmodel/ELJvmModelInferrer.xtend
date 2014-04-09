@@ -24,8 +24,8 @@ class ELJvmModelInferrer implements IJvmModelInferrer {
 	override infer(EObject rootExpression, extension IJvmDeclaredTypeAcceptor acceptor, boolean preIndexingPhase) {
 		if (rootExpression instanceof XExpression) {
 			val expressionContext = rootExpression.eAdapters.filter(ExpressionContext).head
-			rootExpression.toClass('ch.vorburger.el.jvmmodel.Dummy').accept.initializeLater [
-				members += rootExpression.toMethod('dummy', expressionContext?.type?.createTypeRef) [
+			rootExpression.toClass('CompiledExpression').accept.initializeLater [
+				members += rootExpression.toMethod('evaluate', expressionContext?.type?.createTypeRef) [
 					if (expressionContext != null) {
 						for (variableName : expressionContext.variableNames) {
 							val variableType = expressionContext.getVariableType(variableName).createTypeRef
