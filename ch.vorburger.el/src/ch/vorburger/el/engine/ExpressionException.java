@@ -1,6 +1,5 @@
 package ch.vorburger.el.engine;
 
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;

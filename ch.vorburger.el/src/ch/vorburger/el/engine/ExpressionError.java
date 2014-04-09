@@ -1,6 +1,5 @@
 package ch.vorburger.el.engine;
 
-
 /**
  * An Error that occurred during Expression evaluation.
  * 

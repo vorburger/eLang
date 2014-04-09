@@ -7,7 +7,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.common.types.xtext.ui.ITypesProposalProvider;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 
-import ch.vorburger.el.typing.ELJvmTypeProviderFactory;
 import ch.vorburger.el.ui.contentassist.ELTypeProposalProvider;
 import ch.vorburger.el.ui.hovering.ELEObjectDocumentationProvider;
 
@@ -17,10 +16,6 @@ import ch.vorburger.el.ui.hovering.ELEObjectDocumentationProvider;
 public class ELUiModule extends ch.vorburger.el.ui.AbstractELUiModule {
 	public ELUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
-	}
-	
-	public Class<? extends org.eclipse.xtext.common.types.access.IJvmTypeProvider.Factory> bindIJvmTypeProvider$Factory() {
-		return ELJvmTypeProviderFactory.class;
 	}
 
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProviderr() {

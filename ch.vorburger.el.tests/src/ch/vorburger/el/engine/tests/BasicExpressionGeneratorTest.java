@@ -25,7 +25,7 @@ public class BasicExpressionGeneratorTest extends AbstractExpressionGeneratorTes
 
 	@Test
 	public void testNotNull() throws Exception {
-		checkGeneration("\"Saluton\" == null", Boolean.class, "new org.eclipse.xtext.xbase.lib.Functions.Function0<Boolean>() {\n  public Boolean apply() {\n    boolean _equals = com.google.common.base.Objects.equal(\"Saluton\", null);\n    return _equals;\n  }\n}.apply()");
+		checkGeneration("\"Saluton\" == null", Boolean.class, "com.google.common.base.Objects.equal(\"Saluton\", null)");
 	}
 
 	@Test

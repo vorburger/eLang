@@ -1,6 +1,5 @@
 package ch.vorburger.el.engine;
 
-
 import java.util.List;
 
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;

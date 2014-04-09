@@ -1,8 +1,13 @@
 package ch.vorburger.el.jvmmodel
 
+import ch.vorburger.el.engine.ExpressionContext
+import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.xbase.jvmmodel.AbstractModelInferrer
+import org.eclipse.xtext.common.types.util.TypeReferences
+import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
+import org.eclipse.xtext.xbase.jvmmodel.IJvmModelInferrer
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
 
 /**
  * <p>Infers a JVM model from the source model.</p> 
@@ -10,35 +15,27 @@ import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
  * <p>The JVM model should contain all elements that would appear in the Java code 
  * which is generated from the source model. Other models link against the JVM model rather than the source model.</p>     
  */
-class ELJvmModelInferrer extends AbstractModelInferrer {
+class ELJvmModelInferrer implements IJvmModelInferrer {
 
-    /**
-     * conveninence API to build and initialize JvmTypes and their members.
-     */
-//	@Inject extension JvmTypesBuilder
+	@Inject extension TypeReferences
 
-	/**
-	 * Is called for each instance of the first argument's type contained in a resource.
-	 * 
-	 * @param element - the model to create one or more JvmDeclaredTypes from.
-	 * @param acceptor - each created JvmDeclaredType without a container should be passed to the acceptor in order get attached to the
-	 *                   current resource.
-	 * @param isPreLinkingPhase - whether the method is called in a pre linking phase, i.e. when the global index isn't fully updated. You
-	 *        must not rely on linking using the index if iPrelinkingPhase is <code>true</code>
-	 */
-   	override public dispatch void infer(EObject element, IJvmDeclaredTypeAcceptor acceptor, boolean isPrelinkingPhase) {
-   		
-   		// Here you explain how your model is mapped to Java elements, by writing the actual translation code.
-   		// An example based on the initial hellow world example could look like this:
-   		
-//   		acceptor.accept(element.toClass("my.company.greeting.MyGreetings") [
-//   			for (greeting : element.greetings) {
-//   				members += greeting.toMethod(greeting.name, greeting.newTypeRef(typeof(String))) [
-//   					it.body ['''
-//   						return "Hello «greeting.name»";
-//   					''']
-//   				]
-//   			}
-//   		])
-   	}
+	@Inject extension JvmTypesBuilder
+
+	override infer(EObject rootExpression, extension IJvmDeclaredTypeAcceptor acceptor, boolean preIndexingPhase) {
+		if (rootExpression instanceof XExpression) {
+			val expressionContext = rootExpression.eAdapters.filter(ExpressionContext).head
+			rootExpression.toClass('ch.vorburger.el.jvmmodel.Dummy').accept.initializeLater [
+				members += rootExpression.toMethod('dummy', expressionContext?.type?.createTypeRef) [
+					if (expressionContext != null) {
+						for (variableName : expressionContext.variableNames) {
+							val variableType = expressionContext.getVariableType(variableName).createTypeRef
+							parameters += rootExpression.toParameter(variableName, variableType)
+						}
+					}
+					body = rootExpression
+				]
+			]
+		}
+	}
+
 }

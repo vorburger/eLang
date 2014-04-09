@@ -1,6 +1,5 @@
 package ch.vorburger.el.engine;
 
-
 import static com.google.common.collect.Iterables.filter;
 
 import java.io.IOException;
@@ -50,7 +49,14 @@ public class ExpressionFactory {
 		 */
 		this.guiceInjector = new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
 		this.resourceSet = guiceInjector.getInstance(XtextResourceSet.class);
-		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+	}
+	
+	public Injector getInjector() {
+		return guiceInjector;
+	}
+	
+	public XtextResourceSet getResourceSet() {
+		return resourceSet;
 	}
 	
 	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException {
