@@ -6,14 +6,12 @@ package ch.vorburger.el;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
-import org.eclipse.xtext.xbase.interpreter.IExpressionInterpreter;
 import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
 import ch.vorburger.el.engine.Expression;
 import ch.vorburger.el.engine.ExpressionImpl;
 import ch.vorburger.el.generator.ELCompiler;
-import ch.vorburger.el.interpreter.ELInterpreter;
 import ch.vorburger.el.naming.ELQualifiedNameProvider;
 import ch.vorburger.el.scoping.batch.ELImplicitlyImportedTypes;
 import ch.vorburger.el.typesystem.computation.ELTypeComputer;
@@ -49,11 +47,6 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELTypeComputer.class;
 	}
 
-	@Override
-	public Class<? extends IExpressionInterpreter> bindIExpressionInterpreter() {
-		return ELInterpreter.class;
-	}
-	
 	public Class<? extends Expression> bindExpression() {
 		return ExpressionImpl.class;
 	}

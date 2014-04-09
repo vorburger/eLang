@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el
 Bundle-Vendor: vorburger.ch
-Bundle-Version: 2.1.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="[2.5.3,2.6.0)";visibility:=reexport,
@@ -33,7 +33,6 @@ Export-Package: ch.vorburger.el,
  ch.vorburger.el.eL.util,
  ch.vorburger.el.engine,
  ch.vorburger.el.generator,
- ch.vorburger.el.interpreter,
  ch.vorburger.el.lib,
  ch.vorburger.el.parser.antlr,
  ch.vorburger.el.parser.antlr.internal,

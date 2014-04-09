@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
  * 
  * @author Kai Kreuzer
  * @author Michael Vorburger
- *
  */
 public class DateExtensions {
 	

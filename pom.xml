@@ -5,20 +5,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
-		<maven>3.0.4</maven>
+		<maven>3.2.q</maven>
 	</prerequisites>
 
 	<groupId>ch.vorburger</groupId>
 	<artifactId>eLang</artifactId>
-	<version>2.1.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 
 	<name>eLang</name>
 
 	<description>This is an Expression Language, with Grammar / Parser (ANTLR) / Interpreter RT / (TBD) Compiler for both on-the-fly on run time and build/compile time.</description>
 
 	<properties>
-		<xtext-version>2.3.1</xtext-version>
-		<tycho-version>0.16.0</tycho-version>
+		<xtext-version>2.5.3</xtext-version>
+		<tycho-version>0.20.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -222,6 +222,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		
 		<repository>
 			<id>Eclipse Orbit</id>
 			<layout>p2</layout>

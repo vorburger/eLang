@@ -26,6 +26,7 @@ import com.google.inject.Injector;
  * 
  * @author Michael Vorburger
  */
+@SuppressWarnings("restriction")
 public class ExpressionWithContextGeneratorTest extends AbstractExpressionGeneratorTestBase {
 
 	private static ECoreHelper helper = new ECoreHelper();
@@ -36,25 +37,24 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 
 	@Test
 	public void testGenerateWithExpressionContext() throws Exception {
-		EDataType intType = EcorePackage.eINSTANCE.getEInt();
+		EDataType dataType = EcorePackage.eINSTANCE.getEBigDecimal();
 
 		EPackage pkg = helper.createPackage("tests");
 		EClass clazz = helper.createClass(pkg, "NumericTests");
-		helper.addAttribute(clazz, intType, "a");
+		helper.addAttribute(clazz, dataType, "a");
 
 		EObject instance = helper.createInstance(clazz);
-
-		Injector injector = expressionFactory.getInjector();
 
 		XtextResourceSet resourceSet = expressionFactory.getResourceSet();
 		Resource resource = resourceSet.createResource(URI.createURI("__synthetic.testData.expr"));
 		resource.getContents().add(instance);
 
-		JvmTypesBuilder jvmTypesBuilder = injector .getInstance(JvmTypesBuilder.class);
+		Injector injector = expressionFactory.getInjector();
+		JvmTypesBuilder jvmTypesBuilder = injector.getInstance(JvmTypesBuilder.class);
 		JvmGenericType type = jvmTypesBuilder.toClass(instance, "tests.NumericTests");
 		resource.getContents().add(type);
 
-		JvmField field = jvmTypesBuilder.toField(instance, "a", jvmTypesBuilder.newTypeRef(instance, "java.math.BigDecimal"));
+		JvmField field = jvmTypesBuilder.toField(instance, "a", jvmTypesBuilder.newTypeRef(instance, dataType.getInstanceClassName() /*"java.math.BigDecimal"*/));
 		field.setVisibility(JvmVisibility.PUBLIC);
 		type.getMembers().add(field);
 

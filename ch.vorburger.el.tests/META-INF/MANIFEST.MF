@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el.tests
 Bundle-Vendor: vorburger.ch
-Bundle-Version: 2.1.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: ch.vorburger.el,
@@ -13,7 +13,7 @@ Require-Bundle: ch.vorburger.el,
  org.eclipse.ui.workbench;resolution:=optional,
  org.eclipse.xtext.xbase.lib;bundle-version="[2.5.3,2.6.0)",
  org.eclipse.jdt.core;resolution:=optional,
- org.junit;bundle-version="4.11.0"
+ org.junit;bundle-version="4.0.0"
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
  org.junit.runner;version="4.5.0",
