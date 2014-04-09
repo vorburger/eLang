@@ -3,7 +3,6 @@ package ch.vorburger.el.jvmmodel
 import ch.vorburger.el.engine.ExpressionContext
 import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.common.types.util.TypeReferences
 import org.eclipse.xtext.xbase.XExpression
 import org.eclipse.xtext.xbase.jvmmodel.IJvmDeclaredTypeAcceptor
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelInferrer
@@ -17,18 +16,16 @@ import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder
  */
 class ELJvmModelInferrer implements IJvmModelInferrer {
 
-	@Inject extension TypeReferences
-
 	@Inject extension JvmTypesBuilder
 
 	override infer(EObject rootExpression, extension IJvmDeclaredTypeAcceptor acceptor, boolean preIndexingPhase) {
 		if (rootExpression instanceof XExpression) {
 			val expressionContext = rootExpression.eAdapters.filter(ExpressionContext).head
 			rootExpression.toClass('CompiledExpression').accept.initializeLater [
-				members += rootExpression.toMethod('evaluate', expressionContext?.type?.createTypeRef) [
+				members += rootExpression.toMethod('evaluate', expressionContext?.type) [
 					if (expressionContext != null) {
 						for (variableName : expressionContext.variableNames) {
-							val variableType = expressionContext.getVariableType(variableName).createTypeRef
+							val variableType = expressionContext.getVariableType(variableName)
 							parameters += rootExpression.toParameter(variableName, variableType)
 						}
 					}

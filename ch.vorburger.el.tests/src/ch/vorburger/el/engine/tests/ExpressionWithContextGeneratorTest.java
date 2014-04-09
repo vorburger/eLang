@@ -59,8 +59,8 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 		type.getMembers().add(field);
 
 		ExpressionContext context = new ExpressionContext();
-		context.setType(jvmTypesBuilder.newTypeRef(instance, Boolean.TYPE).getType());
-		context.addVariable("t", type);
+		context.setType(jvmTypesBuilder.newTypeRef(instance, Boolean.TYPE));
+		context.addVariable("t", jvmTypesBuilder.newTypeRef(type));
 
 		checkGeneration("t.a == 5", Boolean.TYPE, context,  
 				  		  "new org.eclipse.xtext.xbase.lib.Functions.Function0<Boolean>() {\n" 

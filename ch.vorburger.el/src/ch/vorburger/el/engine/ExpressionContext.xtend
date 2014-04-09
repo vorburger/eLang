@@ -2,6 +2,7 @@ package ch.vorburger.el.engine
 
 import org.eclipse.emf.ecore.util.EContentAdapter
 import org.eclipse.xtext.common.types.JvmType
+import org.eclipse.xtext.common.types.JvmTypeReference
 
 /**
  * <p>An {@link ExpressionContext} provides variables that should be available during the expression
@@ -14,11 +15,11 @@ import org.eclipse.xtext.common.types.JvmType
  */
 class ExpressionContext extends EContentAdapter {
 
-	@Property JvmType type
+	@Property JvmTypeReference type
 
-	val variables = <String, JvmType>newHashMap
+	val variables = <String, JvmTypeReference>newHashMap
 
-	def addVariable(String name, JvmType type) {
+	def addVariable(String name, JvmTypeReference type) {
 		variables.put(name, type)
 	}
 
