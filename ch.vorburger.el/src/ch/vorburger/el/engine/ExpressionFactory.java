@@ -47,7 +47,7 @@ public class ExpressionFactory {
 		/*
 		 *  HARD CODING THIS TO DS EL IS CONFUSING, AS IT means subclasses such as ALLOW DS EL change it via their constructor :-(
 		 */
-		this.guiceInjector = new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
+		this.guiceInjector = ELStandaloneSetup.getInjector(); // NOT new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
 		this.resourceSet = guiceInjector.getInstance(XtextResourceSet.class);
 	}
 	

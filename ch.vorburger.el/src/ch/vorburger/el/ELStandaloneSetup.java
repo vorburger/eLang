@@ -1,14 +1,21 @@
-
 package ch.vorburger.el;
 
-/**
- * Initialization support for running Xtext languages 
- * without equinox extension registry
- */
-public class ELStandaloneSetup extends ELStandaloneSetupGenerated{
+import com.google.inject.Injector;
+
+public class ELStandaloneSetup extends ELStandaloneSetupGenerated {
+
+	private static Injector injector;
 
 	public static void doSetup() {
-		new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
+		if (injector == null) {
+			injector = new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
+		}
+	}
+
+	public static synchronized Injector getInjector() {
+		if (injector == null) {
+			doSetup();
+		}
+		return injector;
 	}
 }
-

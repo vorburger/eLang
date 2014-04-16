@@ -23,6 +23,7 @@ Import-Package: com.google.common.base,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: ch.vorburger.el.ui.contentassist,
  ch.vorburger.el.ui.contentassist.antlr,
+ ch.vorburger.el.ui.hovering,
  ch.vorburger.el.ui.internal,
  ch.vorburger.el.ui.labeling,
  ch.vorburger.el.ui.quickfix

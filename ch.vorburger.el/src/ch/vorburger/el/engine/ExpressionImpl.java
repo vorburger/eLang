@@ -26,13 +26,11 @@ public class ExpressionImpl implements Expression {
 		this.compiler = compiler;
 	}
 
-	/* package-local */
-	 void setXExpression(XExpression xExpression) {
+	public void setXExpression(XExpression xExpression) {
 		this.xExpression = xExpression;
 	}
 
-	/* package-local */
-	XExpression getXExpression() {
+	public XExpression getXExpression() {
 		return xExpression;
 	}
 	
