@@ -30,6 +30,7 @@ public class ExpressionImpl implements Expression {
 		this.xExpression = xExpression;
 	}
 
+	@Override
 	public XExpression getXExpression() {
 		return xExpression;
 	}

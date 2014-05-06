@@ -1,5 +1,7 @@
 package ch.vorburger.el.engine;
 
+import org.eclipse.xtext.xbase.XExpression;
+
 /**
  * Expression.
  *
@@ -9,6 +11,8 @@ package ch.vorburger.el.engine;
  */
 public interface Expression {
 
+	XExpression getXExpression();
+	
 	String generateJavaCode(Class<?> expectedType);
 	
 	/**
