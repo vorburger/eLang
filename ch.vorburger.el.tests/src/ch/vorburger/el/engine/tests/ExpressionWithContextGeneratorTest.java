@@ -45,9 +45,11 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 
 		EObject instance = helper.createInstance(clazz);
 
-		XtextResourceSet resourceSet = expressionFactory.getResourceSet();
+		XtextResourceSet resourceSet = expressionFactory.getInjector().getInstance(XtextResourceSet.class);
 		Resource resource = resourceSet.createResource(URI.createURI("__synthetic.testData.expr"));
 		resource.getContents().add(instance);
+
+		// TODO could use TypeReferences getTypeForName() instead JvmTypesBuilder newTypeRef() .. 
 
 		Injector injector = expressionFactory.getInjector();
 		JvmTypesBuilder jvmTypesBuilder = injector.getInstance(JvmTypesBuilder.class);
@@ -58,7 +60,7 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 		field.setVisibility(JvmVisibility.PUBLIC);
 		type.getMembers().add(field);
 
-		ExpressionContext context = new ExpressionContext();
+		ExpressionContext context = new ExpressionContext(resource);
 		context.setType(jvmTypesBuilder.newTypeRef(instance, Boolean.TYPE));
 		context.addVariable("t", jvmTypesBuilder.newTypeRef(type));
 

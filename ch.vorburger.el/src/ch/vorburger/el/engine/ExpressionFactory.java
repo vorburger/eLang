@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.StringInputStream;
 import org.eclipse.xtext.validation.CheckMode;
@@ -38,7 +37,6 @@ import com.google.inject.Injector;
 public class ExpressionFactory {
 
 	protected Injector guiceInjector;
-	protected XtextResourceSet resourceSet;
 
 	public ExpressionFactory() {
 		super();
@@ -48,15 +46,10 @@ public class ExpressionFactory {
 		 *  HARD CODING THIS TO DS EL IS CONFUSING, AS IT means subclasses such as ALLOW DS EL change it via their constructor :-(
 		 */
 		this.guiceInjector = ELStandaloneSetup.getInjector(); // NOT new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
-		this.resourceSet = guiceInjector.getInstance(XtextResourceSet.class);
 	}
 	
 	public Injector getInjector() {
 		return guiceInjector;
-	}
-	
-	public XtextResourceSet getResourceSet() {
-		return resourceSet;
 	}
 	
 	public Expression newExpressionFromString(final String expressionAsString) throws ExpressionParsingException {
@@ -94,6 +87,7 @@ public class ExpressionFactory {
 	 * @see https://bugs.eclipse.org/bugs/show_bug.cgi?id=287413
 	 */
 	protected XExpression parseExpressionIntoXTextEObject(final String expressionAsString, ExpressionContext context, boolean validate) throws ExpressionParsingException {
+		final ResourceSet resourceSet = context.getResourceSet();
 		Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet)); // IS-A XtextResource
 		if(context!=null) {
 			resource.eAdapters().add(context);

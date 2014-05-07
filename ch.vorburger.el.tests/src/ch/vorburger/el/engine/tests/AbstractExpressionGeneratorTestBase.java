@@ -17,10 +17,6 @@ public abstract class AbstractExpressionGeneratorTestBase extends AbstractExpres
 		super(expressionFactory);
 	}
 
-	protected void checkGeneration(String expressionText, Class<?> expectedType, String expectedGeneratedJavaCode) throws ExpressionParsingException {
-		checkGeneration(expressionText, expectedType, null, expectedGeneratedJavaCode);
-	}
-
 	protected void checkGeneration(String expressionText, Class<?> expectedType, ExpressionContext context, String expectedGeneratedJavaCode) throws ExpressionParsingException {
 		Expression expression = expressionFactory.newExpressionFromString(expressionText, context);
 		String genJavaCode = expression.generateJavaCode(expectedType);
