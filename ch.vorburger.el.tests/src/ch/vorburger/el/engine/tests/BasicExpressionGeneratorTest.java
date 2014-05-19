@@ -2,9 +2,13 @@ package ch.vorburger.el.engine.tests;
 
 import java.math.BigDecimal;
 
+import org.eclipse.xtext.junit4.InjectWith;
+import org.eclipse.xtext.junit4.XtextRunner;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import ch.vorburger.el.ELInjectorProvider;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
 
@@ -14,6 +18,8 @@ import ch.vorburger.el.engine.ExpressionFactory;
  * 
  * @author Michael Vorburger
  */
+@RunWith(XtextRunner.class)
+@InjectWith(ELInjectorProvider.class)
 public class BasicExpressionGeneratorTest extends AbstractExpressionGeneratorTestBase {
 
 	private ExpressionContext context;

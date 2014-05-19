@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.util.CancelIndicator;
 import org.eclipse.xtext.util.StringInputStream;
@@ -19,8 +20,6 @@ import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.IResourceValidator;
 import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.XExpression;
-
-import ch.vorburger.el.ELStandaloneSetup;
 
 import com.google.common.base.Predicate;
 import com.google.inject.Injector;
@@ -36,16 +35,13 @@ import com.google.inject.Injector;
 @SuppressWarnings("restriction")
 public class ExpressionFactory {
 
+	private static final URI exprURI = URI.createURI("ExpressionFactory.expr");
 	protected Injector guiceInjector;
 
 	public ExpressionFactory() {
 		super();
-		// http://wiki.eclipse.org/Xtext/FAQ#How_do_I_load_my_model_in_a_standalone_Java_application.C2.A0.3F
-		// new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("../");
-		/*
-		 *  HARD CODING THIS TO DS EL IS CONFUSING, AS IT means subclasses such as ALLOW DS EL change it via their constructor :-(
-		 */
-		this.guiceInjector = ELStandaloneSetup.getInjector(); // NOT new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
+		IResourceServiceProvider rsp = IResourceServiceProvider.Registry.INSTANCE.getResourceServiceProvider(exprURI);
+		this.guiceInjector = rsp.get(Injector.class); // NOT ELStandaloneSetup.getInjector(); // NOT new ELStandaloneSetup().createInjectorAndDoEMFRegistration();
 	}
 	
 	public Injector getInjector() {

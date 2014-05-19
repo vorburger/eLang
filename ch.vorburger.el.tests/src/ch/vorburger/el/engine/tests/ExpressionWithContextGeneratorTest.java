@@ -10,10 +10,14 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmField;
 import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmVisibility;
+import org.eclipse.xtext.junit4.InjectWith;
+import org.eclipse.xtext.junit4.XtextRunner;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import ch.vorburger.el.ELInjectorProvider;
 import ch.vorburger.el.engine.ExpressionContext;
 import ch.vorburger.el.engine.ExpressionFactory;
 import ch.vorburger.el.engine.tests.helper.ECoreHelper;
@@ -26,6 +30,8 @@ import com.google.inject.Injector;
  * 
  * @author Michael Vorburger
  */
+@RunWith(XtextRunner.class)
+@InjectWith(ELInjectorProvider.class)
 @SuppressWarnings("restriction")
 public class ExpressionWithContextGeneratorTest extends AbstractExpressionGeneratorTestBase {
 
