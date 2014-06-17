@@ -13,7 +13,6 @@ Require-Bundle: org.eclipse.xtext;bundle-version="[2.5.3,2.6.0)";visibility:=ree
  org.eclipse.emf.mwe.utils;resolution:=optional,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
  org.eclipse.xtext.xbase;bundle-version="[2.5.3,2.6.0)";visibility:=reexport,
- org.eclipse.xtext.common.types.shared;bundle-version="[2.5.3,2.6.0)",
  org.eclipse.xtext.util;bundle-version="[2.5.3,2.6.0)",
  org.eclipse.emf.ecore;bundle-version="2.7.0",
  org.eclipse.emf.common;bundle-version="2.7.0",

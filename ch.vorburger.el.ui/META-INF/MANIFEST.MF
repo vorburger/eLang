@@ -16,7 +16,8 @@ Require-Bundle: ch.vorburger.el;visibility:=reexport,
  org.eclipse.xtext.common.types.ui;bundle-version="[2.5.3,2.6.0)",
  org.eclipse.xtext.xbase.ui;bundle-version="[2.5.3,2.6.0)",
  org.eclipse.xtext.ui.codetemplates.ui;bundle-version="[2.5.3,2.6.0)",
- org.eclipse.compare
+ org.eclipse.compare,
+ org.eclipse.xtext.common.types.shared;bundle-version="[2.5.3,2.6.0)"
 Import-Package: com.google.common.base,
  org.apache.commons.logging,
  org.apache.log4j
