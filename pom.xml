@@ -202,7 +202,7 @@
 		<!-- Repository to resolve fornax-oaw-m2-plugin -->
 		<pluginRepository>
 			<id>fornax-releases</id>
-			<url>http://fornax.itemis.de/nexus/content/repositories/public/</url>
+			<url>https://projects.itemis.de/nexus/content/groups/public/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -217,7 +217,7 @@
 	<repositories>
 		<repository>
 			<id>fornax-releases</id>
-			<url>http://fornax.itemis.de/nexus/content/repositories/public/</url>
+			<url>https://projects.itemis.de/nexus/content/groups/public/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
