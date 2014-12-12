@@ -8,11 +8,12 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmField;
-import org.eclipse.xtext.common.types.JvmGenericType;
+import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.common.types.JvmVisibility;
 import org.eclipse.xtext.junit4.InjectWith;
 import org.eclipse.xtext.junit4.XtextRunner;
 import org.eclipse.xtext.resource.XtextResourceSet;
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypeReferenceBuilder;
 import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,19 +59,23 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 
 		Injector injector = expressionFactory.getInjector();
 		JvmTypesBuilder jvmTypesBuilder = injector.getInstance(JvmTypesBuilder.class);
-		JvmGenericType type = jvmTypesBuilder.toClass(instance, "tests.NumericTests");
+		JvmTypeReferenceBuilder.Factory factory = injector.getInstance(JvmTypeReferenceBuilder.Factory.class);
+		JvmTypeReferenceBuilder jvmTypeReferenceBuilder = factory.create(instance.eResource().getResourceSet());
+
+		JvmTypeReference type = jvmTypeReferenceBuilder.typeRef("tests.NumericTests");
 		resource.getContents().add(type);
 
-		JvmField field = jvmTypesBuilder.toField(instance, "a", jvmTypesBuilder.newTypeRef(instance, dataType.getInstanceClassName() /*"java.math.BigDecimal"*/));
+		JvmField field = jvmTypesBuilder.toField(instance, "a", jvmTypeReferenceBuilder.typeRef(dataType.getInstanceClassName() /*"java.math.BigDecimal"*/));
 		field.setVisibility(JvmVisibility.PUBLIC);
 		type.getMembers().add(field);
 
 		ExpressionContext context = new ExpressionContext(resource);
-		context.setType(jvmTypesBuilder.newTypeRef(instance, Boolean.TYPE));
-		context.addVariable("t", jvmTypesBuilder.newTypeRef(type));
+		context.setType(jvmTypeReferenceBuilder.typeRef(Boolean.TYPE));
+		context.addVariable("t", type);
 
 		checkGeneration("t.a == 5", Boolean.TYPE, context, 
 		  		  "com.google.common.base.Objects.equal(t.a, new java.math.BigDecimal(\"5\"))");
 	}
 
 }
+
