@@ -1,10 +1,12 @@
 package ch.vorburger.el.generator;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.common.types.JvmTypeReference;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
 import org.eclipse.xtext.xbase.compiler.output.ITreeAppendable;
-import org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder;
+import org.eclipse.xtext.xbase.jvmmodel.JvmTypeReferenceBuilder;
+import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
 
 import ch.vorburger.el.eL.DateLiteral;
 import ch.vorburger.el.eL.DateTimeLiteral;
@@ -22,15 +24,24 @@ import com.google.inject.Inject;
 @SuppressWarnings("restriction")
 public class ELCompiler extends XbaseCompiler {
 
-	private @Inject JvmTypesBuilder jvmTypesBuilder;
+	private @Inject JvmTypeReferenceBuilder.Factory factory;
+	private JvmTypeReferenceBuilder jvmTypeReferenceBuilder;
+	
+	protected JvmTypeReferenceBuilder getJvmTypeReferenceBuilder(EObject context) {
+		if (jvmTypeReferenceBuilder == null) {
+			jvmTypeReferenceBuilder = factory.create(context.eResource().getResourceSet());
+		}
+		return jvmTypeReferenceBuilder;
+	}
 	
 	public ITreeAppendable compile(XExpression obj, ITreeAppendable appendable, Class<?> expectedType) {
-		final JvmTypeReference newTypeRef = jvmTypesBuilder.newTypeRef(obj, expectedType);
-		return compile(obj, appendable, newTypeRef);
+		final JvmTypeReference newTypeRef = getJvmTypeReferenceBuilder(obj).typeRef(expectedType);
+		final LightweightTypeReference newLightTypeRef = newTypeReferenceOwner(obj).toLightweightTypeReference(newTypeRef);
+		return compile(obj, appendable, newLightTypeRef);
 	}
 	
 	public ITreeAppendable compileAsJavaExpression(XExpression obj, ITreeAppendable parentAppendable, Class<?> expectedType) {
-		final JvmTypeReference newTypeRef = jvmTypesBuilder.newTypeRef(obj, expectedType);
+		final JvmTypeReference newTypeRef = getJvmTypeReferenceBuilder(obj).typeRef(expectedType);
 		return compileAsJavaExpression(obj, parentAppendable, newTypeRef);
 	}
 	

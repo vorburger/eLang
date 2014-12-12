@@ -21,7 +21,7 @@ class ELJvmModelInferrer implements IJvmModelInferrer {
 	override infer(EObject rootExpression, extension IJvmDeclaredTypeAcceptor acceptor, boolean preIndexingPhase) {
 		if (rootExpression instanceof XExpression) {
 			val expressionContext = rootExpression.eAdapters.filter(ExpressionContext).head
-			rootExpression.toClass('CompiledExpression').accept.initializeLater [
+			rootExpression.toClass('CompiledExpression').accept [
 				members += rootExpression.toMethod('evaluate', expressionContext?.type) [
 					if (expressionContext != null) {
 						for (variableName : expressionContext.variableNames) {

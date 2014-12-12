@@ -6,7 +6,7 @@ package ch.vorburger.el;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.xbase.compiler.XbaseCompiler;
-import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes;
+import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedFeatures;
 import org.eclipse.xtext.xbase.typesystem.computation.ITypeComputer;
 
 import ch.vorburger.el.engine.Expression;
@@ -38,7 +38,7 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELQualifiedNameProvider.class;
 	}
 	
-	public Class<? extends ImplicitlyImportedTypes> bindImplicitlyImportedTypes() {
+	public Class<? extends ImplicitlyImportedFeatures> bindImplicitlyImportedTypes() {
 		return ELImplicitlyImportedTypes.class;
 	}
 	

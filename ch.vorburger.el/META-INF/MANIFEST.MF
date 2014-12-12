@@ -2,23 +2,24 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.vorburger.el
 Bundle-Vendor: vorburger.ch
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 3.1.0.qualifier
 Bundle-SymbolicName: ch.vorburger.el; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="[2.5.3,2.6.0)";visibility:=reexport,
+Require-Bundle: org.eclipse.xtext;bundle-version="[2.7.3,2.8.0)";visibility:=reexport,
  org.apache.log4j;bundle-version="1.2.15";visibility:=reexport,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional;visibility:=reexport,
- org.eclipse.xtext.generator;bundle-version="[2.5.3,2.6.0)";resolution:=optional,
+ org.eclipse.xtext.generator;bundle-version="[2.7.3,2.8.0)";resolution:=optional,
  org.eclipse.emf.codegen.ecore;bundle-version="2.7.0";resolution:=optional,
  org.eclipse.emf.mwe.utils;resolution:=optional,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
- org.eclipse.xtext.xbase;bundle-version="[2.5.3,2.6.0)";visibility:=reexport,
- org.eclipse.xtext.util;bundle-version="[2.5.3,2.6.0)",
+ org.eclipse.xtext.xbase;bundle-version="[2.7.3,2.8.0)";visibility:=reexport,
+ org.eclipse.xtext.util;bundle-version="[2.7.3,2.8.0)",
  org.eclipse.emf.ecore;bundle-version="2.7.0",
  org.eclipse.emf.common;bundle-version="2.7.0",
  org.antlr.runtime,
- org.eclipse.xtext.common.types;bundle-version="[2.5.3,2.6.0)";visibility:=reexport,
- org.eclipse.xtext.xbase.lib;bundle-version="[2.5.3,2.6.0)"
+ org.eclipse.xtext.common.types;bundle-version="[2.7.3,2.8.0)";visibility:=reexport,
+ org.eclipse.xtext.xbase.lib;bundle-version="[2.7.3,2.8.0)",
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Import-Package: com.google.common.base,
  com.google.common.collect,
  org.apache.commons.logging,
@@ -44,3 +45,4 @@ Export-Package: ch.vorburger.el,
  ch.vorburger.el.typesystem.computation,
  ch.vorburger.el.validation,
  ch.vorburger.el.valueconverter
+

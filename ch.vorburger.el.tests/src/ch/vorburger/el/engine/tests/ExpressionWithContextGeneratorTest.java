@@ -32,7 +32,6 @@ import com.google.inject.Injector;
  */
 @RunWith(XtextRunner.class)
 @InjectWith(ELInjectorProvider.class)
-@SuppressWarnings("restriction")
 public class ExpressionWithContextGeneratorTest extends AbstractExpressionGeneratorTestBase {
 
 	private static ECoreHelper helper = new ECoreHelper();
@@ -70,16 +69,8 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 		context.setType(jvmTypesBuilder.newTypeRef(instance, Boolean.TYPE));
 		context.addVariable("t", jvmTypesBuilder.newTypeRef(type));
 
-		checkGeneration("t.a == 5", Boolean.TYPE, context,  
-				  		  "new org.eclipse.xtext.xbase.lib.Functions.Function0<Boolean>() {\n" 
-				  		+ "  public Boolean apply() {\n"
-						+ "    boolean _equals = com.google.common.base.Objects.equal(t.a, new org.eclipse.xtext.xbase.lib.Functions.Function0<Object>() {\n"
-						+ "      public Object apply() {\n"
-						+ "        return new java.math.BigDecimal(\"5\");\n"
-						+ "      }\n" + "    }.apply());\n"
-						+ "    return _equals;\n"
-						+ "  }\n"
-						+ "}.apply()");
+		checkGeneration("t.a == 5", Boolean.TYPE, context, 
+		  		  "com.google.common.base.Objects.equal(t.a, new java.math.BigDecimal(\"5\"))");
 	}
 
 }

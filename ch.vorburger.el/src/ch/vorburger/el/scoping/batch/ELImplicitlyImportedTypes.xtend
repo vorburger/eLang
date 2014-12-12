@@ -1,9 +1,9 @@
 package ch.vorburger.el.scoping.batch
 
-import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedTypes
 import ch.vorburger.el.lib.DateExtensions
+import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedFeatures
 
-class ELImplicitlyImportedTypes extends ImplicitlyImportedTypes {
+class ELImplicitlyImportedTypes extends ImplicitlyImportedFeatures {
 	
 	override protected getExtensionClasses() {
 		newArrayList(

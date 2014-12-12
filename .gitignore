@@ -4,3 +4,4 @@ src-gen
 xtend-gen
 *._trace
 *~
+.antlr-generator-3.2.0-patch.jar

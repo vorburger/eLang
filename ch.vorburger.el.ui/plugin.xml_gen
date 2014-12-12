@@ -251,7 +251,9 @@
    <extension
          point="org.eclipse.xtext.builder.participant">
       <participant
-            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+            fileExtensions="expr"
+            >
       </participant>
    </extension>
    <extension
@@ -420,7 +422,7 @@
    </extension>
    <extension point="org.eclipse.ui.editorActions">
       <editorContribution targetID="ch.vorburger.el.EL" 
-                          id="ch.vorburger.el.EL.ide.rulerActions">
+                          id="ch.vorburger.el.EL.rulerActions">
 	     <action
 	             label="Not Used"
 	             class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
@@ -431,17 +433,29 @@
    </extension>
    <extension point="org.eclipse.ui.popupMenus">
       <viewerContribution
-         targetID="example.rulerContextMenuId"
-         id="ch.vorburger.el.EL.ide.RulerPopupActions">
+         targetID="ch.vorburger.el.EL.RulerContext"
+         id="ch.vorburger.el.EL.RulerPopupActions">
          <action
             label="Toggle Breakpoint"
             class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
-            menubarPath="additions"
-            id="ch.vorburger.el.EL.ide.rulerContextMenu.toggleBreakpointAction">
+            menubarPath="debug"
+            id="ch.vorburger.el.EL.rulerContextMenu.toggleBreakpointAction">
+         </action>
+         <action
+            label="Not used"
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerEnableDisableBreakpointActionDelegate"
+            menubarPath="debug"
+            id="ch.vorburger.el.EL.rulerContextMenu.enableDisableBreakpointAction">
+         </action>
+         <action
+           label="Breakpoint Properties"
+           helpContextId="breakpoint_properties_action_context"
+           class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.jdt.debug.ui.actions.JavaBreakpointPropertiesRulerActionDelegate"
+           menubarPath="group.properties"
+           id="ch.vorburger.el.EL.rulerContextMenu.openBreapointPropertiesAction">
          </action>
       </viewerContribution>
    </extension>
-   
     <!-- Introduce Local Variable Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 
@@ -467,6 +481,30 @@
          </command>
       </menuContribution>
    </extension>  
+   <!-- Open implementation -->
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            class="ch.vorburger.el.ui.ELExecutableExtensionFactory:org.eclipse.xtext.xbase.ui.navigation.OpenImplementationHandler"
+            commandId="org.eclipse.xtext.xbase.ui.OpenImplementationCommand">
+            <activeWhen>
+				<reference
+					definitionId="ch.vorburger.el.EL.Editor.opened">
+				</reference>
+			</activeWhen>
+      </handler>
+   </extension>
+ <extension point="org.eclipse.ui.menus">
+       <menuContribution
+            locationURI="menu:navigate?after=open.ext4">
+         <command commandId="org.eclipse.xtext.xbase.ui.OpenImplementationCommand">
+		<visibleWhen checkEnabled="false">
+              <reference
+                 definitionId="ch.vorburger.el.EL.Editor.opened">
+              </reference>
+		</visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
    	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 

@@ -33,7 +33,7 @@ public class BasicExpressionGeneratorTest extends AbstractExpressionGeneratorTes
 
 	@Test
 	public void testNumberLiteral() throws Exception {
-		checkGeneration("23.7", BigDecimal.class, context, "new org.eclipse.xtext.xbase.lib.Functions.Function0<java.math.BigDecimal>() {\n  public java.math.BigDecimal apply() {\n    return new java.math.BigDecimal(\"23.7\");\n  }\n}.apply()");
+		checkGeneration("23.7", BigDecimal.class, context, "new java.math.BigDecimal(\"23.7\")");
 	}
 
 	@Test
