@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.common.types.JvmField;
-import org.eclipse.xtext.common.types.JvmTypeReference;
+import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmVisibility;
 import org.eclipse.xtext.junit4.InjectWith;
 import org.eclipse.xtext.junit4.XtextRunner;
@@ -62,7 +62,7 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 		JvmTypeReferenceBuilder.Factory factory = injector.getInstance(JvmTypeReferenceBuilder.Factory.class);
 		JvmTypeReferenceBuilder jvmTypeReferenceBuilder = factory.create(instance.eResource().getResourceSet());
 
-		JvmTypeReference type = jvmTypeReferenceBuilder.typeRef("tests.NumericTests");
+		JvmGenericType type = jvmTypesBuilder.toClass(instance, "tests.NumericTests");
 		resource.getContents().add(type);
 
 		JvmField field = jvmTypesBuilder.toField(instance, "a", jvmTypeReferenceBuilder.typeRef(dataType.getInstanceClassName() /*"java.math.BigDecimal"*/));
@@ -71,7 +71,7 @@ public class ExpressionWithContextGeneratorTest extends AbstractExpressionGenera
 
 		ExpressionContext context = new ExpressionContext(resource);
 		context.setType(jvmTypeReferenceBuilder.typeRef(Boolean.TYPE));
-		context.addVariable("t", type);
+		context.addVariable("t", jvmTypeReferenceBuilder.typeRef(type));
 
 		checkGeneration("t.a == 5", Boolean.TYPE, context, 
 		  		  "com.google.common.base.Objects.equal(t.a, new java.math.BigDecimal(\"5\"))");
