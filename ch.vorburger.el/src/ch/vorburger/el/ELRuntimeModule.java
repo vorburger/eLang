@@ -42,7 +42,7 @@ public class ELRuntimeModule extends ch.vorburger.el.AbstractELRuntimeModule {
 		return ELImplicitlyImportedTypes.class;
 	}
 	
-	@Override
+	// @Override in 2.7.3, but no longer possible in 2.8.3, removed from default module?
 	public Class<? extends ITypeComputer> bindITypeComputer() {
 		return ELTypeComputer.class;
 	}

@@ -2,7 +2,7 @@
 <feature
       id="ch.vorburger.el.feature"
       label="EL Feature"
-      version="3.1.0.qualifier"
+      version="3.2.0.qualifier"
       provider-name="vorburger.ch">
 
    <description url="https://github.com/vorburger/eLang">
