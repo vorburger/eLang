@@ -8,8 +8,8 @@ This expression language's syntax is not strictly Java-based, but can be adapted
 
 This is using Xtext and xBase now (an older version was based on xText without xBase and built it's own EL), but uses a restricted syntax (not complete xBase).
 
-Copyright (c) 2011 Michael Vorburger (http://www.vorburger.ch) and others.
+Copyright (c) 2011 - 2016 Michael Vorburger (http://www.vorburger.ch) and others.
 
-Licensed under the Eclipse Public License (EPL).
+Dual licensed under the Eclipse Public License (EPL), and starting May 2016 also under the [MIT License](http://choosealicense.com/licenses/mit/). This now permits e.g. a traditional propriertary software company to do a "closed source fork" of this code, as long as the MIT License statement and Copyright Notice remain included, and continue maintaining it in-house without sharing future changes back publicly as open source (which the Eclipse Public License would neccesarily have required if you distribute the code outside of their organization by including it in a proprietary product).
 
 [![Build Status](https://travis-ci.org/vorburger/eLang.png?branch=master)](https://travis-ci.org/vorburger/eLang)
